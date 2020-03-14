@@ -22,6 +22,13 @@ This plot shows total number of confirmed cases, for the same countries as the f
 
 <img src="carlosbrody/src/confirmed.jpg" width="1000">
 
+### Cumulative number of confirmed cases, aligned on equal caseload
+
+First spotted on Adam J Calhoun's [facebook feed](https://www.facebook.com/photo.php?fbid=10101610112688432&set=a.10100591572231672&type=3), this plot is the same as the previous plot, but now each country's timeline is shifted horizontally so that 0 on the horizontal axis corresponds to the moment the caseload hit 200 cases.
+
+<img src="carlosbrody/src/confirmed_aligned.jpg" width="1000">
+
+
 #### 2020-March-09 : Signs of a trend?
 
 ~Spain had a terrible day, Italy continues to rage unabated, but in the rest of Europe... noise? changes in testing? Or the beginning signs of a possibly encouraging trend?~ Update: downwards trend went away after one day. Meant nothing.  :(
