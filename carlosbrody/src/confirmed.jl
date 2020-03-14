@@ -281,9 +281,9 @@ ngroup = 20
 
 interest_explanation = """
 How to read this plot: Think of the vertical axis values like interest rate per day being paid into an account. The account is not
-money, it is cumulative number of cases. We want that interest rate as low as possible. A horizontal flat line on this plot is like
-steady compound interest, i.e., it is exponential growth. Stopping the disease means the growth rate has to go all the way down to
-zero. The horizontal axis shows days before the date on the bottom right.
+money, it is cumulative number of cases. We want that interest rate as low as possible.  20% daily growth is a factor of 10 every
+two weeks. A horizontal flat line on this plot is like steady compound interest, i.e., it is exponential growth. Stopping the disease
+means the growth rate has to go all the way down to zero. The horizontal axis shows days before the date on the bottom right.
 """
 
 using PyCall
