@@ -5,116 +5,55 @@ using Statistics
 push!(LOAD_PATH, ".")
 using CarlosUtils
 
-dname = "../../COVID-19/csse_covid_19_data/csse_covid_19_time_series"
+dname = "../../../COVID-19/csse_covid_19_data/csse_covid_19_time_series"
 fname = "time_series_19-covid-Confirmed.csv"
 A  = readdlm("$dname/$fname", ',');
-# --- Special fix for occasional empty entries: if not the US, then copy
-# previous day; if it is the US, enter zero, for it is a county row that has
-# noe been subsumed by state rows
-a = findall(A[:,5:end] .== "")
-for i=1:length(a)
-   if A[a[i][1],2] != "US"
-      # copy from previous day
-      A[a[i][1], a[i][2]+4] = A[a[i][1], a[i][2]+3]
-   else
-      # if US, enter zero, county rows are now superseded and subsumed in whole-state rows
-      A[a[i][1], a[i][2]+4] = 0
-   end
-end
-# --- end fix
+
+sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
 
 
-# special code for all countries other than China:
-other = "World other than China"
-other_kwargs = Dict(:linewidth=>12, :color=>"gray", :alpha=>0.3)
 
 
+
+# How many days previous to today to plot
 days_previous = 18
 
-paises = ["South Korea", "Iran", "Italy", "Germany", "France", "Japan",
-   "Spain", "US", "Switzerland", "UK", "Greece", "Mainland China", # "Other European Countries",
+# list fo countries to plot
+paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
+   "Spain", "US", "Switzerland", "United Kingdom", "Greece", "China", # "Other European Countries",
    "World other than China"]
 
-oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
-other_europe = "Other European Countries"
-other_europe_kwargs = Dict(:linewidth=>6, :color=>"gray", :alpha=>0.3)
+# oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
+# other_europe = "Other European Countries"
+# other_europe_kwargs = Dict(:linewidth=>6, :color=>"gray", :alpha=>0.3)
 
 fontname       = "Helvetica Neue"
-fontsize       = 20
+fontsize       = 20   # for title and x and y labels
 legendfontsize = 13
 
+# If we plot more than 10 lines, colors repeat; use next marker in that case
 markerorder = ["o", "x", "P", "d"]
 
 
-"""
-   fixNameChange!(oldname::String, newname::String)
-
-   Mutates A. Finds the row of A where the country is newname;
-   copies their non-zero counts columns into the row with oldname,
-   overwriting as it copies; then removes the row with newname.
-
-   Only works if there is only one oldname row and only one newname; checks for
-   that condition being true.
-
-   EXAMPLE:
-
-   fixNameChange!("South Korea", "Republic of Korea")
-"""
-function fixNameChange!(oldname::String, newname::String)
-   global A
-
-   u1 = findall(A[:,2] .== oldname)
-   @assert length(u1)==1 "more than 1 $oldname"
-   u1 = u1[1]
-
-   u2 = findall(A[:,2] .== newname)
-   @assert length(u2)==1 "more than 1 $newname"
-   u2 = u2[1]
-
-   # Copy non-zeros in row u2 to row u1
-   z = findall(A[u2,5:end] .> 0); A[u1,z.+4] = A[u2,z.+4]
-
-   # remove the newname row
-   A = A[setdiff(1:size(A,1), u2),:]
-end
-
-fixNameChange!("South Korea", "Republic of Korea")
-fixNameChange!("Iran", "Iran (Islamic Republic of)")
 
 
-
-# ###########################################
-#
-#  CUMULATIVE TOTAL
-#
-# ###########################################
-
-
-
-
-confirmed = Array{Float64}(undef, length(paises), size(A,2)-4)
 
 
 """
-   pais2conf(pais::String)
+   pais2conf(pais::Array{String,1}, invert=false)
 
-   Given a string representing a country, returns a numeric vector of cumulative
-   confirmed cases as a function of days. ***ASSUMES MATRIX A HAS BEEN
-   POPULATED WITH A READ FROM TEH CSV FILE***
+   Given a vector of strings representing a list of country, returns a numeric
+   vector of cumulative confirmed cases, summed over all those countries, as a
+   function of days. If the optional parameter invert=true, then returns the
+   result for all countries *other* than the given countries
 """
-function pais2conf(pais::String; region::String="")
-   # Find all rows for this country
-   if pais == other
-      crows = findall(A[2:end,2] .!= "Mainland China") .+ 1
-   elseif pais == other_europe
-      crows = findall(map(x -> in(x, oeurope), A[:,2]))
+function pais2conf(pais::Array{String,1}; invert=false)
+
+   if !invert
+      crows = findall(map(x -> in(x, pais), A[:,2]))
    else
-      crows = findall(A[:,2] .== pais)
-      if !isempty(region)
-         rrows1 = findall(map(x -> occursin(", $region", x), A[:,1]))
-         rrows2 = findall(A[:,1] .== abbrev2StateName[region])
-         crows  = intersect(crows, vcat(rrows1, rrows2))
-      end
+      # Be careful to exclude the top row from results in this inverted case
+      crows = findall(map(x -> !in(x, pais), A[2:end,2])) .+ 1
    end
 
    # daily count starts in column 5; turn it into Float64s
@@ -126,72 +65,185 @@ function pais2conf(pais::String; region::String="")
    return my_confirmed
 end
 
+"""
+   pais2conf(pais::String; invert=false)
 
-
-for i = 1:length(paises)
-   pais = paises[i]
-
-   confirmed[i,:] = pais2conf(pais)
+   Given a string representing country, returns a numeric
+   vector of cumulative confirmed cases, as a function of days. If the
+   optional parameter invert=true, then returns the result for
+   all countries *other* than the given country
+"""
+function pais2conf(pais::String; invert=false)
+   return pais2conf([pais], invert=invert)
 end
 
-# We're not going to sort countries-- use the order in paises, so the order,
-# and colors, is consistent from day to day
-# Hence commenting out sorting:
-# v = sortperm(confirmed[:,end])[end:-1:1]
-# # We're going to put China last for now, just to keep plot colors
-# # consistent with previous versions
-# v = [v[2:end]; v[1]]
-# paises = paises[v]
-# confirmed = confirmed[v,:]
+"""
+   plot_kwargs(pais)
 
-
-figure(1); clf(); println()
-   # Make zeros into NaNs so they don't disturb the log plot
-confirmed[confirmed.==0.0] .= NaN
-for i=1:length(paises)
-   pais = paises[i]
-
-   dias = 1:size(A,2)-4
-   if pais == other
-      semilogy(dias[end-days_previous:end] .- dias[end],
-         confirmed[i, end-days_previous:end], "-", label=pais; other_kwargs...)
-   elseif pais==other_europe
-      semilogy(dias[end-days_previous:end] .- dias[end],
-         confirmed[i, end-days_previous:end], "--", label=pais; other_europe_kwargs...)
+   Returns the plotting arguments appropriate for the indicated country.
+   For example, "World other than China" has special line thickness, etc.
+"""
+function plot_kwargs(pais)
+   if pais == "World other than China"
+      # special code for all countries other than China:
+      kwargs = Dict(:linewidth=>12, :color=>"gray", :alpha=>0.3, :label=>pais)
    else
-      semilogy(dias[end-days_previous:end] .- dias[end],
-         confirmed[i, end-days_previous:end], "-", label=pais,
-         marker = markerorder[Int64(ceil(i/10))])
+      kwargs = Dict(:linestyle=>"-", :label=>pais, :marker=>"o", :label=>pais)
    end
-   println("$pais = $(confirmed[i,end])")
+   return kwargs
 end
 
-gca().legend(fontsize=legendfontsize)
-xlabel("days", fontsize=fontsize, fontname=fontname)
-ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-title("Cumulative onfirmed COVID-19 cases in selected countries", fontsize=fontsize, fontname=fontname)
-gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
-gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
-   "4000", "10000", "40000"])
-h = gca().get_xticklabels()
-for i=1:length(h)
-   if h[i].get_position()[1] == 0.0
-      h[i].set_text(mydate(A[1,end]))
+
+"""
+   h = plot_cumulative(pais; alignon="today")
+
+   Adds a single line to a semilogy plot of the cumulative count for the
+   indicated country. pais can be anything that pai2conf accepts.
+
+   Returns a graphics handle to the line
+
+
+"""
+function plot_cumulative(pais; alignon="today", days_previous=days_previous, minval=0)
+   if pais == "World other than China"
+      conf = pais2conf("China", invert=true)
+   else
+      conf = pais2conf(pais)
+   end
+   # Make zeros into NaNs so they don't disturb the log plot
+   conf[conf.==0.0] .= NaN
+   conf[conf .< minval] .= NaN
+
+   h = nothing
+   if alignon=="today"
+      dias = 1:size(A,2)-4  # first for columns are not daily data
+      h = semilogy(dias[end-days_previous:end] .- dias[end], conf[end-days_previous:end];
+         plot_kwargs(pais)...)[1]
+   elseif typeof(alignon) <: Real
+      u = findfirst(conf .>= alignon)
+      if u != nothing && u>=2
+         frac = (alignon-conf[u-1])/(conf[u] - conf[u-1])
+         h = semilogy((1:length(conf)).-(u+frac), conf; plot_kwargs(pais)...)[1]
+      end
+   end
+
+   println("$pais = $(conf[end])")
+   return h
+end
+
+"""
+   addSourceString2Semilogy()
+
+   Adds the text in sourcestring at a bottom right
+   spot appropriate for a semilogy plot.
+"""
+function addSourceString2Semilogy()
+   x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
+   y = exp(log(ylim()[1]) - 0.1*(log(ylim()[2]) - log(ylim()[1])))
+   t = text(x, y, sourcestring, fontname=fontname, fontsize=13,
+      verticalalignment="top", horizontalalignment="right")
+end
+
+"""
+   prettify_cumulative_plot()
+
+   Adds things like titles, ticks, source string, etc. etc.
+"""
+function prettify_cumulative_plot()
+   gca().legend(fontsize=legendfontsize, loc="upper left")
+   xlabel("days", fontsize=fontsize, fontname=fontname)
+   ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
+   title("Cumulative confirmed COVID-19 cases in selected countries", fontsize=fontsize, fontname=fontname)
+   gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
+   gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
+      "4000", "10000", "40000"])
+   grid("on")
+   gca().tick_params(labelsize=16)
+   gca().yaxis.tick_right()
+   gca().tick_params(labeltop=false, labelleft=true)
+
+   addSourceString2Semilogy()
+end
+
+"""
+   plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
+      adjust_zero=true)
+
+   plots all the countries in the array paises.
+
+   # OPTIONAL PARAMS:
+
+   - fignum     The figure number to plot on
+
+   - alignon    Can be either the string "today" or a number. If "today",
+                the rightmost data point corresponds to the latest in the
+                time series. If alignon is a number, then 0 omn the horizontal
+                axis will correspond to the day in which each time series
+                reached alignon cases.
+
+   - minval     Remove data points less than minval from plot
+
+   - adjust_zero  If true, replaces the "0.0" tick mark with the latest date entry,
+                in human-readable form
+"""
+function plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
+   adjust_zero=true)
+   figure(fignum); clf(); println()
+   set_current_fig_position(115, 61, 1496, 856)
+
+   for i=1:length(paises)
+      # plot each country
+      h = plot_cumulative(paises[i], alignon=alignon, minval=minval)
+
+      # World other than China gets no marker, but everybody
+      # else gets a different marker every ten countries:
+      if h != nothing && h.get_marker() != "None"
+         h.set_marker(markerorder[Int64(ceil(i/10))])
+      end
+   end
+
+   # Add titles, etc.
+   prettify_cumulative_plot()
+
+   if adjust_zero
+      # make the rightmost ctick label the current date
+      h = gca().get_xticklabels()
+      for i=1:length(h)
+         if h[i].get_position()[1] == 0.0
+            h[i].set_text(mydate(A[1,end]))
+         end
+      end
+      gca().set_xticklabels(h)
    end
 end
-gca().set_xticklabels(h)
-grid("on")
-gca().tick_params(labelsize=16)
-gca().yaxis.tick_right()
-gca().tick_params(labeltop=false, labelleft=true)
 
-x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
-y = exp(log(ylim()[1]) - 0.1*(log(ylim()[2]) - log(ylim()[1])))
-t = text(x, y, sourcestring, fontname=fontname, fontsize=13,
-   verticalalignment="top", horizontalalignment="right")
 
+# #########################################
+#
+#  FUNCTION DEFS DONE, PRODUCE PLOTS
+#
+# #########################################
+
+plot_many_cumulative(paises)
 savefig("confirmed.png")
 run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
+
+
+alignon=100
+plot_many_cumulative(setdiff(paises, ["World other than China"]), fignum=3,
+   alignon=alignon, minval=alignon/8, adjust_zero=false)
+title("Cumulative confirmed COVID-19 cases in selected countries\naligned on cases=$alignon",
+   fontsize=fontsize, fontname=fontname)
+xlabel("days from reaching $alignon")
+
+gca().set_ylim(alignon/8, ylim()[2])
+addSourceString2Semilogy()
+
+savefig("confirmed_aligned.png")
+run(`sips -s format JPEG confirmed_aligned.png --out confirmed_aligned.jpg`)
+
+#
+
 
 
 #
@@ -202,9 +254,8 @@ run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 # ###########################################
 
 
-minimum_cases = 50
 ngroup = 20
-smkernel = [0.1, 0.4, 0.7, 0.4, 0.1]
+
 
 interest_explanation = """
 How to read this plot: Think of the vertical axis values like interest rate per day being paid into an account. The account is not
@@ -213,42 +264,61 @@ steady compound interest, i.e., it is exponential growth. Stopping the disease m
 zero. The horizontal axis shows days before the date on the bottom right.
 """
 
-sourcestring = "source: https://github.com/carlosbrody/COVID-19-plots"
-
 using PyCall
 hs      = Array{PyObject}(undef, 0)   # line handles
+
+function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
+   minimum_cases=50, smkernel = [0.1, 0.4, 0.7, 0.4, 0.1], xOffset=0)
+   if pais == "World other than China"
+      myconf = pais2conf("China", invert=true)
+   else
+      myconf = pais2conf(pais)
+   end
+   myconf[myconf.<minimum_cases] .= NaN
+
+   global mratio = (myconf[2:end]./myconf[1:end-1] .- 1) .* 100
+
+   h = nothing
+   if alignon=="today"
+      global dias = 1:size(A,2)-4
+      dias = dias[end-days_previous:end] .- dias[end]
+      mratio = mratio[end-days_previous:end]
+
+      u = findall(.!isnan.(mratio))
+      h = plot(dias[u].+xOffset, smooth(mratio[u], smkernel) ;
+            plot_kwargs(pais)...)[1]
+   elseif typeof(alignon) <: Real
+      v = findfirst(myconf .>= alignon)
+      if v != nothing && v>=2
+         u = findall(.!isnan.(mratio))
+         frac = (alignon-conf[v-1])/(conf[v] - conf[v-1])
+         h = plot((1:length(conf)-1).-(v+frac).+xOffset, smooth(mratio, smkernel);
+            plot_kwargs(pais)...)[1]
+      end
+   end
+
+   return h
+end
+
+offsetRange = 0.1
 
 i = 1; f=1;
 while i <= 3
    global i, f
    figure(2); clf(); println()
-   plotted = Array{String}(undef, 0)     # plotted country strings
+   hs = zeros(0)
+   plotted = Array{String}(undef, 0)
    for j=1:ngroup
-      pais = paises[i]
-      myconf = confirmed[i,:]
-      myconf[myconf.<minimum_cases] .= NaN
+      h = plotOneGrowthRate(paises[i], xOffset=((j/(ngroup/2))-1)*offsetRange)
 
-      global mratio = (myconf[2:end]./myconf[1:end-1] .- 1) .* 100
-      mratio = mratio[end-days_previous:end]
-      u = findall(.!isnan.(mratio))
-
-      global dias = 1:size(A,2)-4
-      dias = dias[end-days_previous:end] .- dias[end]
-
-      if pais == other
-         h = plot(dias[u], smooth(mratio[u], smkernel), "-", label=pais;
-            other_kwargs...)[1]
-      elseif pais == other_europe
-         h = plot(dias[u], smooth(mratio[u], smkernel), "--", label=pais;
-            other_europe_kwargs...)[1]
-      else
-         h = plot(dias[u], smooth(mratio[u], smkernel), "-", label=pais,
-            marker = markerorder[Int64(ceil(i/10))])[1]
-      end
-      if length(u)>0
-         global hs = vcat(hs, h)
-         plotted = vcat(plotted, pais)
-         println("$pais = $(confirmed[i,end])")
+      if h != nothing
+         # World other than China gets no marker, but everybody
+         # else gets a different marker every ten countries:
+         if h.get_marker() != "None"
+            h.set_marker(markerorder[Int64(ceil(j/10))])
+         end
+         hs = vcat(hs, h)
+         plotted = vcat(plotted, paises[i])
       end
 
       global i += 1
@@ -257,7 +327,7 @@ while i <= 3
       end
    end
 
-   if ~isempty(plotted)
+   if ~isempty(hs)
       gca().legend(hs, plotted, fontsize=legendfontsize, loc="upper left")
       xlabel("days", fontname=fontname, fontsize=fontsize)
       ylabel("% daily growth", fontname=fontname, fontsize=fontsize)

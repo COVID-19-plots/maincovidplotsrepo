@@ -1,10 +1,11 @@
 module CarlosUtils
 
 export mydate, smooth, axisWidthChange, axisHeightChange, axisMove
+export get_current_fig_position, set_current_fig_position
 
-export stateName2Abbrev, abbrev2StateName
+export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName, stateName2Abbrev
 
-stateName2Abbrev = Dict(
+stateName2AbbrevDict = Dict(
     "New Jersey"    => "NJ",
     "California"    => "CA",
     "Florida"       => "FL",
@@ -15,7 +16,28 @@ stateName2Abbrev = Dict(
     "Connecticut"   => "CT"
 )
 
-abbrev2StateName = Dict()
+abbrev2StateNameDict = Dict()
+
+"""
+    abbrev2StateName(abrs::Array{String,1})
+
+    Given an array of state name abbreviations, like ["NY", "CT"] returns
+    the corresponding full state names, ["New York", "Connecticut"]
+"""
+function abbrev2StateName(abrs::Array{String,1})
+    return map(x -> abbrev2StateNameDict[x], abrs)
+end
+
+
+"""
+    stateName2Abbrev(snms::Array{String,1})
+
+    Given an array of state names, like ["New York", "Connecticut"], returns
+    the corresponding full state abbreviations, ["NY", "CT"]
+"""
+function stateName2Abbrev(snms::Array{String,1})
+    return map(x -> stateName2AbbrevDict[x], snms)
+end
 
 
 """
@@ -149,12 +171,75 @@ function axisMove(xd, yd; ax=nothing)
     return ax
 end
 
+using PyPlot
+using PyCall
+
+"""
+
+(x, y, w, h) = get_current_fig_position()
+
+Returns the current figure's x, y, width and height position on the screen.
+
+Works only when pygui(true) and when the back end is Tk or QT.
+Has been tested only with PyPlot.
+"""
+function get_current_fig_position()
+    try
+        if occursin("Tk", PyCall.pystring(PyPlot.get_current_fig_manager()))
+            g = split(plt.get_current_fig_manager().window.geometry(), ['x', '+'])
+            w = parse(Int64, g[1])
+            h = parse(Int64, g[2])
+            x = parse(Int64, g[3])
+            y = parse(Int64, g[4])
+        elseif occursin("QT", pystring(plt.get_current_fig_manager()))
+            x = PyPlot.get_current_fig_manager().window.pos().x()
+            y = PyPlot.get_current_fig_manager().window.pos().y()
+            w = PyPlot.get_current_fig_manager().window.width()
+            h = PyPlot.get_current_fig_manager().window.height()
+        else
+            error("Only know how to work with matplotlib graphics backends that are either Tk or QT")
+        end
+
+        return (x, y, w, h)
+    catch
+        error("Failed to get current figure position. Is pygui(false) or are you using a back end other than QT or Tk?")
+    end
+end
+
+
+"""
+
+set_current_fig_position(x, y, w, h)
+
+Sets the current figure's x, y, width and height position on the screen.
+
+Works only when pygui(true) and when the back end is Tk or QT.
+Has been tested only with PyPlot.
+"""
+function set_current_fig_position(x, y, w, h)
+    # if !contains(pystring(plt[:get_current_fig_manager]()), "FigureManagerQT")
+    try
+        if occursin("Tk", PyCall.pystring(PyPlot.get_current_fig_manager()))
+            PyPlot.get_current_fig_manager().window.geometry("$(w)x$h+$x+$y")
+        elseif occursin("QT", pystring(plt.get_current_fig_manager()))
+            PyPlot.get_current_fig_manager().window.setGeometry(x, y, w, h)
+        else
+            error("Only know how to work with matplotlib graphics backends that are either Tk or QT")
+        end
+    catch
+        error("Failed to set current figure position. Is pygui(false) or are you using a back end other than QT?")
+    end
+end
+
 
 function __init__()
     for k in keys(stateName2Abbrev)
-        abbrev2StateName[stateName2Abbrev[k]] = k
+        abbrev2StateNameDict[stateName2Abbrev[k]] = k
     end
 
 end
+
+
+
 
 end # ====== END MODULE ========
