@@ -6,6 +6,14 @@ We are grateful to our data sources:
 
 
 
+Plots available below:
+
+* [Daily percentile growth rates in confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
+* [Cumulative number of confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
+* [Cumulative number of confirmed cases by country, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
+* [States of the US: cumulative number of confirmed cases by cstate, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
+
+
 ### Daily percentile growth rates in confirmed cases per country
 
 The first plot shows the percentage daily growth in number of confirmed cases for a selected set of countries. For each country, the data plot starts after 50 cases were reached (it is too noisy before that). Note that net number of confirmed cases can change over time due to many factors, including test availability, test applications, reporting accuracy, etc. These plots simply show the available data as is.
@@ -27,6 +35,13 @@ This plot shows total number of confirmed cases, for the same countries as the f
 First spotted on Adam J Calhoun's [facebook feed](https://www.facebook.com/photo.php?fbid=10101610112688432&set=a.10100591572231672&type=3), this plot is the same as the previous plot, but now each country's timeline is shifted horizontally so that 0 on the horizontal axis corresponds to the moment the caseload hit 200 cases.
 
 <img src="carlosbrody/src/confirmed_aligned.jpg" width="1000">
+
+
+### Cumulative number of confirmed cases, aligned on equal caseload
+
+The same plot as immediately above, but now with some states of the US. Trends in the US look pretty similar to those elsewhere.
+
+<img src="carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
 
 
 #### 2020-March-09 : Signs of a trend?
