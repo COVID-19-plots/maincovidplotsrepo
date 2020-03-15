@@ -1,43 +1,25 @@
 using Revise
-using DelimitedFiles
 using Statistics
 
 push!(LOAD_PATH, ".")
 using CarlosUtils
+using CovidFunctions
 
-dname = "../../../COVID-19/csse_covid_19_data/csse_covid_19_time_series"
-fname = "time_series_19-covid-Confirmed.csv"
-A  = readdlm("$dname/$fname", ',');
+A = loadConfirmedDbase()
+
+#
 
 sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
 
 # US data showed up per county until 09-March-2020, but then only per state
 # thereafter. THis function collapses it all into states
-function collapseStates()
-   abvs = "time_series_19-covid-Confirmed.csv"
-   abvs = readdlm("StateNamesAndAbbreviations.csv", ',');
-   abvs = abvs[findall(map(x -> length(x)==2, abvs[:,2])),:]
 
-   # Find all counties
-   u = findall(map(x -> occursin(r"[\w\s]+, \w\w", x), A[:,1]) .& (A[:,2].=="US"))
-   global A
-   for i=1:length(u)
-      abbrev = match(r", \w\w", A[u[i],1]).match[3:4]
-      fullname = abvs[findfirst(abvs[:,2].==abbrev),1]
-
-      v = findfirst(A[:,1].==fullname)
-      for j=5:size(A,2)
-         A[v,j] = A[v,j] > A[u[i],j] ? A[v,j] : A[u[i],j]
-      end
-   end
-   A = A[setdiff(1:size(A,1), u),:]
-end
-
-collapseStates()
+A = collapseUSStates(A)
+#
 
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
-writedlm("$dname/$fname", A, ',')
+writedlm("$d2name/$fname", A, ',')
 
 
 # How many days previous to today to plot
