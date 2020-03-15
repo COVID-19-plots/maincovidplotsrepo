@@ -42,8 +42,8 @@ days_previous = 18
 
 # list fo countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
-   "Spain", "US", "Switzerland", "United Kingdom", "Greece",
-   "China", "Norway", "Brazil", # "Other European Countries",
+   "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US")
+   "China", ("California", "US"), "Brazil", # "Other European Countries",
    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
