@@ -42,7 +42,8 @@ days_previous = 18
 
 # list fo countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
-   "Spain", "US", "Switzerland", "United Kingdom", "Greece", "China", # "Other European Countries",
+   "Spain", "US", "Switzerland", "United Kingdom", "Greece",
+   "China", "Norway", "Brazil", # "Other European Countries",
    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
@@ -144,8 +145,14 @@ function plot_cumulative(pais; alignon="today", days_previous=days_previous, min
    elseif typeof(alignon) <: Real
       u = findfirst(conf .>= alignon)
       if u != nothing && u>=2
-         frac = (alignon-conf[u-1])/(conf[u] - conf[u-1])
-         h = semilogy((1:length(conf)).-(u+frac), conf; plot_kwargs(pais)...)[1]
+         frac = (log10(alignon)-log10(conf[u-1]))/(log10(conf[u]) - log10(conf[u-1]))
+         h = semilogy((1:length(conf)).-(u+frac).+1, conf; plot_kwargs(pais)...)[1]
+      else
+         # if not enough points or alignment not available or for whatever reason
+         # should not be plotted, then fake plot and make invisible, so color and
+         # properties remain
+         h = plot(xlim(), ylim(); plot_kwargs(pais)... )[1]
+         h.set_visible(false)
       end
    end
 
@@ -171,7 +178,7 @@ end
 
    Adds things like titles, ticks, source string, etc. etc.
 """
-function prettify_cumulative_plot()
+function prettify_cumulative_plot(;minval=0)
    gca().legend(fontsize=legendfontsize, loc="upper left")
    xlabel("days", fontsize=fontsize, fontname=fontname)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
@@ -183,6 +190,10 @@ function prettify_cumulative_plot()
    gca().tick_params(labelsize=16)
    gca().yaxis.tick_right()
    gca().tick_params(labeltop=false, labelleft=true)
+
+   if minval>0
+      gca().set_ylim(maximum([minval, ylim()[1]]), ylim()[2])
+   end
 
    addSourceString2Semilogy()
 end
@@ -225,7 +236,7 @@ function plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
    end
 
    # Add titles, etc.
-   prettify_cumulative_plot()
+   prettify_cumulative_plot(minval=minval)
 
    if adjust_zero
       # make the rightmost ctick label the current date
@@ -246,7 +257,7 @@ end
 #
 # #########################################
 
-plot_many_cumulative(paises)
+plot_many_cumulative(paises, minval=10)
 savefig("confirmed.png")
 run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 
@@ -290,7 +301,7 @@ using PyCall
 hs      = Array{PyObject}(undef, 0)   # line handles
 
 function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
-   minimum_cases=50, smkernel = [0.1, 0.4, 0.7, 0.4, 0.1], xOffset=0)
+   minimum_cases=50, smkernel = [0.1, 0.4, 0.7, 0.4, 0.1], xOffset=0, maxval=100)
    if pais == "World other than China"
       myconf = pais2conf("China", invert=true)
    else
@@ -299,6 +310,8 @@ function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
    myconf[myconf.<minimum_cases] .= NaN
 
    global mratio = (myconf[2:end]./myconf[1:end-1] .- 1) .* 100
+   mratio = smooth(mratio, smkernel)
+   mratio[mratio.>maxval] .= NaN
 
    h = nothing
    if alignon=="today"
@@ -307,15 +320,20 @@ function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
       mratio = mratio[end-days_previous:end]
 
       u = findall(.!isnan.(mratio))
-      h = plot(dias[u].+xOffset, smooth(mratio[u], smkernel) ;
-            plot_kwargs(pais)...)[1]
+      h = plot(dias[u].+xOffset, mratio[u] ; plot_kwargs(pais)...)[1]
    elseif typeof(alignon) <: Real
       v = findfirst(myconf .>= alignon)
       if v != nothing && v>=2
          u = findall(.!isnan.(mratio))
          frac = (alignon-conf[v-1])/(conf[v] - conf[v-1])
-         h = plot((1:length(conf)-1).-(v+frac).+xOffset, smooth(mratio, smkernel);
+         h = plot((1:length(conf)-1).-(v+frac).+xOffset, mratio;
             plot_kwargs(pais)...)[1]
+      else
+         # if not enough points or alignment not available or for whatever reason
+         # should not be plotted, then fake plot and make invisible, so color and
+         # properties remain
+         h = plot(xlim(), ylim(); plot_kwargs(pais)... )[1]
+         h.set_visible(true)
       end
    end
 
@@ -362,7 +380,7 @@ while i <= 3
             h[i].set_text(mydate(A[1,end]))
          end
       end
-      gca().set_yticks(0:10:110)
+      gca().set_yticks(0:10:100)
       gca().set_xticklabels(h)
       gca().tick_params(labelsize=16)
       grid("on")
