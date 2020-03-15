@@ -1,0 +1,1 @@
+The Johns Hopkins database changed on 2020-March-09 from listing US data by county to listing it in a less detailed manner, by state. This directory holds a copy of their database, but the county data has now all been consolidated into their states. So, for example, if you plot the time series for "Washington", you get the full time series for that state.
