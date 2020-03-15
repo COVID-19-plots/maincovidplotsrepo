@@ -11,7 +11,7 @@ Plots available below:
 * [Daily percentile growth rates in confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by country, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [States of the US: cumulative number of confirmed cases by cstate, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
+* [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 
 
 ### Daily percentile growth rates in confirmed cases per country
