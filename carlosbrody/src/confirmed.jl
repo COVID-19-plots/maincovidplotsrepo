@@ -100,6 +100,18 @@ function pais2conf(pais::String; invert=false)
    return pais2conf([pais], invert=invert)
 end
 
+function pais2conf(pais::Tuple{String, String})
+   crows = findall((A[:,1] .== pais[1])  .&  (A[:,2] .== pais[2]))
+
+   # daily count starts in column 5; turn it into Float64s
+   my_confirmed = Array{Float64}(A[crows,5:end])
+
+   # Add all rows for the country
+   my_confirmed = sum(my_confirmed, dims=1)[:]
+
+   return my_confirmed
+end
+
 """
    plot_kwargs(pais)
 
@@ -257,23 +269,40 @@ end
 #
 # #########################################
 
+# -----  base set of countries cumulative plot
 plot_many_cumulative(paises, minval=10)
 savefig("confirmed.png")
 run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 
 
+# ------   aligned on when they hit 100 cases
 alignon=100
 plot_many_cumulative(setdiff(paises, ["World other than China"]), fignum=3,
    alignon=alignon, minval=alignon/8, adjust_zero=false)
 title("Cumulative confirmed COVID-19 cases in selected countries\naligned on cases=$alignon",
    fontsize=fontsize, fontname=fontname)
 xlabel("days from reaching $alignon")
-
 gca().set_ylim(alignon/8, ylim()[2])
 addSourceString2Semilogy()
+figname = "confirmed_aligned"
+savefig("$figname.png")
+run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 
-savefig("confirmed_aligned.png")
-run(`sips -s format JPEG confirmed_aligned.png --out confirmed_aligned.jpg`)
+
+# ------   US states, Italy, Germany aligned on when they hit 100 cases
+alignon=100
+states = [("Washington", "US"), ("New York", "US"), ("California", "US"),
+   "Italy", "Germany"]
+plot_many_cumulative(states, fignum=4,
+   alignon=alignon, minval=alignon/8, adjust_zero=false)
+title("Cumulative confirmed COVID-19 cases in selected\nstates and countries, aligned on cases=$alignon",
+   fontsize=fontsize, fontname=fontname)
+xlabel("days from reaching $alignon")
+gca().set_ylim(alignon/8, ylim()[2])
+addSourceString2Semilogy()
+figname = "states_confirmed_aligned"
+savefig("$figname.png")
+run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 
 #
 
