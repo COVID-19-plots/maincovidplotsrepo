@@ -35,6 +35,9 @@ end
 
 collapseStates()
 
+# Write out the database with the states consolidated
+d2name = "../../consolidated_database"
+writedlm("$dname/$fname", A, ',')
 
 
 # How many days previous to today to plot
