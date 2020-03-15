@@ -37,7 +37,7 @@ First spotted on Adam J Calhoun's [facebook feed](https://www.facebook.com/photo
 <img src="carlosbrody/src/confirmed_aligned.jpg" width="1000">
 
 
-### Cumulative number of confirmed cases, aligned on equal caseload
+### States of the US: cumulative number of confirmed cases, aligned on equal caseload
 
 The same plot as immediately above, but now with some states of the US. Trends in the US look pretty similar to those elsewhere.
 
