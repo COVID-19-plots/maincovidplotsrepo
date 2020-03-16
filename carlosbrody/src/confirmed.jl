@@ -266,7 +266,7 @@ using PyCall
 hs      = Array{PyObject}(undef, 0)   # line handles
 
 function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
-   minimum_cases=50, smkernel = [0.1, 0.4, 0.7, 0.4, 0.1], xOffset=0, maxval=100)
+   minimum_cases=50, smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], xOffset=0, maxval=100)
    if pais == "World other than China"
       myconf = country2conf(A, "China", invert=true)
    else
@@ -336,7 +336,7 @@ while i <= 3
       gca().legend(hs, plotted, fontsize=legendfontsize, loc="upper left")
       xlabel("days", fontname=fontname, fontsize=fontsize)
       ylabel("% daily growth", fontname=fontname, fontsize=fontsize)
-      title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 1-day moving average; $minimum_cases cases minimum)",
+      title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
          fontname="Helvetica Neue", fontsize=20)
       PyPlot.show(); gcf().canvas.flush_events()  # make graphics are ready to ask for tick labels
       h = gca().get_xticklabels()
