@@ -3,7 +3,7 @@ module CovidFunctions
 using DelimitedFiles
 
 
-export loadConfirmedDbase, collapseUSStates
+export loadConfirmedDbase, collapseUSStates, country2conf
 
 
 """
@@ -85,6 +85,75 @@ function collapseUSStates(A; mapfilename="StateNamesAndAbbreviations.csv")
 
    return A
 end
+
+
+
+"""
+   country2conf(A, pais::Array{String,1}, invert=false)
+
+   Given a database matrix A and a vector of strings representing a list of
+   countries, returns a numeric
+   vector of cumulative confirmed cases, summed over all those countries, as a
+   function of days. If the optional parameter invert=true, then returns the
+   result for all countries *other* than the given countries
+"""
+function country2conf(A, pais::Array{String,1}; invert=false)
+
+   if !invert
+      crows = findall(map(x -> in(x, pais), A[:,2]))
+   else
+      # Be careful to exclude the top row from results in this inverted case
+      crows = findall(map(x -> !in(x, pais), A[2:end,2])) .+ 1
+   end
+
+   # daily count starts in column 5; turn it into Float64s
+   my_confirmed = Array{Float64}(A[crows,5:end])
+
+   # Add all rows for the country
+   my_confirmed = sum(my_confirmed, dims=1)[:]
+
+   return my_confirmed
+end
+
+"""
+   country2conf(pais::String; invert=false)
+
+   Given a string representing country, returns a numeric
+   vector of cumulative confirmed cases, as a function of days. If the
+   optional parameter invert=true, then returns the result for
+   all countries *other* than the given country
+"""
+function country2conf(A, pais::String; invert=false)
+   return country2conf(A, [pais], invert=invert)
+end
+
+
+"""
+   country2conf(pais::Tuple{String, String}; invert=false)
+
+   Given a tuple of two strings, representing region, country, respectively,
+   returns a numeric vector of cumulative confirmed cases, as a function of days.
+   If the optional parameter invert=true, then returns the result for
+   all countries *other* than the given country
+
+"""
+function country2conf(A, pais::Tuple{String, String}; invert=false)
+   crows = findall((A[:,1] .== pais[1])  .&  (A[:,2] .== pais[2]))
+   if invert
+      crows = setdiff(2:size(A,1), crows)
+   end
+
+   # daily count starts in column 5; turn it into Float64s
+   my_confirmed = Array{Float64}(A[crows,5:end])
+
+   # Add all rows for the country
+   my_confirmed = sum(my_confirmed, dims=1)[:]
+
+   return my_confirmed
+end
+
+
+
 
 
 end # ===== End MODULE

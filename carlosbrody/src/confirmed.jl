@@ -47,55 +47,6 @@ markerorder = ["o", "x", "P", "d"]
 
 
 
-"""
-   pais2conf(pais::Array{String,1}, invert=false)
-
-   Given a vector of strings representing a list of country, returns a numeric
-   vector of cumulative confirmed cases, summed over all those countries, as a
-   function of days. If the optional parameter invert=true, then returns the
-   result for all countries *other* than the given countries
-"""
-function pais2conf(pais::Array{String,1}; invert=false)
-
-   if !invert
-      crows = findall(map(x -> in(x, pais), A[:,2]))
-   else
-      # Be careful to exclude the top row from results in this inverted case
-      crows = findall(map(x -> !in(x, pais), A[2:end,2])) .+ 1
-   end
-
-   # daily count starts in column 5; turn it into Float64s
-   my_confirmed = Array{Float64}(A[crows,5:end])
-
-   # Add all rows for the country
-   my_confirmed = sum(my_confirmed, dims=1)[:]
-
-   return my_confirmed
-end
-
-"""
-   pais2conf(pais::String; invert=false)
-
-   Given a string representing country, returns a numeric
-   vector of cumulative confirmed cases, as a function of days. If the
-   optional parameter invert=true, then returns the result for
-   all countries *other* than the given country
-"""
-function pais2conf(pais::String; invert=false)
-   return pais2conf([pais], invert=invert)
-end
-
-function pais2conf(pais::Tuple{String, String})
-   crows = findall((A[:,1] .== pais[1])  .&  (A[:,2] .== pais[2]))
-
-   # daily count starts in column 5; turn it into Float64s
-   my_confirmed = Array{Float64}(A[crows,5:end])
-
-   # Add all rows for the country
-   my_confirmed = sum(my_confirmed, dims=1)[:]
-
-   return my_confirmed
-end
 
 """
    plot_kwargs(pais)
@@ -126,9 +77,9 @@ end
 """
 function plot_cumulative(pais; alignon="today", days_previous=days_previous, minval=0)
    if pais == "World other than China"
-      conf = pais2conf("China", invert=true)
+      conf = country2conf(A, "China", invert=true)
    else
-      conf = pais2conf(pais)
+      conf = country2conf(A, pais)
    end
    # Make zeros into NaNs so they don't disturb the log plot
    conf[conf.==0.0] .= NaN
@@ -317,9 +268,9 @@ hs      = Array{PyObject}(undef, 0)   # line handles
 function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
    minimum_cases=50, smkernel = [0.1, 0.4, 0.7, 0.4, 0.1], xOffset=0, maxval=100)
    if pais == "World other than China"
-      myconf = pais2conf("China", invert=true)
+      myconf = country2conf(A, "China", invert=true)
    else
-      myconf = pais2conf(pais)
+      myconf = country2conf(A, pais)
    end
    myconf[myconf.<minimum_cases] .= NaN
 
