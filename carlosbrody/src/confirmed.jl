@@ -17,6 +17,10 @@ sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
 A = collapseUSStates(A)
 #
 
+# Some hand-fixes from Wikipedia:
+A = setValue(A, "Brazil", "3/15/20", 200)
+A = setValue(A, "Brazil", "3/16/20", 234)
+
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
 writedlm("$d2name/$fname", A, ',')
@@ -226,7 +230,7 @@ run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 
 
 # ------   US states, Italy, Germany, Brazil aligned on when they hit 100 cases
-alignon=100
+alignon=200
 states = [("Washington", "US"), ("New York", "US"), ("California", "US"),
    "Italy", "Germany", "Brazil"]
 plot_many_cumulative(states, fignum=4,

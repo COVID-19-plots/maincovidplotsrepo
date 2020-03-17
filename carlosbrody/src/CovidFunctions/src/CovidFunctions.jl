@@ -3,7 +3,7 @@ module CovidFunctions
 using DelimitedFiles
 
 
-export loadConfirmedDbase, collapseUSStates, country2conf
+export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 
 
 """
@@ -150,6 +150,73 @@ function country2conf(A, pais::Tuple{String, String}; invert=false)
    my_confirmed = sum(my_confirmed, dims=1)[:]
 
    return my_confirmed
+end
+
+
+"""
+   A = setValue(A, country, datestring, value::Real)
+
+   Given a dbase matrix A, set the value for a single entry specified by
+   country and datestring. Returns the new dbase matrix. If country is a
+   Tuple of two Strings, then it specifies region/country
+
+   # PARAMETERS
+
+   - A    dbase matrix
+
+   - country   Can be a String, or a Tuple{String,String}. In the first
+          case it specifies only a country, in the second it specifes region
+          and country
+
+   - datestring    A string of the form "m/d/yy". Must match one of A[1,5:end]
+
+   - value     A scalar value
+"""
+function setValue(A, country, datestring, value::Real)
+   if typeof(country) == Tuple{String, String}
+      crows = findall((A[:,1] .== country[1]) .& (A[:,2] .== country[2]))
+   else
+      crows = findall(A[:,2] .== country)
+   end
+   ccols = findall(A[1,:] .== datestring)
+
+   @assert (length(ccols)==1) && (length(crows)==1) "$country and $datestring must resolve to a single row and column"
+
+   A[crows[1], ccols[1]] = value
+
+   return A
+end
+
+
+"""
+   val = getValue(A, country, datestring)
+
+   Given a dbase matrix A, get the value for a single entry specified by
+   country and datestring. If country is a
+   Tuple of two Strings, then it specifies region/country
+
+   # PARAMETERS
+
+   - A    dbase matrix
+
+   - country   Can be a String, or a Tuple{String,String}. In the first
+          case it specifies only a country, in the second it specifes region
+          and country
+
+   - datestring    A string of the form "m/d/yy". Must match one of A[1,5:end]
+
+"""
+function getValue(A, country, datestring, value::Real)
+   if typeof(country) == Tuple{String, String}
+      crows = findall((A[:,1] .== country[1]) .& (A[:,2] .== country[2]))
+   else
+      crows = findall(A[:,2] .== country)
+   end
+   ccols = findall(A[1,:] .== datestring)
+
+   @assert (length(ccols)==1) && (length(crows)==1) "$country and $datestring must resolve to a single row and column"
+
+   return A[crows[1], ccols[1]]
 end
 
 
