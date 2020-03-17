@@ -17,7 +17,7 @@ sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
 A = collapseUSStates(A)
 #
 
-# Some hand-fixes from Wikipedia:
+# Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
 A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
 
