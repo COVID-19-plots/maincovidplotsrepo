@@ -27,12 +27,12 @@ writedlm("$d2name/$fname", A, ',')
 
 
 # How many days previous to today to plot
-days_previous = 18
+days_previous = 19
 
 # list fo countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
-   "China", ("California", "US"), "Brazil", # "Other European Countries",
+   "China", ("California", "US"), "Brazil", "Argentina", # "Other European Countries",
    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
