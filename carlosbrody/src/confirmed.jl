@@ -245,7 +245,8 @@ run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 # ------   US states, Italy, Germany, Brazil aligned on when they hit 100 cases
 alignon=200
 states = [("Washington", "US"), ("New York", "US"), ("California", "US"),
-   "Italy", "Germany", "Brazil"]
+   ("New Jersey", "US"),
+   "Italy", "Germany", "Brazil", africa]
 plot_many_cumulative(states, fignum=4,
    alignon=alignon, minval=alignon/8, adjust_zero=false)
 title("Cumulative confirmed COVID-19 cases in selected\nstates and countries, aligned on cases=$alignon",
