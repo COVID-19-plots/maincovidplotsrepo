@@ -1,5 +1,8 @@
 using Revise
 using Statistics
+using DelimitedFiles
+using PyPlot
+
 
 push!(LOAD_PATH, ".")
 using CarlosUtils
@@ -23,6 +26,7 @@ A = setValue(A, "Brazil", "3/16/20", 234)
 
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
+fname  = "time_series_19-covid-Confirmed.csv"
 writedlm("$d2name/$fname", A, ',')
 
 
@@ -32,7 +36,7 @@ days_previous = 19
 # list fo countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
-   "China", ("California", "US"), "Brazil", "Argentina", # "Other European Countries",
+   "China", ("California", "US"), "Brazil", "Argentina", "Mexico", # "Other European Countries",
    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
@@ -310,6 +314,7 @@ function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
 end
 
 offsetRange = 0.1
+minimum_cases=50
 
 i = 1; f=1;
 while i <= 3
@@ -318,7 +323,8 @@ while i <= 3
    hs = zeros(0)
    plotted = Array{String}(undef, 0)
    for j=1:ngroup
-      h = plotOneGrowthRate(paises[i], xOffset=((j/(ngroup/2))-1)*offsetRange)
+      h = plotOneGrowthRate(paises[i], minimum_cases=minimum_cases,
+         xOffset=((j/(ngroup/2))-1)*offsetRange)
 
       if h != nothing
          # World other than China gets no marker, but everybody
@@ -349,7 +355,7 @@ while i <= 3
             h[i].set_text(mydate(A[1,end]))
          end
       end
-      gca().set_yticks(0:10:100)
+      gca().set_yticks(0:10:70)
       gca().set_xticklabels(h)
       gca().tick_params(labelsize=16)
       grid("on")

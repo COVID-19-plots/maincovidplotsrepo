@@ -1,5 +1,7 @@
 module CarlosUtils
 
+using Dates
+
 export mydate, smooth, axisWidthChange, axisHeightChange, axisMove
 export get_current_fig_position, set_current_fig_position
 
@@ -233,8 +235,8 @@ end
 
 
 function __init__()
-    for k in keys(stateName2Abbrev)
-        abbrev2StateNameDict[stateName2Abbrev[k]] = k
+    for k in keys(stateName2AbbrevDict)
+        abbrev2StateNameDict[stateName2AbbrevDict[k]] = k
     end
 
 end
