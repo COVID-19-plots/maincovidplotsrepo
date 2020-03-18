@@ -153,6 +153,25 @@ function country2conf(A, pais::Tuple{String, String}; invert=false)
 end
 
 
+
+
+"""
+   country2conf(pais::Tuple{String, Array{String,1}}; invert=false)
+
+   Given a tuple of a strings (representing a label, which will be ignored),
+   and an array of strings, representing a list of countries,
+   returns a numeric vector of cumulative confirmed cases, as a function of days.
+   If the optional parameter invert=true, then returns the result for
+   all countries *other* than those in the given list
+
+"""
+function country2conf(A, pais::Tuple{String, Array{String,1}}; invert=false)
+   return country2conf(A, pais[2], invert=invert)
+end
+
+
+
+
 """
    A = setValue(A, country, datestring, value::Real)
 

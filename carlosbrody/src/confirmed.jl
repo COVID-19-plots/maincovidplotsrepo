@@ -33,10 +33,18 @@ writedlm("$d2name/$fname", A, ',')
 # How many days previous to today to plot
 days_previous = 19
 
-# list fo countries to plot
+africa = ("Africa", ["South Africa", "Namibia", "Congo", "Gabon",
+"Cameroon", "Equatorial Guinea", "Nigeria", "Benin", "Togo",
+"Ghana", "Cote d'Ivoire", "Liberia", "Guinea", "Senegal",
+"Burkina Faso", "Mauritania", "Morocco", "Algeria", "Egypt",
+"Sudan", "Central African Republic", "Sudan", "Ethiopia",
+"Somalia", "Kenya", "Tanzania"])
+
+# list of countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
-   "China", ("California", "US"), "Brazil", "Argentina", "Mexico", # "Other European Countries",
+   "China", ("California", "US"), "Brazil", "Argentina", "Mexico",
+   "India", africa, # "Other European Countries",
    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
@@ -53,9 +61,6 @@ markerorder = ["o", "x", "P", "d"]
 
 
 
-
-
-
 """
    plot_kwargs(pais)
 
@@ -68,6 +73,10 @@ function plot_kwargs(pais)
       kwargs = Dict(:linewidth=>12, :color=>"gray", :alpha=>0.3, :label=>pais)
    else
       kwargs = Dict(:linestyle=>"-", :label=>pais, :marker=>"o", :label=>pais)
+   end
+
+   if typeof(pais) == Tuple{String, Array{String,1}}
+      kwargs[:label] = pais[1]
    end
    return kwargs
 end
@@ -343,7 +352,7 @@ while i <= 3
    end
 
    if ~isempty(hs)
-      gca().legend(hs, plotted, fontsize=legendfontsize, loc="upper left")
+      gca().legend(fontsize=legendfontsize, loc="upper left")
       xlabel("days", fontname=fontname, fontsize=fontsize)
       ylabel("% daily growth", fontname=fontname, fontsize=fontsize)
       title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
