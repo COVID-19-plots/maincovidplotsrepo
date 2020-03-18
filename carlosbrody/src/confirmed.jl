@@ -365,7 +365,7 @@ while i <= 3
             h[i].set_text(mydate(A[1,end]))
          end
       end
-      gca().set_yticks(0:10:70)
+      gca().set_yticks(0:10:60)
       gca().set_xticklabels(h)
       gca().tick_params(labelsize=16)
       grid("on")
