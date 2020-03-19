@@ -2,7 +2,7 @@ using Revise
 using Statistics
 using DelimitedFiles
 using PyPlot
-
+using Random
 
 push!(LOAD_PATH, ".")
 using CarlosUtils
@@ -23,6 +23,7 @@ A = collapseUSStates(A)
 # Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
 A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
+A = setValue(A, ("Washington", "US"), "3/17/20", 1014)
 
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
@@ -33,18 +34,19 @@ writedlm("$d2name/$fname", A, ',')
 # How many days previous to today to plot
 days_previous = 19
 
-africa = ("Africa", ["South Africa", "Namibia", "Congo", "Gabon",
+africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
 "Cameroon", "Equatorial Guinea", "Nigeria", "Benin", "Togo",
 "Ghana", "Cote d'Ivoire", "Liberia", "Guinea", "Senegal",
-"Burkina Faso", "Mauritania", "Morocco", "Algeria", "Egypt",
+"Burkina Faso", "Mauritania",
 "Sudan", "Central African Republic", "Sudan", "Ethiopia",
 "Somalia", "Kenya", "Tanzania"])
 
 # list of countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
-   "China", ("California", "US"), "Brazil", "Argentina", "Mexico",
-   "India", africa, # "Other European Countries",
+   "China", ("California", "US"),
+   "Brazil", "Argentina", "Mexico",
+   "India", africa, # ("New Jersey", "US"), # "Other European Countries",
    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
@@ -72,8 +74,11 @@ function plot_kwargs(pais)
       # special code for all countries other than China:
       kwargs = Dict(:linewidth=>12, :color=>"gray", :alpha=>0.3, :label=>pais)
    else
-      kwargs = Dict(:linestyle=>"-", :label=>pais, :marker=>"o", :label=>pais)
+      kwargs = Dict(:linestyle=>"-", :label=>pais, :marker=>"o", :label=>pais,
+         :linewidth=>2)
    end
+
+   kwargs[:fillstyle] = "none"
 
    if typeof(pais) == Tuple{String, Array{String,1}}
       kwargs[:label] = pais[1]
@@ -92,7 +97,8 @@ end
 
 
 """
-function plot_cumulative(pais; alignon="today", days_previous=days_previous, minval=0)
+function plot_cumulative(pais; alignon="today", days_previous=days_previous,
+      minval=0, xOffset=0)
    if pais == "World other than China"
       conf = country2conf(A, "China", invert=true)
    else
@@ -105,13 +111,14 @@ function plot_cumulative(pais; alignon="today", days_previous=days_previous, min
    h = nothing
    if alignon=="today"
       dias = 1:size(A,2)-4  # first for columns are not daily data
-      h = semilogy(dias[end-days_previous:end] .- dias[end], conf[end-days_previous:end];
-         plot_kwargs(pais)...)[1]
+      h = semilogy(dias[end-days_previous:end] .- dias[end].+xOffset,
+         conf[end-days_previous:end]; plot_kwargs(pais)...)[1]
    elseif typeof(alignon) <: Real
       u = findfirst(conf .>= alignon)
       if u != nothing && u>=2
          frac = (log10(alignon)-log10(conf[u-1]))/(log10(conf[u]) - log10(conf[u-1]))
-         h = semilogy((1:length(conf)).-(u+frac).+1, conf; plot_kwargs(pais)...)[1]
+         h = semilogy((1:length(conf)).-(u+frac).+1 .+ xOffset,
+            conf; plot_kwargs(pais)...)[1]
       else
          # if not enough points or alignment not available or for whatever reason
          # should not be plotted, then fake plot and make invisible, so color and
@@ -144,7 +151,7 @@ end
    Adds things like titles, ticks, source string, etc. etc.
 """
 function prettify_cumulative_plot(;minval=0)
-   gca().legend(fontsize=legendfontsize, loc="upper left")
+   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize), loc="upper left")
    xlabel("days", fontsize=fontsize, fontname=fontname)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 cases in selected countries", fontsize=fontsize, fontname=fontname)
@@ -185,13 +192,16 @@ end
                 in human-readable form
 """
 function plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
-   adjust_zero=true)
+   adjust_zero=true, offsetRange=0)
    figure(fignum); clf(); println()
    set_current_fig_position(115, 61, 1496, 856)
 
+   u = randperm(length(paises))
+
    for i=1:length(paises)
       # plot each country
-      h = plot_cumulative(paises[i], alignon=alignon, minval=minval)
+      h = plot_cumulative(paises[i], alignon=alignon, minval=minval,
+         xOffset=((u[i]/(length(paises)/2))-1)*offsetRange)
 
       # World other than China gets no marker, but everybody
       # else gets a different marker every ten countries:
@@ -223,7 +233,7 @@ end
 # #########################################
 
 # -----  base set of countries cumulative plot
-plot_many_cumulative(paises, minval=10)
+plot_many_cumulative(paises, minval=10, offsetRange=0.1)
 savefig("confirmed.png")
 run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 
@@ -245,7 +255,7 @@ run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 # ------   US states, Italy, Germany, Brazil aligned on when they hit 100 cases
 alignon=200
 states = [("Washington", "US"), ("New York", "US"), ("California", "US"),
-   ("New Jersey", "US"),
+   # ("New Jersey", "US"),
    "Italy", "Germany", "Brazil", africa]
 plot_many_cumulative(states, fignum=4,
    alignon=alignon, minval=alignon/8, adjust_zero=false)
