@@ -154,7 +154,7 @@ function prettify_cumulative_plot(;minval=0)
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize), loc="upper left")
    xlabel("days", fontsize=fontsize, fontname=fontname)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-   title("Cumulative confirmed COVID-19 cases in selected countries", fontsize=fontsize, fontname=fontname)
+   title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
    gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
    gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
       "4000", "10000", "40000"])
@@ -242,7 +242,7 @@ run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 alignon=100
 plot_many_cumulative(setdiff(paises, ["World other than China"]), fignum=3,
    alignon=alignon, minval=alignon/8, adjust_zero=false)
-title("Cumulative confirmed COVID-19 cases in selected countries\naligned on cases=$alignon",
+title("Cumulative confirmed COVID-19 cases in selected regions\naligned on cases=$alignon",
    fontsize=fontsize, fontname=fontname)
 xlabel("days from reaching $alignon")
 gca().set_ylim(alignon/8, ylim()[2])
@@ -259,7 +259,7 @@ states = [("Washington", "US"), ("New York", "US"), ("California", "US"),
    "Italy", "Germany", "Brazil", africa]
 plot_many_cumulative(states, fignum=4,
    alignon=alignon, minval=alignon/8, adjust_zero=false)
-title("Cumulative confirmed COVID-19 cases in selected\nstates and countries, aligned on cases=$alignon",
+title("Cumulative confirmed COVID-19 cases in selected\nregions, aligned on cases=$alignon",
    fontsize=fontsize, fontname=fontname)
 xlabel("days from reaching $alignon")
 gca().set_ylim(alignon/8, ylim()[2])
