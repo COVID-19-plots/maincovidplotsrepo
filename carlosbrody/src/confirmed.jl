@@ -363,7 +363,7 @@ while i <= 3
    end
 
    if ~isempty(hs)
-      gca().legend(fontsize=legendfontsize, loc="upper left")
+      gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize), loc="upper left")
       xlabel("days", fontname=fontname, fontsize=fontsize)
       ylabel("% daily growth", fontname=fontname, fontsize=fontsize)
       title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
