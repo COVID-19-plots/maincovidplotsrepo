@@ -49,6 +49,13 @@ paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "India", africa, # ("New Jersey", "US"), # "Other European Countries",
    "World other than China"]
 
+
+paises = ["Germany", "United Kingdom", "Italy",
+   ("Washington", "US"), ("California", "US"),
+   # ("New Jersey", "US"), ("New York", "US"),
+   "Belgium", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
+   "World other than China"]
+
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
 # other_europe = "Other European Countries"
 # other_europe_kwargs = Dict(:linewidth=>6, :color=>"gray", :alpha=>0.3)
@@ -294,6 +301,7 @@ using PyCall
 hs      = Array{PyObject}(undef, 0)   # line handles
 
 function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
+   # minimum_cases=50, smkernel = [0.2, 0.5, 0.7, 0.5, 0.2], xOffset=0, maxval=100)
    minimum_cases=50, smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], xOffset=0, maxval=100)
    if pais == "World other than China"
       myconf = country2conf(A, "China", invert=true)
