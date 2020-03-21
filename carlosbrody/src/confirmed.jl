@@ -50,11 +50,11 @@ paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "World other than China"]
 
 
-paises = ["Germany", "United Kingdom", "Italy",
-   ("Washington", "US"), ("California", "US"),
-   # ("New Jersey", "US"), ("New York", "US"),
-   "Belgium", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
-   "World other than China"]
+# paises = ["Germany", "United Kingdom", "Italy",
+#    ("Washington", "US"), ("California", "US"),
+#    # ("New Jersey", "US"), ("New York", "US"),
+#    "Belgium", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
+#    "World other than China"]
 
 # oeurope = ["Netherlands", "Sweden", "Belgium", "Norway", "Austria", "Denmark"]
 # other_europe = "Other European Countries"
