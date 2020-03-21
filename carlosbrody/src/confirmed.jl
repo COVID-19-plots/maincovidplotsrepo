@@ -32,7 +32,7 @@ writedlm("$d2name/$fname", A, ',')
 
 
 # How many days previous to today to plot
-days_previous = 19
+days_previous = 29
 
 africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
 "Cameroon", "Equatorial Guinea", "Nigeria", "Benin", "Togo",
@@ -46,7 +46,7 @@ paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
    "China", ("California", "US"),
    "Brazil", "Argentina", "Mexico",
-   "India", africa, # ("New Jersey", "US"), # "Other European Countries",
+   "India", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
    "World other than China"]
 
 
@@ -162,9 +162,9 @@ function prettify_cumulative_plot(;minval=0)
    xlabel("days", fontsize=fontsize, fontname=fontname)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
-   gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
+   gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000, 100000])
    gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
-      "4000", "10000", "40000"])
+      "4000", "10000", "40000", "100000"])
    grid("on")
    gca().tick_params(labelsize=16)
    gca().yaxis.tick_right()
@@ -383,7 +383,7 @@ while i <= 3
             h[i].set_text(mydate(A[1,end]))
          end
       end
-      gca().set_yticks(0:10:60)
+      gca().set_yticks(0:10:80)
       gca().set_xticklabels(h)
       gca().tick_params(labelsize=16)
       grid("on")
