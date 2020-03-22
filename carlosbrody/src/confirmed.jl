@@ -236,7 +236,7 @@ end
 
 # #########################################
 #
-#  FUNCTION DEFS DONE, PRODUCE PLOTS
+#  FUNCTION DEFS DONE, PRODUCE CUMULATIVE PLOTS
 #
 # #########################################
 
@@ -301,13 +301,14 @@ means the growth rate has to go all the way down to zero. The horizontal axis sh
 using PyCall
 hs      = Array{PyObject}(undef, 0)   # line handles
 
-function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
+function plotOneGrowthRate(pais; db=A, alignon="today", days_previous=days_previous,
    # minimum_cases=50, smkernel = [0.2, 0.5, 0.7, 0.5, 0.2], xOffset=0, maxval=100)
-   minimum_cases=50, smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], xOffset=0, maxval=100)
+   minimum_cases=50, smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], xOffset=0,
+   maxval=100)
    if pais == "World other than China"
-      myconf = country2conf(A, "China", invert=true)
+      myconf = country2conf(db, "China", invert=true)
    else
-      myconf = country2conf(A, pais)
+      myconf = country2conf(db, pais)
    end
    myconf[myconf.<minimum_cases] .= NaN
 
@@ -317,7 +318,7 @@ function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
 
    h = nothing
    if alignon=="today"
-      global dias = 1:size(A,2)-4
+      global dias = 1:size(db,2)-4
       dias = dias[end-days_previous:end] .- dias[end]
       mratio = mratio[end-days_previous:end]
 
@@ -342,67 +343,121 @@ function plotOneGrowthRate(pais; alignon="today", days_previous=days_previous,
    return h
 end
 
+
+
 offsetRange = 0.1
 minimum_cases=50
 
-i = 1; f=1;
-while i <= 3
-   global i, f
-   figure(2); clf(); println()
-   hs = zeros(0)
-   plotted = Array{String}(undef, 0)
-   for j=1:ngroup
-      h = plotOneGrowthRate(paises[i], minimum_cases=minimum_cases,
-         xOffset=((j/(ngroup/2))-1)*offsetRange)
 
-      if h != nothing
-         # World other than China gets no marker, but everybody
-         # else gets a different marker every ten countries:
-         if h.get_marker() != "None"
-            h.set_marker(markerorder[Int64(ceil(j/10))])
+function prettifyGrowthRatePlot(; minimum_cases=50)
+   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
+      loc="upper left")
+   xlabel("days", fontname=fontname, fontsize=fontsize)
+   ylabel("% daily growth", fontname=fontname, fontsize=fontsize)
+   title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
+      fontname="Helvetica Neue", fontsize=20)
+   PyPlot.show(); gcf().canvas.flush_events()  # make graphics are ready to ask for tick labels
+
+   gca().set_yticks(0:10:80)
+   gca().tick_params(labelsize=16)
+   grid("on")
+   gca().tick_params(labeltop=false, labelright=true)
+
+   axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+   t = text(mean(xlim()), -0.23*(ylim()[2]-ylim()[1]), interest_explanation,
+      fontname=fontname, fontsize=16,
+      horizontalalignment = "center", verticalalignment="top")
+
+   x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
+   y = ylim()[1] - 0.1*(ylim()[2] - ylim()[1])
+   t = text(x, y, sourcestring, fontname=fontname, fontsize=13,
+      verticalalignment="top", horizontalalignment="right")
+end
+
+"""
+   plotManyGrowthRate(paises; fignum=2, alignon="today", minval=0,
+      adjust_zero=true)
+
+   plots growth rate all the countries in the array paises.
+
+   # OPTIONAL PARAMS:
+
+   - fignum     The figure number to plot on
+
+   - alignon    Can be either the string "today" or a number. If "today",
+                the rightmost data point corresponds to the latest in the
+                time series. If alignon is a number, then 0 on the horizontal
+                axis will correspond to the day in which each time series
+                reached alignon cases.
+
+   - minimum_cases     Countries with fewer than these cases don't make it in
+
+   - adjust_zero  If true, replaces the "0.0" tick mark with the latest date entry,
+                in human-readable form
+"""
+function plotManyGrowthRate(paises; db=A, fignum=2, alignon="today",
+   adjust_zero=true, offsetRange=0.1, ngroup=20, minimum_cases=50,
+   smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], days_previous=days_previous)
+
+   i = 1; f=1;
+   while i <= 3
+      figure(fignum); clf(); println()
+      set_current_fig_position(115, 61, 1496, 856)
+
+      hs = zeros(0)
+      for j=1:ngroup
+         h = plotOneGrowthRate(paises[i], db=db, minimum_cases=minimum_cases,
+            xOffset=((j/(ngroup/2))-1)*offsetRange, smkernel=smkernel,
+            days_previous=days_previous)
+
+         if h != nothing
+            # World other than China gets no marker, but everybody
+            # else gets a different marker every ten countries:
+            if h.get_marker() != "None"
+               h.set_marker(markerorder[Int64(ceil(j/10))])
+            end
+            hs = vcat(hs, h)
          end
-         hs = vcat(hs, h)
-         plotted = vcat(plotted, paises[i])
-      end
 
-      global i += 1
-      if i > length(paises)
-         break
-      end
-   end
-
-   if ~isempty(hs)
-      gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize), loc="upper left")
-      xlabel("days", fontname=fontname, fontsize=fontsize)
-      ylabel("% daily growth", fontname=fontname, fontsize=fontsize)
-      title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
-         fontname="Helvetica Neue", fontsize=20)
-      PyPlot.show(); gcf().canvas.flush_events()  # make graphics are ready to ask for tick labels
-      h = gca().get_xticklabels()
-      for i=1:length(h)
-         if h[i].get_position()[1] == 0.0
-            h[i].set_text(mydate(A[1,end]))
+         i += 1
+         if i > length(paises)
+            break
          end
       end
-      gca().set_yticks(0:10:80)
-      gca().set_xticklabels(h)
-      gca().tick_params(labelsize=16)
-      grid("on")
-      gca().tick_params(labeltop=false, labelright=true)
 
-      axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
-      t = text(mean(xlim()), -0.23*(ylim()[2]-ylim()[1]), interest_explanation,
-         fontname=fontname, fontsize=16,
-         horizontalalignment = "center", verticalalignment="top")
+      if ~isempty(hs)
+         prettifyGrowthRatePlot(minimum_cases=minimum_cases)
 
-      x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
-      y = ylim()[1] - 0.1*(ylim()[2] - ylim()[1])
-      t = text(x, y, sourcestring, fontname=fontname, fontsize=13,
-         verticalalignment="top", horizontalalignment="right")
-
-      figname = "multiplicative_factor"
-      savefig("$(figname)_$f.png")
-      run(`sips -s format JPEG $(figname)_$f.png --out $(figname)_$f.jpg`)
+         h = gca().get_xticklabels()
+         for i=1:length(h)
+            if h[i].get_position()[1] == 0.0
+               h[i].set_text(mydate(db[1,end]))
+            end
+         end
+         gca().set_xticklabels(h)
+      end
       f += 1
    end
 end
+
+
+# #########################################
+#
+#  FUNCTION DEFS DONE, PRODUCE GROWTH RATE PLOTS
+#
+# #########################################
+
+
+plotManyGrowthRate(paises, fignum=2, offsetRange=0.1, ngroup=20)
+figname = "multiplicative_factor" ; f=1
+savefig("$(figname)_$f.png")
+run(`sips -s format JPEG $(figname)_$f.png --out $(figname)_$f.jpg`)
+
+
+plotManyGrowthRate(paises, db=D, fignum=5, offsetRange=0.1, ngroup=20,
+   days_previous=15)
+title("% daily growth in cumulative COVID-19 deaths\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
+   fontname="Helvetica Neue", fontsize=20)
+figname = "multiplicative_death_factor" ; f=1
+savefig("$(figname)_$f.png")
+run(`sips -s format JPEG $(figname)_$f.png --out $(figname)_$f.jpg`)
