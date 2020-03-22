@@ -245,6 +245,12 @@ plot_many_cumulative(paises, minval=10, offsetRange=0.1)
 savefig("confirmed.png")
 run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 
+# -----  base set of countries cumulative plot
+plot_many_cumulative(paises, db=D, minval=10, offsetRange=0.1, fignum=6)
+title("Cumulative COVID-19 deaths in selected regions", fontsize=fontsize, fontname=fontname)
+savefig("deaths.png")
+run(`sips -s format JPEG deaths.png --out deaths.jpg`)
+
 
 # ------   aligned on when they hit 100 cases
 alignon=200
@@ -349,22 +355,25 @@ offsetRange = 0.1
 minimum_cases=50
 
 
-function prettifyGrowthRatePlot(; minimum_cases=50)
+
+function prettifyGrowthRatePlot(; minimum_cases=50, ymax=80)
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
       loc="upper left")
    xlabel("days", fontname=fontname, fontsize=fontsize)
    ylabel("% daily growth", fontname=fontname, fontsize=fontsize)
    title("% daily growth in cumulative confirmed COVID-19 cases\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
       fontname="Helvetica Neue", fontsize=20)
+
+   ylim(0, ymax)
    PyPlot.show(); gcf().canvas.flush_events()  # make graphics are ready to ask for tick labels
 
-   gca().set_yticks(0:10:80)
+   gca().set_yticks(0:10:ymax)
    gca().tick_params(labelsize=16)
    grid("on")
    gca().tick_params(labeltop=false, labelright=true)
 
    axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
-   t = text(mean(xlim()), -0.23*(ylim()[2]-ylim()[1]), interest_explanation,
+   t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
       fontname=fontname, fontsize=16,
       horizontalalignment = "center", verticalalignment="top")
 
@@ -397,12 +406,13 @@ end
 """
 function plotManyGrowthRate(paises; db=A, fignum=2, alignon="today",
    adjust_zero=true, offsetRange=0.1, ngroup=20, minimum_cases=50,
-   smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], days_previous=days_previous)
+   smkernel = [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1], days_previous=days_previous,
+   ymax=80)
 
    i = 1; f=1;
    while i <= 3
       figure(fignum); clf(); println()
-      set_current_fig_position(115, 61, 1496, 856)
+      set_current_fig_position(115, 61, 1496, 906)
 
       hs = zeros(0)
       for j=1:ngroup
@@ -426,7 +436,7 @@ function plotManyGrowthRate(paises; db=A, fignum=2, alignon="today",
       end
 
       if ~isempty(hs)
-         prettifyGrowthRatePlot(minimum_cases=minimum_cases)
+         prettifyGrowthRatePlot(minimum_cases=minimum_cases, ymax=ymax)
 
          h = gca().get_xticklabels()
          for i=1:length(h)
@@ -448,7 +458,7 @@ end
 # #########################################
 
 
-plotManyGrowthRate(paises, fignum=2, offsetRange=0.1, ngroup=20)
+plotManyGrowthRate(paises, fignum=2, offsetRange=0.1, ngroup=20, ymax=60)
 figname = "multiplicative_factor" ; f=1
 savefig("$(figname)_$f.png")
 run(`sips -s format JPEG $(figname)_$f.png --out $(figname)_$f.jpg`)
