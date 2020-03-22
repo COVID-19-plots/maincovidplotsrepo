@@ -9,15 +9,16 @@ using CarlosUtils
 using CovidFunctions
 
 A = loadConfirmedDbase()
+D = loadConfirmedDbase(fname = "time_series_19-covid-Deaths.csv")
+# US data showed up per county until 09-March-2020, but then only per state
+# thereafter. THis function collapses it all into states
+A = collapseUSStates(A)
+D = collapseUSStates(D)
 
 #
 
 sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
 
-# US data showed up per county until 09-March-2020, but then only per state
-# thereafter. THis function collapses it all into states
-
-A = collapseUSStates(A)
 #
 
 # Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
@@ -104,12 +105,12 @@ end
 
 
 """
-function plot_cumulative(pais; alignon="today", days_previous=days_previous,
+function plot_cumulative(pais; db=A, alignon="today", days_previous=days_previous,
       minval=0, xOffset=0)
    if pais == "World other than China"
-      conf = country2conf(A, "China", invert=true)
+      conf = country2conf(db, "China", invert=true)
    else
-      conf = country2conf(A, pais)
+      conf = country2conf(db, pais)
    end
    # Make zeros into NaNs so they don't disturb the log plot
    conf[conf.==0.0] .= NaN
@@ -117,7 +118,7 @@ function plot_cumulative(pais; alignon="today", days_previous=days_previous,
 
    h = nothing
    if alignon=="today"
-      dias = 1:size(A,2)-4  # first for columns are not daily data
+      dias = 1:size(db,2)-4  # first for columns are not daily data
       h = semilogy(dias[end-days_previous:end] .- dias[end].+xOffset,
          conf[end-days_previous:end]; plot_kwargs(pais)...)[1]
    elseif typeof(alignon) <: Real
@@ -198,7 +199,7 @@ end
    - adjust_zero  If true, replaces the "0.0" tick mark with the latest date entry,
                 in human-readable form
 """
-function plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
+function plot_many_cumulative(paises; db=A, fignum=1, alignon="today", minval=0,
    adjust_zero=true, offsetRange=0)
    figure(fignum); clf(); println()
    set_current_fig_position(115, 61, 1496, 856)
@@ -207,7 +208,7 @@ function plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
 
    for i=1:length(paises)
       # plot each country
-      h = plot_cumulative(paises[i], alignon=alignon, minval=minval,
+      h = plot_cumulative(paises[i], db=db, alignon=alignon, minval=minval,
          xOffset=((u[i]/(length(paises)/2))-1)*offsetRange)
 
       # World other than China gets no marker, but everybody
@@ -225,7 +226,7 @@ function plot_many_cumulative(paises; fignum=1, alignon="today", minval=0,
       h = gca().get_xticklabels()
       for i=1:length(h)
          if h[i].get_position()[1] == 0.0
-            h[i].set_text(mydate(A[1,end]))
+            h[i].set_text(mydate(db[1,end]))
          end
       end
       gca().set_xticklabels(h)
@@ -246,7 +247,7 @@ run(`sips -s format JPEG confirmed.png --out confirmed.jpg`)
 
 
 # ------   aligned on when they hit 100 cases
-alignon=100
+alignon=200
 plot_many_cumulative(setdiff(paises, ["World other than China"]), fignum=3,
    alignon=alignon, minval=alignon/8, adjust_zero=false)
 title("Cumulative confirmed COVID-19 cases in selected regions\naligned on cases=$alignon",
