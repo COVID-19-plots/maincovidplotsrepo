@@ -39,7 +39,7 @@ africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
 "Cameroon", "Equatorial Guinea", "Nigeria", "Benin", "Togo",
 "Ghana", "Cote d'Ivoire", "Liberia", "Guinea", "Senegal",
 "Burkina Faso", "Mauritania",
-"Sudan", "Central African Republic", "Sudan", "Ethiopia",
+"Sudan", "Central African Republic", "Ethiopia",
 "Somalia", "Kenya", "Tanzania"])
 
 # list of countries to plot
