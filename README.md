@@ -44,11 +44,19 @@ Click on the plot to see an expanded version.
 
 ### States of the US: cumulative number of confirmed cases, aligned on equal caseload
 
-The same plot as immediately above, but now with some states of the US. Trends in the US look pretty similar to those elsewhere.
+The same plot as immediately above, but now with some states of the US. 
 
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
+
+
+### Cumulative number of COVID-19 deaths per country
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/deaths.jpg" width="1000">
+
 
 
 #### 2020-March-09 : Signs of a trend?
