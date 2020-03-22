@@ -8,23 +8,13 @@ We are grateful to our data sources:
 
 Plots available below:
 
-* [Daily percentile growth rates in confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
-* [Cumulative number of confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
-* [Cumulative number of confirmed cases by country, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
+* [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
+* [Daily percentile growth rates in confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
+* [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
-
-### Daily percentile growth rates in confirmed cases per country
-
-The first plot shows the percentage daily growth in number of confirmed cases for a selected set of countries. For each country, the data plot starts after 50 cases were reached (it is too noisy before that). Note that net number of confirmed cases can change over time due to many factors, including test availability, test applications, reporting accuracy, etc. These plots simply show the available data as is.
-
-Caseloads growing at a contsant exponential rate  correspond to a horizontal line in this plot. In other words, although growth rate in Japan is comparatively slower than others, it is still exponential growth. Mainland China is the orange line at the bottom, near zero.
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/multiplicative_factor_1.jpg" width="1200"> 
 
 
 ### Cumulative number of confirmed cases per country
@@ -34,6 +24,18 @@ This plot shows total number of confirmed cases, for the same countries as the f
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/confirmed.jpg" width="1000">
+
+### Daily percentile growth rates in confirmed cases per country
+
+This plot shows the percentage daily growth in number of confirmed cases for a selected set of countries. For each country, the data plot starts after 50 cases were reached (it is too noisy before that). Note that net number of confirmed cases can change over time due to many factors, including test availability, test applications, reporting accuracy, etc. These plots simply show the available data as is.
+
+Caseloads growing at a contsant exponential rate  correspond to a horizontal line in this plot. In other words, although growth rate in Japan is comparatively slower than others, it is still exponential growth. Mainland China is the orange line at the bottom, near zero.
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/multiplicative_factor_1.jpg" width="1200"> 
+
+
 
 ### Cumulative number of confirmed cases, aligned on equal caseload
 
