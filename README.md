@@ -12,8 +12,8 @@ Plots available below:
 * [Cumulative number of confirmed cases per country](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by country, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
-* [Daily percentile growth rates in COVID-19 deaths per region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
+* [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-per-country)
+* [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
 
 
 ### Daily percentile growth rates in confirmed cases per country
@@ -53,11 +53,18 @@ Click on the plot to see an expanded version.
 <img src="carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
 
 
-### Cumulative number of COVID-19 deaths per country
+### Cumulative number of COVID-19 deaths by region
 
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/deaths.jpg" width="1000">
+
+
+### Daily percentile growth rate in COVID-19 deaths by region
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/multiplicative_death_factor_1.jpg" width="1000">
 
 
 
