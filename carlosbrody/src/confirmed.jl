@@ -466,7 +466,7 @@ run(`sips -s format JPEG $(figname)_$f.png --out $(figname)_$f.jpg`)
 
 plotManyGrowthRate(paises, db=D, fignum=5, offsetRange=0.1, ngroup=20,
    days_previous=15)
-title("% daily growth in cumulative COVID-19 deaths\n(smoothed with a +/- 2-day moving average; $minimum_cases cases minimum)",
+title("% daily growth in cumulative COVID-19 deaths\n(smoothed with a +/- 2-day moving average; $minimum_cases deaths minimum)",
    fontname="Helvetica Neue", fontsize=20)
 figname = "multiplicative_death_factor" ; f=1
 savefig("$(figname)_$f.png")
