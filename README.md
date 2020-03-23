@@ -6,22 +6,20 @@ We are grateful to our data sources:
 
 
 
-Plots available below:
-
-#### Confirmed cases:
+#### Confirmed cases plots:
 
 * [Daily percentile growth rates in confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 
-#### Mortality
+#### Mortality plots:
 
 * [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
 * [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
-And a brief blog noting some observations:
+### Blog noting some brief observations:
 
 * [Blog with comments](https://github.com/COVID-19-plots/maincovidplotsrepo#blog)
 
@@ -65,6 +63,8 @@ Click on the plot to see an expanded version.
 
 
 ### Cumulative number of COVID-19 deaths by region
+
+Making these mortaility plots made me cry. I know that people die all the time. Even without a pandemic, on the order of 8 million people a month pass away. COVID-19 deaths are at an early enough point in their exponential growth that they are very small compared to that. But I had never before been personally involved in counting deaths.
 
 Click on the plot to see an expanded version.
 
