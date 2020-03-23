@@ -8,8 +8,8 @@ We are grateful to our data sources:
 
 Plots available below:
 
-* [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Daily percentile growth rates in confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
+* [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
@@ -17,14 +17,6 @@ Plots available below:
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
 
-
-### Cumulative number of confirmed cases per country
-
-This plot shows total number of confirmed cases, for the same countries as the first plot (same color code also). Since the vertical axis is logarithmic, percentage daily growth (in the first plot) is proportional to the slope of the lines in this plot. China is the orange line at the top. 
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/confirmed.jpg" width="1000">
 
 ### Daily percentile growth rates in confirmed cases per country
 
@@ -36,6 +28,15 @@ Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/multiplicative_factor_1.jpg" width="1200"> 
 
+
+
+### Cumulative number of confirmed cases per country
+
+This plot shows total number of confirmed cases, for the same countries as the first plot (same color code also). Since the vertical axis is logarithmic, percentage daily growth (in the first plot) is proportional to the slope of the lines in this plot. China is the orange line at the top. 
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/confirmed.jpg" width="1000">
 
 
 ### Cumulative number of confirmed cases, aligned on equal caseload
