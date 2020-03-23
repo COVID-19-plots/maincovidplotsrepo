@@ -315,11 +315,11 @@ function plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
 end
 
 
-#############################################
+# ############################################
 #
 #  FN DEFS DONE - PRODUCE PLOTS
 #
-#############################################
+# ############################################
 
 # ------  Cumulative case count
 plotMany(paises, minval=10)
@@ -372,7 +372,7 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # --------   case count aligned on caseload
 alignon=200
-plotMany(setdiff(paises, ["World other than  China"]),
+plotMany(setdiff(paises, ["World other than China"]),
    alignon=alignon, minval=alignon/8, fignum=4)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
 title("Cumulative confirmed COVID-19 cases in selected regions,\naligned on cases=$alignon",
@@ -405,7 +405,7 @@ run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 
 
 # -----  Cumulative Death count
-plotMany(paises, db=D, minval=2, fignum=3)
+plotMany(paises, db=D, minval=2, fignum=6)
 ylabel("cumulative deaths", fontsize=fontsize, fontname=fontname)
 title("Cumulative COVID-19 deaths in selected regions", fontsize=fontsize, fontname=fontname)
 gca().set_yticks([10, 40, 100, 400, 1000, 4000, 10000])
@@ -419,7 +419,7 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # ------  New death count
 plotMany(paises, db=D, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
-   minval=1, fignum=4)
+   minval=1, fignum=7)
 ylabel("New deaths per day", fontsize=fontsize, fontname=fontname)
 title("Daily COVID-19 mortality in selected regions\nsmoothed with a +/- 2 day window",
    fontsize=fontsize, fontname=fontname)
@@ -433,7 +433,7 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 # -----   Death growth rate
-plotMany(paises, db=D, minval=0, fignum=4,
+plotMany(paises, db=D, minval=0, fignum=8,
    fn=x -> smooth(percentileGrowth(x), [0.2, 0.5, 0.7, 0.5, 0.2]), plotFn=plot)
 ylabel("daily % growth in cumulative deaths", fontsize=fontsize, fontname=fontname)
 title("Percentile daily growth in cumulative COVID-19 deaths in selected regions\nsmoothes with a +/- 2 day window", fontsize=fontsize, fontname=fontname)
