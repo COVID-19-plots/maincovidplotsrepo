@@ -350,11 +350,12 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 # ------  Percentile growth in case count
+mincases=50
 plotMany(paises, plotFn=plot,
    fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
-   mincases=50, fignum=3)
+   mincases=mincases, fignum=3)
 ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
-title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window",
+title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases deaths minimum",
    fontsize=fontsize, fontname=fontname)
 gca().set_yticks(0:10:60)
 ylim(0, 65)
@@ -433,12 +434,20 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 # -----   Death growth rate
-plotMany(paises, db=D, minval=0, fignum=8,
+mincases=20
+plotMany(paises, db=D, minval=0, mincases=mincases, fignum=8,
    fn=x -> smooth(percentileGrowth(x), [0.2, 0.5, 0.7, 0.5, 0.2]), plotFn=plot)
 ylabel("daily % growth in cumulative deaths", fontsize=fontsize, fontname=fontname)
-title("Percentile daily growth in cumulative COVID-19 deaths in selected regions\nsmoothes with a +/- 2 day window", fontsize=fontsize, fontname=fontname)
-# gca().set_yticks([10, 40, 100, 400, 1000, 4000, 10000])
-# gca().set_yticklabels(["10", "40", "100", "400", "1000",   "4000", "10000"])
+title("Percentile daily growth in cumulative COVID-19 deaths in selected regions\nsmoothed with a +/- 2 day window. $mincases deaths minimum", fontsize=fontsize, fontname=fontname)
+gca().set_yticks(0:10:80)
+ylim(0, 80)
+axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
+   fontname=fontname, fontsize=16,
+   horizontalalignment = "center", verticalalignment="top")
+a = gcf().findobj(x -> py"hasattr"(x, "get_text") && x.get_text() == sourcestring)
+a[1].remove()
+addSourceString2Linear()
 
 fname = "deathGrowthRate"
 savefig("$fname.png")
