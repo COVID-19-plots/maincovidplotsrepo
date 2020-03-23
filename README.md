@@ -62,6 +62,15 @@ Click on the plot to see an expanded version.
 <img src="carlosbrody/src/deaths.jpg" width="1000">
 
 
+### New deaths per day, by region
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/newDeaths.jpg" width="1000">
+
+
+
+
 ### Daily percentile growth rate in COVID-19 deaths by region
 
 Click on the plot to see an expanded version.
