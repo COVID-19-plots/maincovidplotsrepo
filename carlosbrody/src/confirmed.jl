@@ -80,12 +80,23 @@ function percentileGrowth(series; smkernel=[1])
 end
 
 """
-   addSourceString2Semilogy()
+   addSourceString2Semilogy(;replaceOld=true)
 
    Adds the text in sourcestring at a bottom right
    spot appropriate for a semilogy plot.
+
+   If replaceOld is true, the first existing previous text
+   matching the source string is removed from the plot before
+   placing a new one.
 """
-function addSourceString2Semilogy()
+function addSourceString2Semilogy(;replaceOld=true)
+   if replaceOld
+      # Find and remove the old source string
+      a = gcf().findobj(x -> py"hasattr"(x, "get_text") &&
+         x.get_text() == sourcestring)
+      a[1].remove()
+   end
+
    x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
    y = exp(log(ylim()[1]) - 0.1*(log(ylim()[2]) - log(ylim()[1])))
    t = text(x, y, sourcestring, fontname=fontname, fontsize=13,
@@ -93,12 +104,23 @@ function addSourceString2Semilogy()
 end
 
 """
-   addSourceString2Linear()
+   addSourceString2Linear(;replaceOld=true)
 
    Adds the text in sourcestring at a bottom right
    spot appropriate for a regular plot.
+
+   If replaceOld is true, the first existing previous text
+   matching the source string is removed from the plot before
+   placing a new one.
 """
-function addSourceString2Linear()
+function addSourceString2Linear(;replaceOld=true)
+   if replaceOld
+      # Find and remove the old source string
+      a = gcf().findobj(x -> py"hasattr"(x, "get_text") &&
+         x.get_text() == sourcestring)
+      a[1].remove()
+   end
+
    x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
    y = ylim()[1] - 0.1*(ylim()[2] - ylim()[1])
    t = text(x, y, sourcestring, fontname=fontname, fontsize=13,
@@ -334,28 +356,29 @@ savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
-# ------  New case count
+## ------  New case count
 plotMany(paises, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
-   minval=1, fignum=2)
+   minval=0, fignum=2, days_previous=size(A,2)-6)
 ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
 title("New confirmed COVID-19 cases per day\nin selected regions, smoothed with a +/- 2 day window",
    fontsize=fontsize, fontname=fontname)
-gca().set_yticks([10, 40, 100, 400, 1000, 4000, 10000, 40000])
-gca().set_yticklabels(["10", "40", "100", "400", "1000",
+gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
+gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
    "4000", "10000", "40000"])
-# ylim(minval, ylim()[2])
+ylim(1, ylim()[2])
+addSourceString2Semilogy()
 fname = "newConfirmed"
 savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
-# ------  Percentile growth in case count
+## ------  Percentile growth in case count
 mincases=50
 plotMany(paises, plotFn=plot,
    fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
    mincases=mincases, fignum=3)
 ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
-title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases deaths minimum",
+title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
    fontsize=fontsize, fontname=fontname)
 gca().set_yticks(0:10:60)
 ylim(0, 65)
@@ -363,9 +386,7 @@ axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
 t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
    fontname=fontname, fontsize=16,
    horizontalalignment = "center", verticalalignment="top")
-a = gcf().findobj(x -> py"hasattr"(x, "get_text") && x.get_text() == sourcestring)
-a[1].remove()
-addSourceString2Linear()
+addSourceString2Linear(replaceOld=true)
 fname = "multiplicative_factor_1"
 savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
