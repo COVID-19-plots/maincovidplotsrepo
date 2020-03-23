@@ -64,7 +64,7 @@ Click on the plot to see an expanded version.
 
 ### Cumulative number of COVID-19 deaths by region
 
-Making these mortaility plots made me cry. I know that people die all the time. Even without a pandemic, on the order of 8 million people a month pass away. COVID-19 deaths are at an early enough point in their exponential growth that they are very small compared to that. But I had never before been personally involved in counting deaths.
+Making these mortaility plots made me cry. I know that people die all the time. Even without a pandemic, on the order of 8 million people a month pass away. COVID-19 deaths are at an early enough point in their exponential growth that they are very small compared to that. But I had never before been personally involved in counting deaths. It is very grim.
 
 Click on the plot to see an expanded version.
 
