@@ -90,7 +90,7 @@ South Korea is correctly highly praised, and has brought it's growth rate way do
 
 #### 2020-March-23 : Social distancing is not yet working in Italy. 
 
-It's been 14 days since Italy went on national lockdown, on March 9th. While daily growth rate came down below 20%, it is still above 10%. At that rate, it's hospitals will be twice as overwhelmed every 9 days. Terrifyingly, it's going to get a lot worse.
+It's been 14 days since Italy went on national lockdown, on March 9th. While daily growth rate came down below 20%, it is still above 10%. At that rate, its hospitals will be twice as overwhelmed every 9 days. Terrifyingly, that means it's going to get a lot worse there.
 
 #### 2020-March-23 : No signs of warmer weather regions being different. 
 
