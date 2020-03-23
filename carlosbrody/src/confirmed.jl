@@ -48,7 +48,7 @@ paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
    "China", ("California", "US"),
    "Brazil", "Argentina", "Mexico",
    "India", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
-   "World other than China"]
+   ("Hong Kong", "China"), "Singapore", "World other than China"]
 
 
 # paises = ["Germany", "United Kingdom", "Italy",
@@ -94,7 +94,9 @@ function addSourceString2Semilogy(;replaceOld=true)
       # Find and remove the old source string
       a = gcf().findobj(x -> py"hasattr"(x, "get_text") &&
          x.get_text() == sourcestring)
-      a[1].remove()
+      if !isempty(a)
+         a[1].remove()
+      end
    end
 
    x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
@@ -118,7 +120,9 @@ function addSourceString2Linear(;replaceOld=true)
       # Find and remove the old source string
       a = gcf().findobj(x -> py"hasattr"(x, "get_text") &&
          x.get_text() == sourcestring)
-      a[1].remove()
+      if !isempty(a)
+         a[1].remove()
+      end
    end
 
    x = xlim()[2] + 0.1*(xlim()[2] - xlim()[1])
@@ -356,7 +360,7 @@ savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
-## ------  New case count
+# ------  New case count
 plotMany(paises, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
    minval=0, fignum=2, days_previous=size(A,2)-6)
 ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
@@ -372,8 +376,7 @@ fname = "newConfirmed"
 savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
-
-## ------  Percentile growth in case count
+# ------  Percentile growth in case count
 mincases=50
 plotMany(paises, plotFn=plot,
    fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
@@ -381,8 +384,8 @@ plotMany(paises, plotFn=plot,
 ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
 title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
    fontsize=fontsize, fontname=fontname)
-gca().set_yticks(0:10:60)
-ylim(0, 65)
+gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
+gca().set_yticks(0:10:60); ylim(0, 65)
 axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
 t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
    fontname=fontname, fontsize=16,
@@ -461,8 +464,8 @@ plotMany(paises, db=D, minval=0, mincases=mincases, fignum=8,
    fn=x -> smooth(percentileGrowth(x), [0.2, 0.5, 0.7, 0.5, 0.2]), plotFn=plot)
 ylabel("daily % growth in cumulative deaths", fontsize=fontsize, fontname=fontname)
 title("Percentile daily growth in cumulative COVID-19 deaths in selected regions\nsmoothed with a +/- 2 day window. $mincases deaths minimum", fontsize=fontsize, fontname=fontname)
-gca().set_yticks(0:10:80)
-ylim(0, 80)
+gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
+gca().set_yticks(0:10:80); ylim(0, 80)
 axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
 t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
    fontname=fontname, fontsize=16,
