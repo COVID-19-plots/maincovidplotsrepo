@@ -366,6 +366,7 @@ gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
 gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
    "4000", "10000", "40000"])
 ylim(1, ylim()[2])
+# xlim(-1.1*(size(A,2)-6), 0.5)
 addSourceString2Semilogy()
 fname = "newConfirmed"
 savefig("$fname.png")
