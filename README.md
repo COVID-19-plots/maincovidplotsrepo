@@ -75,7 +75,7 @@ Click on the plot to see an expanded version.
 
 Click on the plot to see an expanded version.
 
-<img src="carlosbrody/src/multiplicative_death_factor_1.jpg" width="1000">
+<img src="carlosbrody/src/deathGrowRate.jpg" width="1000">
 
 
 
