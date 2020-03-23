@@ -13,6 +13,7 @@ Plots available below:
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
+* [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
 
@@ -62,7 +63,7 @@ Click on the plot to see an expanded version.
 <img src="carlosbrody/src/deaths.jpg" width="1000">
 
 
-### New deaths per day, by region
+### New deaths per day by region
 
 Click on the plot to see an expanded version.
 
