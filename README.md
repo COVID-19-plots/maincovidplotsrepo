@@ -16,6 +16,8 @@ Plots available below:
 * [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
+And a brief blog noting some observations:
+
 * [Blog with comments](https://github.com/COVID-19-plots/maincovidplotsrepo#blog)
 
 ### Daily percentile growth rates in confirmed cases per country
@@ -86,7 +88,7 @@ Click on the plot to see an expanded version.
 
 South Korea is correctly highly praised, and has brought it's growth rate way down to 1.5% new cases per day. But it's stuck. It's been like that for 10 days. As long as it stays like that, it means the country can't go back to fully normal. They might have to change their strategy in some way, add some new approach if they are to get back to normal.
 
-#### 2020-March-23 : Social distancing is not working in Italy. 
+#### 2020-March-23 : Social distancing is not yet working in Italy. 
 
 It's been 14 days since Italy went on national lockdown, on March 9th. While daily growth rate came down below 20%, it is still above 10%. At that rate, it's hospitals will be twice as overwhelmed every 9 days. Terrifyingly, it's going to get a lot worse.
 
