@@ -8,8 +8,8 @@ push!(LOAD_PATH, ".")
 using CarlosUtils
 using CovidFunctions
 
-A = loadConfirmedDbase()
-D = loadConfirmedDbase(fname = "time_series_19-covid-Deaths.csv")
+A = loadConfirmedDbase(fname = "time_series_covid19_confirmed_global.csv")
+D = loadConfirmedDbase(fname = "time_series_covid19_deaths_global.csv")
 # US data showed up per county until 09-March-2020, but then only per state
 # thereafter. THis function collapses it all into states
 A = collapseUSStates(A)
@@ -24,7 +24,7 @@ sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
 # Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
 A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
-A = setValue(A, ("Washington", "US"), "3/17/20", 1014)
+# A = setValue(A, ("Washington", "US"), "3/17/20", 1014)
 
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
@@ -44,8 +44,8 @@ africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
 
 # list of countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
-   "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
-   "China", ("California", "US"),
+   "Spain", "US", "Switzerland", "United Kingdom", "Austria", # ("New York", "US"),
+   "China", "Taiwan*", # ("California", "US"),
    "Brazil", "Argentina", "Mexico",
    "India", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
    ("Hong Kong", "China"), "Singapore", "World other than China"]

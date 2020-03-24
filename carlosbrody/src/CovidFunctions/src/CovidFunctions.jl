@@ -45,6 +45,9 @@ end
 """
 function collapseUSStates(A; mapfilename="StateNamesAndAbbreviations.csv")
    A = copy(A)
+   # Any empty strings where numbers should be get converted to zeros:
+   G = A[:,5:end]; G[findall(G .== "")] .= 0;
+   A[:,5:end] = G;
    abvs = readdlm(mapfilename, ',');
    # Exclude any lines where the second column isn't two letters long
    abvs = abvs[findall(map(x -> length(x)==2, abvs[:,2])),:]
