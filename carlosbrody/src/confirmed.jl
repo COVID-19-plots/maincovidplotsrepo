@@ -414,7 +414,7 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # ---- states confirmed aligned
 alignon=200
-states = [("Washington", "US"), ("New York", "US"), ("California", "US"),
+states = [# ("Washington", "US"), ("New York", "US"), ("California", "US"),
    "Italy", "Germany", "Brazil", africa, ("New Jersey", "US"), "Australia"]
 plotMany(states, alignon=alignon, minval=alignon/8, fignum=5)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
