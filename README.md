@@ -58,6 +58,8 @@ Click on the plot to see an expanded version.
 
 ### States of the US: cumulative number of confirmed cases, aligned on equal caseload
 
+**2020-03-24: State info is on hold while Johns Hopkins restructures their database format**
+
 The same plot as immediately above, but now with some states of the US. 
 
 Click on the plot to see an expanded version.
