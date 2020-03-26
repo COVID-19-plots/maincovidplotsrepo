@@ -357,11 +357,11 @@ end
 # ############################################
 
 # ------  Cumulative case count
-plotMany(paises, minval=10)
+plotMany(paises, minval=100)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
 title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
-gca().set_yticks([10, 40, 100, 400, 1000, 4000, 10000, 40000, 100000])
-gca().set_yticklabels(["10", "40", "100", "400", "1000",
+gca().set_yticks([100, 400, 1000, 4000, 10000, 40000, 100000])
+gca().set_yticklabels(["100", "400", "1000",
    "4000", "10000", "40000", "100000"])
 # ylim(minval, ylim()[2])
 fname = "confirmed"
@@ -422,7 +422,7 @@ savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # ---- states confirmed aligned
-##
+
 alignon=200
 south = ("10 Southeast US states", [("Florida", "US"), ("Louisiana", "US"),
    ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
@@ -433,9 +433,12 @@ mexicoborder = ("3 border w/Mexico states", [("Texas", "US"),
 midwest = ("Midwest US", [("Iowa", "US"), ("Missouri", "US"),
    ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
    ("Colorado", "US"), ("Utah", "US")])
+canadaborder = ("6 border w/Canada states", [("Michigan", "US"),
+   ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
+   ("North Dakota", "US"), ("Montana", "US")])
 regions = [("Washington", "US"), ("New York", "US"), ("California", "US"),
    "Italy", "Germany", "Brazil", africa, ("New Jersey", "US"), "Australia",
-   south, mexicoborder, midwest]
+   south, mexicoborder, midwest, canadaborder]
 plotMany(regions, alignon=alignon, minval=alignon/8, fignum=5)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
 title("Cumulative confirmed COVID-19 cases in selected countries and U.S. states,\naligned on cases=$alignon",
@@ -448,7 +451,7 @@ figname = "states_confirmed_aligned"
 savefig("$figname.png")
 run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 
-##
+
 
 # -----  Cumulative Death count
 plotMany(paises, db=D, minval=2, fignum=6)
