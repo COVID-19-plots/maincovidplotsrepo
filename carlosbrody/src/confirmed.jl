@@ -17,13 +17,19 @@ D = collapseUSStates(D)
 
 #
 
+
+
 sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
+
 
 #
 
 # Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
 A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
+A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
+D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
+#
 # A = setValue(A, ("Washington", "US"), "3/17/20", 1014)
 
 # Write out the database with the states consolidated
@@ -36,19 +42,21 @@ writedlm("$d2name/$fname", A, ',')
 days_previous = 29
 
 africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
+"Niger", "Chad", "South Sudan",
 "Cameroon", "Equatorial Guinea", "Nigeria", "Benin", "Togo",
 "Ghana", "Cote d'Ivoire", "Liberia", "Guinea", "Senegal",
 "Burkina Faso", "Mauritania",
 "Sudan", "Central African Republic", "Ethiopia",
-"Somalia", "Kenya", "Tanzania"])
+"Rwanda", "Uganda", "Somalia", "Kenya", "Tanzania"])
 
 # list of countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
-   "Spain", "US", "Switzerland", "United Kingdom", "Austria", # ("New York", "US"),
-   "China", "Taiwan*", # ("California", "US"),
+   "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
+   "China", ("California", "US"),
    "Brazil", "Argentina", "Mexico",
-   "India", africa, "Australia", # ("New Jersey", "US"), # "Other European Countries",
-   ("Hong Kong", "China"), "Singapore", "World other than China"]
+   "India", africa, ("New Jersey", "US"), # "Other European Countries",
+   ("Hong Kong", "China"), "Singapore", ("Washington", "US"),
+   "World other than China"]
 
 
 # paises = ["Germany", "United Kingdom", "Italy",
@@ -66,7 +74,7 @@ fontsize       = 20   # for title and x and y labels
 legendfontsize = 13
 
 # If we plot more than 10 lines, colors repeat; use next marker in that case
-markerorder = ["o", "x", "P", "d"]
+markerorder = ["o", "x", "P", "d", "*", "<"]
 
 # ####################################
 #
@@ -149,7 +157,8 @@ function plot_kwargs(pais)
 
    kwargs[:fillstyle] = "none"
 
-   if typeof(pais) == Tuple{String, Array{String,1}}
+   if typeof(pais) == Tuple{String, Array{String,1}} ||
+      typeof(pais) == Tuple{String,Array{Tuple{String,String},1}}
       kwargs[:label] = pais[1]
    end
    return kwargs
@@ -362,7 +371,7 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # ------  New case count
 plotMany(paises, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
-   minval=0, fignum=2, days_previous=size(A,2)-6)
+   minval=0, fignum=2, days_previous=days_previous) # days_previous=size(A,2)-6)
 ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
 title("New confirmed COVID-19 cases per day\nin selected regions, smoothed with a +/- 2 day window",
    fontsize=fontsize, fontname=fontname)
@@ -413,10 +422,21 @@ savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # ---- states confirmed aligned
+##
 alignon=200
-states = [# ("Washington", "US"), ("New York", "US"), ("California", "US"),
-   "Italy", "Germany", "Brazil", africa, ("New Jersey", "US"), "Australia"]
-plotMany(states, alignon=alignon, minval=alignon/8, fignum=5)
+south = ("10 Southeast US states", [("Florida", "US"), ("Louisiana", "US"),
+   ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
+   ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
+   ("Alabama", "US"), ("Kentucky", "US")])
+mexicoborder = ("3 border w/Mexico states", [("Texas", "US"),
+   ("New Mexico", "US"), ("Arizona", "US")])
+midwest = ("Midwest US", [("Iowa", "US"), ("Missouri", "US"),
+   ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
+   ("Colorado", "US"), ("Utah", "US")])
+regions = [("Washington", "US"), ("New York", "US"), ("California", "US"),
+   "Italy", "Germany", "Brazil", africa, ("New Jersey", "US"), "Australia",
+   south, mexicoborder, midwest]
+plotMany(regions, alignon=alignon, minval=alignon/8, fignum=5)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
 title("Cumulative confirmed COVID-19 cases in selected countries and U.S. states,\naligned on cases=$alignon",
       fontsize=fontsize, fontname=fontname)
@@ -428,7 +448,7 @@ figname = "states_confirmed_aligned"
 savefig("$figname.png")
 run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 
-
+##
 
 # -----  Cumulative Death count
 plotMany(paises, db=D, minval=2, fignum=6)

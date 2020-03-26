@@ -4,6 +4,31 @@ using DelimitedFiles
 
 
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
+export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
+
+
+stateAbbrevMapFilename = "StateNamesAndAbbreviations.csv"
+stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
+
+"""
+   stateAbbrev2Fullname(str)
+
+   Given a state abbreviation like "WA" returns the fullname, like "Washington"
+
+   If given a two-letter abbreviation that is not a string, returns "".
+   If given an array of strings, applies function to each entry
+
+"""
+function stateAbbrev2Fullname(str::String)
+   @assert length(str)==2  "str must be a tw-letter string"
+   abvs = stateAbbrevMap
+   u = findfirst(abvs[:,2].==str)
+   return u==nothing ? "" : abvs[u,1];
+end
+
+function stateAbbrev2Fullname(str::Array{String})
+   return map(x -> stateAbbrev2Fullname(x), str)
+end
 
 
 """
@@ -32,6 +57,131 @@ function loadConfirmedDbase(;
 
    return readdlm("$dname/$fname", ',');
 end
+
+##
+##
+
+"""
+   mergeJHandCovidTracking(;jh=NaN, ct=NaN)
+
+   Given a dbase matrix from Johns Hopkins and one from covidtracking,
+   and assuming they have identical first row, removes from jh the US
+   data and instead adds the rows from covidtracking
+"""
+function mergeJHandCovidTracking(;jh=NaN, ct=NaN)
+   @assert jh != NaN && ct != NaN  "Need both jh and ct"
+   @assert size(jh,2)==size(ct,2)    "jh and ct must have same number of cols"
+   @assert jh[1,:] == ct[1,:]         "First row of jh and ct must be equal"
+
+   # remove old US data
+   u = findall(jh[:,2] .!= "US")
+   nA = jh[u,:];
+   return vcat(nA, ct[2:end,:])
+end
+
+
+"""
+   loadCovidTrackingUSData(; dname = "../../data/covidtracking.com/api/states",
+      fname = "daily.csv")
+
+   Load US state daya from CovidTracking project not Johns Hopkins
+"""
+function loadCovidTrackingUSData(;
+   dname = "../../data/covidtracking.com/api/states",
+   fname = "daily.csv")
+
+   C = readdlm("$dname/$fname", ',');
+
+   poscol = findfirst(C[1,:].=="positive")
+   dedcol = findfirst(C[1,:].=="death")
+   sabcol = findfirst(C[1,:].=="state")
+   daycol = findfirst(C[1,:].=="date")
+
+   """
+      dayroll(;startdate=20200122, enddate=20200324)
+
+      Return a vector of sequential days, following the calendar,
+      using Int64s to define the limits, as in C[:,daycol]
+   """
+   function dayroll(;startdate=20200122, enddate=20200324)
+      ds = zeros(Int64, 0)
+      ds = vcat(ds, startdate:(minimum([enddate, 20200131])))
+
+      if enddate >= 20200201
+         ds = vcat(ds, 20200201:(minimum([enddate, 20200229])))
+      end
+      if enddate >= 20200301
+         ds = vcat(ds, 20200301:(minimum([enddate, 20200331])))
+      end
+      if enddate >= 20200401
+         ds = vcat(ds, 20200401:(minimum([enddate, 20200430])))
+      end
+      return ds
+   end
+
+   """
+      daynum2daystr(num::Int)
+
+      Number in format yyyymmdd gets turned into string mm/dd/yr where
+      dd might be length 1
+   """
+   function daynum2daystr(num::Int)
+      yr = fld(num, 10000); num -= yr*10000; yr -= 2000
+      mo = fld(num, 100);   num -= mo*100
+      dy = num
+      return "$mo/$dy/$yr"
+   end
+
+
+   mydays = dayroll(enddate=maximum(C[2:end,daycol])) # use default start date to match JH dbase
+   ndays  = length(mydays)
+   sabs   = Array{String}(unique(C[2:end,sabcol]))  # state abbreviations
+   states = stateAbbrev2Fullname(sabs)              # corresponding fullnames
+   u = findall(.!isempty.(states))                  # eliminate unknown states
+      sabs = sabs[u]
+      states = states[u]
+   nstates = length(u)
+
+
+   As = Array{Any}(undef, nstates+1, ndays+4)   # This will be the output
+   Ds = Array{Any}(undef, nstates+1, ndays+4)   # This will be the output
+   # Fill in top row
+   As[1,1:4] = ["Province/State", "Country/Region", "Lat", "Long"]
+   Ds[1,1:4] = ["Province/State", "Country/Region", "Lat", "Long"]
+   for i=1:length(mydays)
+      As[1, i+4] = daynum2daystr(mydays[i])
+      Ds[1, i+4] = daynum2daystr(mydays[i])
+   end
+
+   # loop over states
+   for s=1:nstates
+      mystate = states[s]
+
+      As[s+1,1:4] = [stateAbbrev2Fullname(sabs[s]), "US", 0, 0]
+      As[s+1,5:end] .= 0
+
+      Ds[s+1,1:4] = [stateAbbrev2Fullname(sabs[s]), "US", 0, 0]
+      Ds[s+1,5:end] .= 0
+
+      # Find all entries for this state
+      u = findall(C[:,sabcol] .== sabs[s])
+      for d=1:length(u)
+         myday   = C[u[d], daycol]
+         mypos   = C[u[d], poscol]
+         myded   = C[u[d], dedcol]
+
+         Adaycol    = findfirst(As[1,:] .== daynum2daystr(myday))
+         # For each entry, put it in corresponding spot in As
+         As[s+1, Adaycol] = mypos
+         Ds[s+1, Adaycol] = myded != "" ? myded : 0
+      end
+   end
+
+   return As, Ds
+end
+
+
+
 
 """
    collapseUSStates(A; mapfilename="StateNamesAndAbbreviations.csv")
@@ -118,6 +268,26 @@ function country2conf(A, pais::Array{String,1}; invert=false)
    return my_confirmed
 end
 
+function country2conf(A, pais::Array{Tuple{String,String},1}; invert=false)
+   if !invert
+      crows = findall( map(x -> in(x, pais),
+         mapslices(x -> (x[1], x[2]), A, dims=2)[:]) )
+   else
+      # Be careful to exclude the top row from results in this inverted case
+      crows = findall( map(x -> !in(x, pais),
+         mapslices(x -> (x[1], x[2]), A[2:end,:], dims=2)[:]) ) .+ 1
+   end
+
+   # daily count starts in column 5; turn it into Float64s
+   my_confirmed = Array{Float64}(A[crows,5:end])
+
+   # Add all rows for the country
+   my_confirmed = sum(my_confirmed, dims=1)[:]
+
+   return my_confirmed
+end
+
+
 """
    country2conf(pais::String; invert=false)
 
@@ -173,6 +343,10 @@ function country2conf(A, pais::Tuple{String, Array{String,1}}; invert=false)
 end
 
 
+
+function country2conf(A, pais::Tuple{String, Array{Tuple{String,String},1}}; invert=false)
+   return country2conf(A, pais[2], invert=invert)
+end
 
 
 """
@@ -242,6 +416,9 @@ function getValue(A, country, datestring, value::Real)
 end
 
 
+function __init__()
+   stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
+end
 
 
 
