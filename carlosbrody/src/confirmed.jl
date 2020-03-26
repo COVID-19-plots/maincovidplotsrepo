@@ -437,7 +437,8 @@ canadaborder = ("6 border w/Canada states", [("Michigan", "US"),
    ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
    ("North Dakota", "US"), ("Montana", "US")])
 regions = [("Washington", "US"), ("New York", "US"), ("California", "US"),
-   "Italy", "Germany", "Brazil", africa, ("New Jersey", "US"), "Australia",
+   # "Italy", "Germany", "Brazil", africa,
+   ("New Jersey", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder]
 plotMany(regions, alignon=alignon, minval=alignon/8, fignum=5)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
