@@ -1,14 +1,16 @@
 module CovidFunctions
 
 using DelimitedFiles
+using PyPlot
 
 
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
-
+export savefig2jpg
 
 stateAbbrevMapFilename = "StateNamesAndAbbreviations.csv"
 stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
+
 
 """
    stateAbbrev2Fullname(str)
@@ -28,6 +30,18 @@ end
 
 function stateAbbrev2Fullname(str::Array{String})
    return map(x -> stateAbbrev2Fullname(x), str)
+end
+
+
+"""
+   savefig2jpg(fname::String)
+
+   saves current figure to fname.jpg, then calls Mac system executable
+   sips to make a jpg version in fname.jpg
+"""
+function savefig2jpg(fname::String)
+   savefig("$fname.png")
+   run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 end
 
 

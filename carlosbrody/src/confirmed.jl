@@ -421,7 +421,7 @@ fname = "confirmed_aligned"
 savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
-# ---- states confirmed aligned
+## ---- states confirmed aligned
 
 function plotUSStates()
    alignon=200
@@ -461,7 +461,7 @@ end
 plotUSStates()
 
 
-# -----  Cumulative Death count
+## -----  Cumulative Death count
 plotMany(paises, db=D, minval=2, fignum=6)
 ylabel("cumulative deaths", fontsize=fontsize, fontname=fontname)
 title("Cumulative COVID-19 deaths in selected regions", fontsize=fontsize, fontname=fontname)
@@ -508,6 +508,37 @@ addSourceString2Linear()
 fname = "deathGrowthRate"
 savefig("$fname.png")
 run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+
+
+##   ====== FOCUS ON LATIN AMERICA
+
+la = ["Mexico", "Brazil", "Chile", "Uruguay", "Argentina", "Colombia",
+   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
+plotMany(la, minval=100, fignum=8)
+ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
+title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
+gca().set_yticks([100, 400, 1000, 4000, 10000]) # , 40000, 100000])
+gca().set_yticklabels(["100", "400", "1000",
+   "4000", "10000"]) # , "40000", "100000"])
+# ylim(minval, ylim()[2])
+savefig2jpg("confirmedLA")
+
+
+mincases=50
+plotMany(la, plotFn=plot,
+   fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
+   mincases=mincases, fignum=3)
+ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
+title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
+   fontsize=fontsize, fontname=fontname)
+gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
+gca().set_yticks(0:10:60); ylim(0, 65)
+axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
+   fontname=fontname, fontsize=16,
+   horizontalalignment = "center", verticalalignment="top")
+addSourceString2Linear(replaceOld=true)
+savefig2jpg("multiplicative_factorLA")
 
 
 ## ===================
