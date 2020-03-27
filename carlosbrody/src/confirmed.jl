@@ -423,35 +423,42 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 # ---- states confirmed aligned
 
-alignon=200
-south = ("10 Southeast US states", [("Florida", "US"), ("Louisiana", "US"),
-   ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
-   ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
-   ("Alabama", "US"), ("Kentucky", "US")])
-mexicoborder = ("3 border w/Mexico states", [("Texas", "US"),
-   ("New Mexico", "US"), ("Arizona", "US")])
-midwest = ("Midwest US", [("Iowa", "US"), ("Missouri", "US"),
-   ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
-   ("Colorado", "US"), ("Utah", "US")])
-canadaborder = ("6 border w/Canada states", [("Michigan", "US"),
-   ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
-   ("North Dakota", "US"), ("Montana", "US")])
-regions = [("Washington", "US"), ("New York", "US"), ("California", "US"),
-   # "Italy", "Germany", "Brazil", africa,
-   ("New Jersey", "US"), # "Australia",
-   south, mexicoborder, midwest, canadaborder]
-plotMany(regions, alignon=alignon, minval=alignon/8, fignum=5)
-ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-title("Cumulative confirmed COVID-19 cases in selected countries and U.S. states,\naligned on cases=$alignon",
-      fontsize=fontsize, fontname=fontname)
-gca().set_yticks([40, 100, 400, 1000, 4000, 10000, 40000, 100000])
-gca().set_yticklabels(["40", "100", "400", "1000",
-   "4000", "10000", "40000", "100000"])
+function plotUSStates()
+   alignon=200
+   south = ("10 Southeast US states", [("Florida", "US"), ("Louisiana", "US"),
+      ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
+      ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
+      ("Alabama", "US"), ("Kentucky", "US")])
+   mexicoborder = ("3 border w/Mexico states", [("Texas", "US"),
+      ("New Mexico", "US"), ("Arizona", "US")])
+   midwest = ("Midwest US", [("Iowa", "US"), ("Missouri", "US"),
+      ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
+      ("Colorado", "US"), ("Utah", "US")])
+   canadaborder = ("6 border w/Canada states", [("Michigan", "US"),
+      ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
+      ("North Dakota", "US"), ("Montana", "US")])
 
-figname = "states_confirmed_aligned"
-savefig("$figname.png")
-run(`sips -s format JPEG $figname.png --out $figname.jpg`)
+   regions = ["Italy",
+      ("Washington", "US"), ("New York", "US"), ("California", "US"),
+      ("Florida", "US"),
+      # "Italy", "Germany", "Brazil", africa,
+      ("New Jersey", "US"), # "Australia",
+      south, mexicoborder, midwest, canadaborder, "US"]
 
+   plotMany(regions, alignon=alignon, minval=alignon/8, fignum=5)
+   ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
+   title("Cumulative confirmed COVID-19 cases in selected countries and U.S. states,\naligned on cases=$alignon",
+         fontsize=fontsize, fontname=fontname)
+   gca().set_yticks([40, 100, 400, 1000, 4000, 10000, 40000, 100000])
+   gca().set_yticklabels(["40", "100", "400", "1000",
+      "4000", "10000", "40000", "100000"])
+
+   figname = "states_confirmed_aligned"
+   savefig("$figname.png")
+   run(`sips -s format JPEG $figname.png --out $figname.jpg`)
+end
+
+plotUSStates()
 
 
 # -----  Cumulative Death count

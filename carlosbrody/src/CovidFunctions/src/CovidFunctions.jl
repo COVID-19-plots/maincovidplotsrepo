@@ -53,7 +53,7 @@ end
 """
 function loadConfirmedDbase(;
    dname = "../../../COVID-19/csse_covid_19_data/csse_covid_19_time_series",
-   fname = "time_series_19-covid-Confirmed.csv")
+   fname = "time_series_covid19_confirmed_global.csv")
 
    return readdlm("$dname/$fname", ',');
 end
@@ -69,9 +69,13 @@ end
    data and instead adds the rows from covidtracking
 """
 function mergeJHandCovidTracking(;jh=NaN, ct=NaN)
-   @assert jh != NaN && ct != NaN  "Need both jh and ct"
-   @assert size(jh,2)==size(ct,2)    "jh and ct must have same number of cols"
-   @assert jh[1,:] == ct[1,:]         "First row of jh and ct must be equal"
+   @assert jh != NaN && ct != NaN    "Need both jh and ct"
+   @assert jh[1,1:5] == ct[1,1:5]    "jh and ct must start on same date and have equal first 5 cols of first row"
+   # Use smallest date range
+   jh = jh[:,1:minimum([size(jh,2), size(ct,2)])]
+   ct = ct[:,1:minimum([size(jh,2), size(ct,2)])]
+   @assert jh[1,:] == ct[1,:]    "after narrowing both to smallest date range, first row of both jh and ct must be equal"
+
 
    # remove old US data
    u = findall(jh[:,2] .!= "US")
