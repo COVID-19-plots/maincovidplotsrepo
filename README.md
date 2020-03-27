@@ -21,9 +21,17 @@ We are grateful to our data sources:
 * [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
+#### [Focus on Latin America](#focus-on-latin-america):
+
+* [Daily percentile growth rates in confirmed cases by region](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
+
+
 #### Blog noting some brief observations:
 
 * [Blog with comments](https://github.com/COVID-19-plots/maincovidplotsrepo#blog)
+
+
+
 
 ## Confirmed cases plots
 
@@ -100,6 +108,15 @@ Click on the plot to see an expanded version.
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/deathGrowthRate.jpg" width="1000">
+
+
+## Focus on Latin America
+
+## Daily percentile growth rates in confirmed cases in Latin America
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/multiplicative_factorLA.jpg" width="1000">
 
 
 ## Blog
