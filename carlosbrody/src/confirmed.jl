@@ -19,7 +19,7 @@ D = collapseUSStates(D)
 
 
 
-sourcestring = "source: https://github.com/COVID-19-plots/maincovidplotsrepo"
+sourcestring = "daily updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
 
 
 #
@@ -350,7 +350,13 @@ function plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
 end
 
 
-function makeTickList(;yticbase=[1, 4], mintic=100, maxtic=400000)
+"""
+   setLogYTicks(;yticbase=[1, 4], mintic=100, maxtic=400000)
+
+   Sets yticks and ytick labels for log plots, at powers of 10
+   of the yticbase
+"""
+function setLogYTicks(;yticbase=[1, 4], mintic=100, maxtic=400000)
    tb = 1; tenpow=0;
    ticklist = 10^tenpow * mintic * yticbase[tb]
    while ticklist[end] < maxtic
@@ -362,6 +368,8 @@ function makeTickList(;yticbase=[1, 4], mintic=100, maxtic=400000)
       end
    end
 
+   gca().set_yticks(ticklist)
+   gca().set_yticklabels(string.(ticklist))
    return ticklist
 end
 
@@ -372,16 +380,14 @@ end
 # ############################################
 
 # ------  Cumulative case count
-function plotCumulative(regions, fname::String=""; yticbase=[1, 4],
+function plotCumulative(regions; fname::String="", yticbase=[1, 4],
    mintic=100, maxtic=400000, minval=100, kwargs...)
 
    plotMany(regions, minval=minval)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
 
-   ticklist = makeTickList(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
-   gca().set_yticks(ticklist)
-   gca().set_yticklabels(string.(ticklist))
+   setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
 
    if fname != ""
       savefig("$fname.png")
@@ -389,46 +395,96 @@ function plotCumulative(regions, fname::String=""; yticbase=[1, 4],
    end
 end
 
-plotCumulative(paises)
+plotCumulative(paises, fname="confirmed")
 
 ##
 # ------  New case count
-plotMany(paises, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
-   minval=0, fignum=2, days_previous=days_previous) # days_previous=size(A,2)-6)
-ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
-title("New confirmed COVID-19 cases per day\nin selected regions, smoothed with a +/- 2 day window",
-   fontsize=fontsize, fontname=fontname)
-gca().set_yticks([1, 4, 10, 40, 100, 400, 1000, 4000, 10000, 40000])
-gca().set_yticklabels(["1", "4", "10", "40", "100", "400", "1000",
-   "4000", "10000", "40000"])
-ylim(1, ylim()[2])
-# xlim(-1.1*(size(A,2)-6), 0.5)
-addSourceString2Semilogy()
-fname = "newConfirmed"
-savefig("$fname.png")
-run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
-# ------  Percentile growth in case count
-mincases=50
-plotMany(paises, plotFn=plot,
-   fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
-   mincases=mincases, fignum=3)
-ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
-title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
-   fontsize=fontsize, fontname=fontname)
-gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
-gca().set_yticks(0:10:60); ylim(0, 65)
-axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
-t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
-   fontname=fontname, fontsize=16,
-   horizontalalignment = "center", verticalalignment="top")
-addSourceString2Linear(replaceOld=true)
-fname = "multiplicative_factor_1"
-savefig("$fname.png")
-run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
+      yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
+
+   plotMany(paises, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
+   minval=minval, fignum=fignum, kwargs...) # days_previous=size(A,2)-6)
+   ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
+   title("New confirmed COVID-19 cases per day\nin selected regions, " *
+      "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window",
+      fontsize=fontsize, fontname=fontname)
+   ylim(minval, ylim()[2])
+   setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
+
+   addSourceString2Semilogy()
+   if fname != ""
+      savefig("$fname.png")
+      run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+   end
+end
+
+plotNew(paises, fignum=2, fname="newConfirmed")
+
+## ------  Percentile growth in case count
+
+interest_explanation = """
+How to read this plot: Think of the vertical axis values like interest rate per day being paid into an account. The account is not
+money, it is cumulative number of cases. We want that interest rate as low as possible. A horizontal flat line on this plot is like
+steady compound interest, i.e., it is exponential growth. The horizontal axis shows days before the date on the bottom right.
+"""
+
+function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
+   minval=10, fignum=3, yticks=0:10:60, ylim2=65,
+   mincases=50, fname::String="", kwargs...)
+
+   plotMany(paises, plotFn=plot,
+   fn=x -> smooth(percentileGrowth(x), smkernel),
+      mincases=mincases, fignum=3)
+
+   ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
+   title("% daily growth in cumulative confirmed COVID-19 cases," *
+      "\nsmoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window. " *
+      "$mincases cases minimum", fontsize=fontsize, fontname=fontname)
+
+   gca().set_yticks(yticks); ylim(0, ylim2); xlim(xlim()[1], 0.5)
+   axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+   axisMove(-0.05, 0)
+   t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
+      fontname=fontname, fontsize=16,
+      horizontalalignment = "center", verticalalignment="top")
+
+   """
+      ypos(factor, days)
+
+      given a growth fcator (e.g., 10 for 10x) and a number of days,
+      calculates the daily percentile growth that would lead to that
+   """
+   function growthTick(days::Real, str::String; factor=10)
+      x1 = 0.045*(xlim()[2] - xlim()[1]) + xlim()[2]
+      x2 = 0.145*(xlim()[2] - xlim()[1]) + xlim()[2]
+
+      ypos = 100*(exp(log(factor)/days) - 1);
+
+      h = plot([x1, x2], [1, 1]*ypos, color="grey", clip_on=false)[1]
+      t = text((x1+x2)/2, ypos, str,
+         verticalalignment="center", horizontalalignment="center",
+         backgroundcolor="w", color="grey")
+   end
+   growthTick(7, "1 week")
+   growthTick(14, "2 weeks")
+   growthTick(30, "1 month")
+   growthTick(60, "2 months")
+   growthTick(180, "6 months")
+   xpos = 0.105*(xlim()[2] - xlim()[1]) + xlim()[2]
+   ypos = ylim()[2] - 0.025*(ylim()[2]-ylim()[1])
+   text(xpos, ypos, "10X growth time",
+      verticalalignment="center", horizontalalignment="center",
+      backgroundcolor="w", color="grey", fontname="Helvetica", fontsize=14)
+
+   addSourceString2Linear()
+   savefig2jpg(fname)
+end
+
+plotGrowth(paises, fname = "multiplicative_factor_1")
 
 
-# --------   case count aligned on caseload
+## --------   case count aligned on caseload
 alignon=200
 plotMany(setdiff(paises, ["World other than China"]),
    alignon=alignon, minval=alignon/8, fignum=4)

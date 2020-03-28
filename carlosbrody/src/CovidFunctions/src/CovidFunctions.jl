@@ -38,10 +38,14 @@ end
 
    saves current figure to fname.jpg, then calls Mac system executable
    sips to make a jpg version in fname.jpg
+
+   If fname == "" then does nothing
 """
 function savefig2jpg(fname::String)
-   savefig("$fname.png")
-   run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+   if fname != ""
+      savefig("$fname.png")
+      run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+   end
 end
 
 
