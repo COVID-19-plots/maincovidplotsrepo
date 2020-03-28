@@ -107,6 +107,12 @@ Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/multiplicative_factorLA.jpg" width="1000">
 
+### Latin America: Cumulative number of cases
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/confirmedLA.jpg" width="1000">
+
 
 
 
