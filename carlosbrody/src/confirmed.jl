@@ -383,7 +383,7 @@ end
 function plotCumulative(regions; fname::String="", yticbase=[1, 4],
    mintic=100, maxtic=400000, minval=100, kwargs...)
 
-   plotMany(regions, minval=minval)
+   plotMany(regions, minval=minval, kwargs...)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
 
@@ -425,20 +425,25 @@ plotNew(paises, fignum=2, fname="newConfirmed")
 
 interest_explanation = """
 How to read this plot: Think of the vertical axis values like interest rate per day being paid into an account. The account is not
-money, it is cumulative number of cases. We want that interest rate as low as possible. A horizontal flat line on this plot is like
+money, it is cumulative number. We want that interest rate as low as possible. A horizontal flat line on this plot is like
 steady compound interest, i.e., it is exponential growth. The horizontal axis shows days before the date on the bottom right.
 """
 
+"""
+   plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
+      minval=10, fignum=3, yticks=0:10:60, ylim2=65,
+      mincases=50, fname::String="", counttype="cases", kwargs...)
+"""
 function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
-   minval=10, fignum=3, yticks=0:10:60, ylim2=65,
-   mincases=50, fname::String="", kwargs...)
+   fignum=3, yticks=0:10:60, ylim2=65,
+   mincases=50, fname::String="", counttype="cases", kwargs...)
 
-   plotMany(paises, plotFn=plot,
-   fn=x -> smooth(percentileGrowth(x), smkernel),
-      mincases=mincases, fignum=3)
+   plotMany(regions, plotFn=plot,
+      fn=x -> smooth(percentileGrowth(x), smkernel),
+      mincases=mincases, fignum=3; kwargs...)
 
    ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
-   title("% daily growth in cumulative confirmed COVID-19 cases," *
+   title("% daily growth in cumulative confirmed COVID-19 $counttype," *
       "\nsmoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window. " *
       "$mincases cases minimum", fontsize=fontsize, fontname=fontname)
 
@@ -481,7 +486,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    savefig2jpg(fname)
 end
 
-plotGrowth(paises, fname = "multiplicative_factor_1")
+plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1")
 
 
 ## --------   case count aligned on caseload
@@ -569,31 +574,34 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 # -----   Death growth rate
-mincases=20
-plotMany(paises, db=D, minval=0, mincases=mincases, fignum=8,
-   fn=x -> smooth(percentileGrowth(x), [0.2, 0.5, 0.7, 0.5, 0.2]), plotFn=plot)
-ylabel("daily % growth in cumulative deaths", fontsize=fontsize, fontname=fontname)
-title("Percentile daily growth in cumulative COVID-19 deaths in selected regions\nsmoothed with a +/- 2 day window. $mincases deaths minimum", fontsize=fontsize, fontname=fontname)
-gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
-gca().set_yticks(0:10:80); ylim(0, 80)
-axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
-t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
-   fontname=fontname, fontsize=16,
-   horizontalalignment = "center", verticalalignment="top")
-a = gcf().findobj(x -> py"hasattr"(x, "get_text") && x.get_text() == sourcestring)
-a[1].remove()
-addSourceString2Linear()
 
-fname = "deathGrowthRate"
-savefig("$fname.png")
-run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+plotGrowth(paises, fignum=8; db=D, counttype="deaths", mincases=20, yticks=0:10:80, ylim2=80, fname="deathGrowthRate")
+
+# mincases=20
+# plotMany(paises, db=D, minval=0, mincases=mincases, fignum=8,
+#    fn=x -> smooth(percentileGrowth(x), [0.2, 0.5, 0.7, 0.5, 0.2]), plotFn=plot)
+# ylabel("daily % growth in cumulative deaths", fontsize=fontsize, fontname=fontname)
+# title("Percentile daily growth in cumulative COVID-19 deaths in selected regions\nsmoothed with a +/- 2 day window. $mincases deaths minimum", fontsize=fontsize, fontname=fontname)
+# gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
+# gca().set_yticks(0:10:80); ylim(0, 80)
+# axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+# t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
+#    fontname=fontname, fontsize=16,
+#    horizontalalignment = "center", verticalalignment="top")
+# a = gcf().findobj(x -> py"hasattr"(x, "get_text") && x.get_text() == sourcestring)
+# a[1].remove()
+# addSourceString2Linear()
+#
+# fname = "deathGrowthRate"
+# savefig("$fname.png")
+# run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 ##   ====== FOCUS ON LATIN AMERICA
 
-la = ["Mexico", "Brazil", "Chile", "Uruguay", "Argentina", "Colombia",
-   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica",
-   "World other than China"]
+la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
+   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
+
 plotMany(setdiff(la, ["World other than China"]), minval=100, fignum=8)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
 title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
@@ -603,22 +611,27 @@ gca().set_yticklabels(["100", "400", "1000",
 # ylim(minval, ylim()[2])
 savefig2jpg("confirmedLA")
 
+##
 
-mincases=50
-plotMany(la, plotFn=plot,
-   fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
-   mincases=mincases, fignum=9, days_previous=11)
-ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
-title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
-   fontsize=fontsize, fontname=fontname)
-gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
-gca().set_yticks(0:10:40); ylim(0, 45)
-axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
-t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
-   fontname=fontname, fontsize=16,
-   horizontalalignment = "center", verticalalignment="top")
-addSourceString2Linear(replaceOld=true)
-savefig2jpg("multiplicative_factorLA")
+
+plotGrowth(la, yticks=0:10:40, ylim2=45, fname="multiplicative_factorLA",
+   fignum=9)
+
+##
+# plotMany(la, plotFn=plot,
+#    fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
+#    mincases=mincases, fignum=9, days_previous=11)
+# ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
+# title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
+#    fontsize=fontsize, fontname=fontname)
+# gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
+# gca().set_yticks(0:10:40); ylim(0, 45)
+# axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+# t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
+#    fontname=fontname, fontsize=16,
+#    horizontalalignment = "center", verticalalignment="top")
+# addSourceString2Linear(replaceOld=true)
+# savefig2jpg()
 
 
 ## ===================
