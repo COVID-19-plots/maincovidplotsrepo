@@ -14,13 +14,13 @@ We are grateful to our data sources:
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [New cases per day and by region](#new-cases-per-day-and-by-region)
 
-#### [Focus on US States](#focus-on-us-states):
+#### [US States](#focus-on-us-states):
 
 * [States of the US: Daily percentile growth rates](https://github.com/COVID-19-plots/maincovidplotsrepo#states-of-the-us-daily-percentile-growth-rates)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases):
 
-#### [Focus on Latin America](#focus-on-latin-america):
+#### [Latin America](#focus-on-latin-america):
 
 * [Daily percentile growth rates in confirmed cases by region](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
 
