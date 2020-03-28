@@ -7,13 +7,18 @@ We are grateful to our data sources:
 
 
 
-#### [Confirmed cases plots](https://github.com/COVID-19-plots/maincovidplotsrepo#confirmed-cases-plots-1):
+#### [Confirmed cases around the world](https://github.com/COVID-19-plots/maincovidplotsrepo#confirmed-cases-plots-1):
 
 * [Daily percentile growth rates in confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [New cases per day and by region](#new-cases-per-day-and-by-region)
+
+#### [Focus on US States](#focus-on-us-states):
+
+* [States of the US: Daily percentile growth rates](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-us-states)
+* [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](maincovidplotsrepo#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
+* [States of the US: Cumulative number of cases]():
 
 #### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1):
 
@@ -66,8 +71,6 @@ Click on the plot to see an expanded version.
 
 
 ### States of the US: cumulative number of confirmed cases, aligned on equal caseload
-
-**2020-03-24: State info is on hold while Johns Hopkins restructures their database format**
 
 The same plot as immediately above, but now with some states of the US. 
 
