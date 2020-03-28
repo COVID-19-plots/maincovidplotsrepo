@@ -427,6 +427,7 @@ interest_explanation = """
 How to read this plot: Think of the vertical axis values like interest rate per day being paid into an account. The account is not
 money, it is cumulative number. We want that interest rate as low as possible. A horizontal flat line on this plot is like
 steady compound interest, i.e., it is exponential growth. The horizontal axis shows days before the date on the bottom right.
+Grey lines at right indicate time to grow by a factor of 10X.
 """
 
 """
@@ -487,7 +488,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    savefig2jpg(fname)
 end
 
-plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1")
+plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
 
 
 ## --------   case count aligned on caseload
@@ -508,23 +509,23 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 ## ---- states confirmed aligned
 
-south = ("South: FL, LA, TN, GA, MS,\nAK, NC, SC, AL, KY", [("Florida", "US"), ("Louisiana", "US"),
+south = ("South: FL+LA+TN+GA+MS+\nAK+NC+SC+AL+KY", [("Florida", "US"), ("Louisiana", "US"),
    ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
    ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
    ("Alabama", "US"), ("Kentucky", "US")])
-mexicoborder = ("Mexico border: TX, NM, AZ", [("Texas", "US"),
+mexicoborder = ("Mexico border: TX+NM+AZ", [("Texas", "US"),
    ("New Mexico", "US"), ("Arizona", "US")])
-midwest = ("Midwest: IA, MO, OK, KS, NE\nWY, CO, UT",
+midwest = ("Midwest: IA+MO+OK+KS+NE\nWY, CO, UT",
    [("Iowa", "US"), ("Missouri", "US"),
    ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
    ("Colorado", "US"), ("Utah", "US")])
-canadaborder = ("Canada border:\nMI, IL, WI, MN, ND, MT", [("Michigan", "US"),
+canadaborder = ("Canada border:\nMI+IL+WI+MN+ND+MT", [("Michigan", "US"),
    ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
    ("North Dakota", "US"), ("Montana", "US")])
 
 regions = ["US", "Italy",
    ("Washington", "US"), ("New York", "US"), ("California", "US"),
-   ("Florida", "US"),
+   ("Florida", "US"), ("Texas", "US"),
    # "Italy", "Germany", "Brazil", africa,
    ("New Jersey", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder]
