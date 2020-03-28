@@ -470,14 +470,15 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
       t = text((x1+x2)/2, ypos, str,
          verticalalignment="center", horizontalalignment="center",
          backgroundcolor="w", color="grey")
+      return ypos
    end
-   growthTick(7, "1 week")
+   yp = growthTick(7, "1 week")
    growthTick(14, "2 weeks")
    growthTick(30, "1 month")
    growthTick(60, "2 months")
    growthTick(180, "6 months")
    xpos = 0.105*(xlim()[2] - xlim()[1]) + xlim()[2]
-   ypos = ylim()[2] - 0.025*(ylim()[2]-ylim()[1])
+   ypos = yp + 0.1*(ylim()[2]-ylim()[1])
    text(xpos, ypos, "10X growth time",
       verticalalignment="center", horizontalalignment="center",
       backgroundcolor="w", color="grey", fontname="Helvetica", fontsize=14)
