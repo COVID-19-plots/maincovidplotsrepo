@@ -22,7 +22,8 @@ We are grateful to our data sources:
 
 #### [Latin America](#focus-on-latin-america):
 
-* [Daily percentile growth rates in confirmed cases by region](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
+* [Latin America: Daily percentile growth rates](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
+* [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases):
 
 #### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1):
 
@@ -101,7 +102,7 @@ Click on the plot to see an expanded version.
 
 ## Focus on Latin America
 
-## Daily percentile growth rates in confirmed cases in Latin America
+### Daily percentile growth rates in confirmed cases in Latin America
 
 Click on the plot to see an expanded version.
 
