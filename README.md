@@ -79,8 +79,6 @@ Click on the plot to see an expanded version.
 
 ## Focus on US states
 
-* [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases):
-
 ### States of the US: Daily percentile growth rates
 
 Click on the plot to see an expanded version.
