@@ -83,7 +83,7 @@ Click on the plot to see an expanded version.
 
 Click on the plot to see an expanded version.
 
-<img src="carlosbrody/src/statesGrowth.jpg" width="1000">
+<img src="carlosbrody/src/statesGrowthRate.jpg" width="1000">
 
 
 ### States of the US: cumulative number of confirmed cases, aligned on equal caseload
