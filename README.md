@@ -16,19 +16,19 @@ We are grateful to our data sources:
 
 #### [Focus on US States](#focus-on-us-states):
 
-* [States of the US: Daily percentile growth rates](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-us-states)
-* [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](maincovidplotsrepo#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [States of the US: Cumulative number of cases]():
+* [States of the US: Daily percentile growth rates](https://github.com/COVID-19-plots/maincovidplotsrepo#states-of-the-us-daily-percentile-growth-rates)
+* [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
+* [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases):
+
+#### [Focus on Latin America](#focus-on-latin-america):
+
+* [Daily percentile growth rates in confirmed cases by region](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
 
 #### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1):
 
 * [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
 * [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
 * [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
-
-#### [Focus on Latin America](#focus-on-latin-america):
-
-* [Daily percentile growth rates in confirmed cases by region](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
 
 
 #### Blog noting some brief observations:
@@ -70,20 +70,35 @@ Click on the plot to see an expanded version.
 <img src="carlosbrody/src/confirmed_aligned.jpg" width="1000">
 
 
-### States of the US: cumulative number of confirmed cases, aligned on equal caseload
-
-The same plot as immediately above, but now with some states of the US. 
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
-
-
 ### New cases per day and by region
 
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/newConfirmed.jpg" width="1000">
+
+
+## Focus on US states
+
+* [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases):
+
+### States of the US: Daily percentile growth rates
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/statesGrowth.jpg" width="1000">
+
+
+### States of the US: cumulative number of confirmed cases, aligned on equal caseload
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
+
+### States of the US: Cumulative number of cases
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/statesCumulative.jpg" width="1000">
 
 
 ## Mortality plots
