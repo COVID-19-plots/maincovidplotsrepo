@@ -334,7 +334,7 @@ function plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
 
    end
 
-   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
+   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2),
       loc="upper left")
    xlabel("days", fontsize=fontsize, fontname=fontname)
    grid("on")
@@ -350,6 +350,21 @@ function plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
 end
 
 
+function makeTickList(;yticbase=[1, 4], mintic=100, maxtic=400000)
+   tb = 1; tenpow=0;
+   ticklist = 10^tenpow * mintic * yticbase[tb]
+   while ticklist[end] < maxtic
+      tb += 1;
+      ticklist = vcat(ticklist, 10^tenpow * mintic * yticbase[tb])
+      if tb==2
+         tb = 0
+         tenpow += 1
+      end
+   end
+
+   return ticklist
+end
+
 # ############################################
 #
 #  FN DEFS DONE - PRODUCE PLOTS
@@ -357,18 +372,26 @@ end
 # ############################################
 
 # ------  Cumulative case count
-plotMany(paises, minval=100)
-ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
-gca().set_yticks([100, 400, 1000, 4000, 10000, 40000, 100000])
-gca().set_yticklabels(["100", "400", "1000",
-   "4000", "10000", "40000", "100000"])
-# ylim(minval, ylim()[2])
-fname = "confirmed"
-savefig("$fname.png")
-run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+function plotCumulative(regions, fname::String=""; yticbase=[1, 4],
+   mintic=100, maxtic=400000, minval=100, kwargs...)
 
+   plotMany(regions, minval=minval)
+   ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
+   title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
 
+   ticklist = makeTickList(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
+   gca().set_yticks(ticklist)
+   gca().set_yticklabels(string.(ticklist))
+
+   if fname != ""
+      savefig("$fname.png")
+      run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+   end
+end
+
+plotCumulative(paises)
+
+##
 # ------  New case count
 plotMany(paises, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
    minval=0, fignum=2, days_previous=days_previous) # days_previous=size(A,2)-6)
@@ -423,29 +446,29 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 ## ---- states confirmed aligned
 
-function plotUSStates()
-   alignon=200
-   south = ("10 Southeast US states", [("Florida", "US"), ("Louisiana", "US"),
-      ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
-      ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
-      ("Alabama", "US"), ("Kentucky", "US")])
-   mexicoborder = ("3 border w/Mexico states", [("Texas", "US"),
-      ("New Mexico", "US"), ("Arizona", "US")])
-   midwest = ("Midwest US", [("Iowa", "US"), ("Missouri", "US"),
-      ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
-      ("Colorado", "US"), ("Utah", "US")])
-   canadaborder = ("6 border w/Canada states", [("Michigan", "US"),
-      ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
-      ("North Dakota", "US"), ("Montana", "US")])
+south = ("South: FL, LA, TN, GA, MS,\nAK, NC, SC, AL, KY", [("Florida", "US"), ("Louisiana", "US"),
+   ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
+   ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
+   ("Alabama", "US"), ("Kentucky", "US")])
+mexicoborder = ("Mexico border: TX, NM, AZ", [("Texas", "US"),
+   ("New Mexico", "US"), ("Arizona", "US")])
+midwest = ("Midwest: IA, MO, OK, KS, NE\nWY, CO, UT",
+   [("Iowa", "US"), ("Missouri", "US"),
+   ("Oklahoma", "US"), ("Kansas", "US"), ("Nebraska", "US"), ("Wyoming", "US"),
+   ("Colorado", "US"), ("Utah", "US")])
+canadaborder = ("Canada border:\nMI, IL, WI, MN, ND, MT", [("Michigan", "US"),
+   ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
+   ("North Dakota", "US"), ("Montana", "US")])
 
-   regions = ["Italy",
-      ("Washington", "US"), ("New York", "US"), ("California", "US"),
-      ("Florida", "US"),
-      # "Italy", "Germany", "Brazil", africa,
-      ("New Jersey", "US"), # "Australia",
-      south, mexicoborder, midwest, canadaborder, "US"]
+regions = ["US", "Italy",
+   ("Washington", "US"), ("New York", "US"), ("California", "US"),
+   ("Florida", "US"),
+   # "Italy", "Germany", "Brazil", africa,
+   ("New Jersey", "US"), # "Australia",
+   south, mexicoborder, midwest, canadaborder]
 
-   plotMany(regions, alignon=alignon, minval=alignon/8, fignum=5)
+function plotUSStates(regions, alignon=200, fignum=5; kwargs...)
+   plotMany(regions, alignon=alignon, minval=alignon/8, fignum=fignum; kwargs...)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 cases in selected countries and U.S. states,\naligned on cases=$alignon",
          fontsize=fontsize, fontname=fontname)
@@ -458,7 +481,7 @@ function plotUSStates()
    run(`sips -s format JPEG $figname.png --out $figname.jpg`)
 end
 
-plotUSStates()
+plotUSStates(regions)
 
 
 ## -----  Cumulative Death count
@@ -513,8 +536,9 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 ##   ====== FOCUS ON LATIN AMERICA
 
 la = ["Mexico", "Brazil", "Chile", "Uruguay", "Argentina", "Colombia",
-   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
-plotMany(la, minval=100, fignum=8)
+   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica",
+   "World other than China"]
+plotMany(setdiff(la, ["World other than China"]), minval=100, fignum=8)
 ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
 title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
 gca().set_yticks([100, 400, 1000, 4000, 10000]) # , 40000, 100000])
@@ -527,12 +551,12 @@ savefig2jpg("confirmedLA")
 mincases=50
 plotMany(la, plotFn=plot,
    fn=x -> smooth(percentileGrowth(x), [0.1, 0.2, 0.5, 0.7, 0.5, 0.2, 0.1]),
-   mincases=mincases, fignum=3)
+   mincases=mincases, fignum=9, days_previous=11)
 ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
 title("% daily growth in cumulative confirmed COVID-19 cases,\nsmoothed with a +/- 2 day window. $mincases cases minimum",
    fontsize=fontsize, fontname=fontname)
 gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2), loc="upper left")
-gca().set_yticks(0:10:60); ylim(0, 65)
+gca().set_yticks(0:10:40); ylim(0, 45)
 axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
 t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
    fontname=fontname, fontsize=16,
