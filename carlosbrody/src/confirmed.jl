@@ -380,10 +380,14 @@ end
 # ############################################
 
 # ------  Cumulative case count
+"""
+   plotCumulative(regions; fname::String="", yticbase=[1, 4],
+      mintic=100, maxtic=400000, minval=100, kwargs...)
+"""
 function plotCumulative(regions; fname::String="", yticbase=[1, 4],
    mintic=100, maxtic=400000, minval=100, kwargs...)
 
-   plotMany(regions, minval=minval, kwargs...)
+   plotMany(regions, minval=minval; kwargs...)
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
 
@@ -545,6 +549,8 @@ function plotUSStates(regions, alignon=200, fignum=5; kwargs...)
 end
 
 plotUSStates(regions)
+plotGrowth(regions, fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
+plotCumulative(regions, fignum=11, maxtic=100000, fname="statesCumulative")
 
 
 ## -----  Cumulative Death count
