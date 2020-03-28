@@ -99,6 +99,17 @@ Click on the plot to see an expanded version.
 <img src="carlosbrody/src/statesCumulative.jpg" width="1000">
 
 
+## Focus on Latin America
+
+## Daily percentile growth rates in confirmed cases in Latin America
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/multiplicative_factorLA.jpg" width="1000">
+
+
+
+
 ## Mortality plots
 
 Making these mortaility plots made me cry. I know that people die all the time. Even without a pandemic, on the order of 8 million people a month pass away. COVID-19 deaths are at an early enough point in their exponential growth that they are very small compared to that. But I had never before been personally involved in counting deaths. It is very grim.
@@ -125,14 +136,6 @@ Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/deathGrowthRate.jpg" width="1000">
 
-
-## Focus on Latin America
-
-## Daily percentile growth rates in confirmed cases in Latin America
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/multiplicative_factorLA.jpg" width="1000">
 
 
 ## Blog
