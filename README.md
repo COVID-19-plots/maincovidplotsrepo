@@ -56,6 +56,7 @@ Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/newConfirmed.jpg" width="1000">
 
+**2020-March-29**: It looks like the number of new cases per day is beginning to not grow exponentially, but stay steady. A sign of social distancing working? But I fear that might be merely because the number of actual cases is now exceeding, in many regions, their testing capacity. 
 
 ## Blog
 
