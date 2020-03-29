@@ -15,19 +15,10 @@ We are grateful to our data sources:
 Four different types of plots are provided on this page, each showing a number of selected regions from around the world. These plots are (a) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (b) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (c) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (d) [new daily counts](new-cases-per-day-and-by-region).
 
 
-  For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
+* For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
+* For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
+* For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
 
-  For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
-
-  For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
-
-
-There is also a very brief [blog with short observations](https://github.com/COVID-19-plots/maincovidplotsrepo#blog)
-
-
-
-
-## Confirmed cases plots
 
 ### Daily percentile growth rates in confirmed cases per country
 
