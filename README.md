@@ -9,7 +9,7 @@ We are grateful to our data sources:
 ### Plot types
 
 Four different types of plots are provided for 
-* a variety of regions aroung the globe; 
+* a variety of regions around the globe; 
 * US States; 
 * Latin America; 
 * death counts for a variety of regions aroung the globe.
