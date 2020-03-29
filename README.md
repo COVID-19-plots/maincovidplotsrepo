@@ -8,7 +8,7 @@ We are grateful to our data sources:
 
 ### Plot types
 
-For main types of plots are provided: growth rates; cumulative counts; cumulative counts aligned on equal caseload; new daily counts.
+Four main types of plots are provided: growth rates; cumulative counts; cumulative counts aligned on equal caseload; new daily counts.
 
 Those four types of plots are provided for (a) a variety of regions aroung the globe; (b) US States; (c) Latin America; (d) death counts for a variety of regions aroung the globe.
 
