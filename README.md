@@ -29,7 +29,7 @@ Those four types of plots are provided for (a) a variety of regions aroung the g
 * [States of the US: New cases per day](#states-of-the-us-new-cases-per-day)
 
 
-#### [Latin America](#focus-on-latin-america):
+#### [Latin America confirmed cases](#focus-on-latin-america):
 
 * [Latin America: Daily percentile growth rates](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
 * [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases)
