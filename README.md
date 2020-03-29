@@ -6,12 +6,13 @@ We are grateful to our data sources:
 * US and US state-level data are from https://covidtracking.com
 
 
-# Plot types
+### Plot types
 
 For main types of plots are provided: growth rates; cumulative counts; cumulative counts aligned on equal caseload; new daily counts.
 
 Those four types of plots are provided for (a) a variety of regions aroung the globe; (b) US States; (c) Latin America; (d) death counts for a variety of regions aroung the globe.
 
+### Plot listing
 
 #### [Confirmed cases around the world](https://github.com/COVID-19-plots/maincovidplotsrepo#confirmed-cases-plots-1):
 
