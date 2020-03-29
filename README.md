@@ -14,7 +14,11 @@ Four different types of plots are provided for
 * Latin America; 
 * death counts for a variety of regions aroung the globe.
 
-The four main types of plots provided are: growth rates; cumulative counts; cumulative counts aligned on equal caseload; new daily counts.
+The four main types of plots provided are: 
+* growth rates
+* cumulative counts
+* cumulative counts aligned on equal caseload
+* new daily counts.
 
 ### Plot listing
 
