@@ -10,7 +10,7 @@ Four different types of plots are provided on this page, each showing a number o
 * For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
 * For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
 
---
+---
 
 We are grateful to our data sources:
 
