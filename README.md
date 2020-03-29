@@ -12,17 +12,15 @@ We are grateful to our data sources:
 
 ### Plot types
 
-Four different types of plots are provided for 
-* a variety of regions around the globe; 
-* US States; 
-* Latin America; 
-* death counts for a variety of regions aroung the globe.
-
-The four main types of plots provided are: 
+Four different types of plots are provided: 
 * growth rates
 * cumulative counts
 * cumulative counts aligned on equal caseload
 * new daily counts.
+
+For same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
+
+For same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
 
 ### Plot listing
 
@@ -32,21 +30,6 @@ The four main types of plots provided are:
 * [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [New cases per day and by region](#new-cases-per-day-and-by-region)
-
-#### [US States confirmed cases](#focus-on-us-states):
-
-* [States of the US: Daily percentile growth rates](https://github.com/COVID-19-plots/maincovidplotsrepo#states-of-the-us-daily-percentile-growth-rates)
-* [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases)
-* [States of the US: New cases per day](#states-of-the-us-new-cases-per-day)
-
-
-#### [Latin America confirmed cases](#focus-on-latin-america):
-
-* [Latin America: Daily percentile growth rates](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
-* [Latin America: cumulative number of confirmed cases, aligned on equal caseload](#latin-america-cumulative-number-of-cases-aligned-on-equal-caseload)
-* [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases)
-* [Latin America: New cases per day](#latin-america-new-cases-per-day)
 
 
 #### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1)
@@ -100,64 +83,6 @@ Click on the plot to see an expanded version.
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/newConfirmed.jpg" width="1000">
-
-
-## Focus on US states
-
-### States of the US: Daily percentile growth rates
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/statesGrowthRate.jpg" width="1000">
-
-
-### States of the US: cumulative number of confirmed cases, aligned on equal caseload
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
-
-### States of the US: Cumulative number of cases
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/statesCumulative.jpg" width="1000">
-
-### States of the US: New cases per day
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/statesNew.jpg" width="1000">
-
-
-
-## Focus on Latin America
-
-### Daily percentile growth rates in confirmed cases in Latin America
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/multiplicative_factorLA.jpg" width="1000">
-
-
-### Latin America: Cumulative number of cases, aligned on equal caseload
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/laAligned.jpg" width="1000">
-
-
-### Latin America: Cumulative number of cases
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/confirmedLA.jpg" width="1000">
-
-### Latin America: New cases per day
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/laNew.jpg" width="1000">
 
 
 
