@@ -382,32 +382,34 @@ end
 # ------  Cumulative case count
 """
    plotCumulative(regions; fname::String="", yticbase=[1, 4],
-      mintic=100, maxtic=400000, minval=100, kwargs...)
+      mintic=100, maxtic=400000, minval=100, fignum=1, counttype="cases", kwargs...)
 """
 function plotCumulative(regions; fname::String="", yticbase=[1, 4],
-   mintic=100, maxtic=400000, minval=100, kwargs...)
+   mintic=100, maxtic=400000, minval=100, fignum=1, counttype="cases", kwargs...)
 
-   plotMany(regions, minval=minval; kwargs...)
+   plotMany(regions, minval=minval, fignum=fignum; kwargs...)
+
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-   title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
-
+   title("Cumulative confirmed COVID-19 $counttype in selected regions", fontsize=fontsize, fontname=fontname)
    setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
 
-   if fname != ""
-      savefig("$fname.png")
-      run(`sips -s format JPEG $fname.png --out $fname.jpg`)
-   end
+   addSourceString2Semilogy()
+
+   savefig2jpg(fname)
 end
 
-plotCumulative(paises, fname="confirmed")
 
 ##
 # ------  New case count
 
+"""
+   plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
+      yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
+"""
 function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
       yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
 
-   plotMany(paises, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
+   plotMany(regions, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
    minval=minval, fignum=fignum, kwargs...) # days_previous=size(A,2)-6)
    ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
    title("New confirmed COVID-19 cases per day\nin selected regions, " *
@@ -417,13 +419,10 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
    setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
 
    addSourceString2Semilogy()
-   if fname != ""
-      savefig("$fname.png")
-      run(`sips -s format JPEG $fname.png --out $fname.jpg`)
-   end
+
+   savefig2jpg(fname)
 end
 
-plotNew(paises, fignum=2, fname="newConfirmed")
 
 ## ------  Percentile growth in case count
 
@@ -492,24 +491,30 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    savefig2jpg(fname)
 end
 
-plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
 
 
 ## --------   case count aligned on caseload
-alignon=200
-plotMany(setdiff(paises, ["World other than China"]),
-   alignon=alignon, minval=alignon/8, fignum=4)
-ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-title("Cumulative confirmed COVID-19 cases in selected regions,\naligned on cases=$alignon",
-   fontsize=fontsize, fontname=fontname)
-gca().set_yticks([40, 100, 400, 1000, 4000, 10000, 40000, 100000])
-gca().set_yticklabels(["40", "100", "400", "1000",
-   "4000", "10000", "40000", "100000"])
-# ylim(minval, ylim()[2])
+"""
+   plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
+      mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases", kwargs...)
+"""
+function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
+   mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases", kwargs...)
 
-fname = "confirmed_aligned"
-savefig("$fname.png")
-run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+   plotMany(setdiff(regions, ["World other than China"]),
+      alignon=alignon, minval=alignon/8, fignum=fignum; kwargs...)
+   ylabel("cumulative confirmed $counttype", fontsize=fontsize, fontname=fontname)
+   title("Cumulative confirmed COVID-19 $counttype in selected regions,\naligned on cases=$alignon",
+      fontsize=fontsize, fontname=fontname)
+   setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
+
+   savefig2jpg(fname)
+end
+
+plotCumulative(paises, fname="confirmed")
+plotNew(paises, fignum=2, fname="newConfirmed")
+plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
+plotAligned(paises, fignum=4, fname="confirmed_aligned")
 
 ## ---- states confirmed aligned
 
@@ -534,23 +539,11 @@ regions = ["US", "Italy",
    ("New Jersey", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder]
 
-function plotUSStates(regions, alignon=200, fignum=5; kwargs...)
-   plotMany(regions, alignon=alignon, minval=alignon/8, fignum=fignum; kwargs...)
-   ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-   title("Cumulative confirmed COVID-19 cases in selected countries and U.S. states,\naligned on cases=$alignon",
-         fontsize=fontsize, fontname=fontname)
-   gca().set_yticks([40, 100, 400, 1000, 4000, 10000, 40000, 100000])
-   gca().set_yticklabels(["40", "100", "400", "1000",
-      "4000", "10000", "40000", "100000"])
-
-   figname = "states_confirmed_aligned"
-   savefig("$figname.png")
-   run(`sips -s format JPEG $figname.png --out $figname.jpg`)
-end
-
-plotUSStates(regions)
 plotGrowth(regions, fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
 plotCumulative(regions, fignum=11, maxtic=100000, fname="statesCumulative")
+plotAligned(regions, fname="states_confirmed_aligned",
+   mintic=40, maxtic=100000, fignum=5, minval=10)
+plotNew(regions, fignum=14, fname="statesNew")
 
 
 ## -----  Cumulative Death count
