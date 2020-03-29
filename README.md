@@ -4,21 +4,20 @@
 
 ---
 
-We are grateful to our data sources:
-
-* The open availability of the [database](https://github.com/CSSEGISandData/COVID-19) for the [Johns Hopkins COVID-19 dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) (their [mobile version here](https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61)) makes these plots possible.
-* US and US state-level data are from https://covidtracking.com
-
-
-### Plot types
-
-Four different types of plots are provided on this page, each showing a number of selected regions from around the world. These plots are (a) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (b) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (c) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (d) [new daily counts](new-cases-per-day-and-by-region).
-
+Four different types of plots are provided on this page, each showing a number of selected regions from around the world. (A) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (B) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (C) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (D) [new daily counts](new-cases-per-day-and-by-region).
 
 * For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
 * For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
 * For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
 
+--
+
+We are grateful to our data sources:
+
+* The open availability of the [database](https://github.com/CSSEGISandData/COVID-19) for the [Johns Hopkins COVID-19 dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) (their [mobile version here](https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61)) makes these plots possible.
+* US and US state-level data are from https://covidtracking.com
+
+---
 
 ### Daily percentile growth rates in confirmed cases per country
 
