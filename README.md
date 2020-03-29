@@ -32,7 +32,10 @@ Those four types of plots are provided for (a) a variety of regions aroung the g
 #### [Latin America confirmed cases](#focus-on-latin-america):
 
 * [Latin America: Daily percentile growth rates](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
+* [Latin America: cumulative number of confirmed cases by state, aligned on equal caseload](#latin-america-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases)
+* [Latin America: New cases per day](#latin-america-new-cases-per-day)
+
 
 #### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1)
 
@@ -138,6 +141,11 @@ Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/confirmedLA.jpg" width="1000">
 
+### Latin America: New cases per day
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/laNew.jpg" width="1000">
 
 
 
