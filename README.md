@@ -12,17 +12,18 @@ We are grateful to our data sources:
 
 ### Plot types
 
-Four different types of plots are provided: 
+Four different types of plots are provided on this page, showing a number of selected regions from around the world: 
 * growth rates
 * cumulative counts
 * cumulative counts aligned on equal caseload
 * new daily counts.
 
-For same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
 
-For same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
+  For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
 
-For same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
+  For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
+
+  For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
 
 ### Plot listing
 
@@ -32,13 +33,6 @@ For same plots now counting **[mortality](mortality/README.md)**, click **[here]
 * [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
 * [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [New cases per day and by region](#new-cases-per-day-and-by-region)
-
-
-#### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1)
-
-* [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
-* [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
-* [Daily percentile growth rates in COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rate-in-covid-19-deaths-by-region)
 
 
 #### Blog noting some brief observations:
