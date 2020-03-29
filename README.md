@@ -4,20 +4,12 @@
 
 ---
 
-Four different types of plots are provided on this page, each showing data for multiple different selected regions from around the world. (A) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (B) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (C) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (D) [new daily counts](new-cases-per-day-and-by-region).
+Four different types of plots are provided on this page, each showing data for multiple different selected regions from around the world. (A) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (B) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (C) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (D) [new daily counts](new-cases-per-day-and-by-region). For a pointer to the data sources, please click **[here](#data-sources)**.
 
 * For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
 * For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
 * For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
 
----
-
-We are grateful to our data sources:
-
-* The open availability of the [database](https://github.com/CSSEGISandData/COVID-19) for the [Johns Hopkins COVID-19 dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) (their [mobile version here](https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61)) makes these plots possible.
-* US and US state-level data are from https://covidtracking.com
-
----
 
 ### Daily percentile growth rates in confirmed cases per country
 
@@ -58,6 +50,8 @@ Click on the plot to see an expanded version.
 
 **2020-March-29**: It looks like the number of new cases per day is beginning to not grow exponentially, but stay steady. A sign of social distancing working? But I fear that might be merely because the number of actual cases is now exceeding, in many regions, their testing capacity. 
 
+---
+
 ## Blog
 
 #### 2020-March-23 : South Korea seems stuck.
@@ -81,6 +75,16 @@ Growth rates in Australia, Brazil, Africa below the Sahara, India, are all in th
 Three of the countries with the largest caseloads as of 6-March-2020, namely China, South Korea, and Italy, are also countries with some of the smallest growth rates, specially China and South Korea. Their experience has clearly led them to learn something about how to deal with COVID-19. But the rest of the world hasn't learned from *them*: almost everyone starts at growth rates much higher than the current growth rates in those countries.
 
 Perhaps the problem is political: perhaps it takes 500+ cases within your own borders before the measures needed to contain growth become politically feasible, even if your neighbor already went through it. And even if limiting growth would be of course far easier at the start, when you have fewer cases.
+
+---
+
+### Data sources
+
+We are grateful to our data sources:
+
+* The open availability of the [database](https://github.com/CSSEGISandData/COVID-19) for the [Johns Hopkins COVID-19 dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) (their [mobile version here](https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61)) makes these plots possible.
+* US and US state-level data are from https://covidtracking.com
+
 
 ### Update frequency
 
