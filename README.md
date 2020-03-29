@@ -18,16 +18,16 @@ We are grateful to our data sources:
 
 * [States of the US: Daily percentile growth rates](https://github.com/COVID-19-plots/maincovidplotsrepo#states-of-the-us-daily-percentile-growth-rates)
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases):
-* [States of the US: New cases per day](#states-of-the-us-new-cases-per-day):
+* [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases)
+* [States of the US: New cases per day](#states-of-the-us-new-cases-per-day)
 
 
 #### [Latin America](#focus-on-latin-america):
 
 * [Latin America: Daily percentile growth rates](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
-* [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases):
+* [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases)
 
-#### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1):
+#### [Mortality plots](https://github.com/COVID-19-plots/maincovidplotsrepo#mortality-plots-1)
 
 * [Cumulative number of COVID-19 deaths by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-covid-19-deaths-by-region)
 * [New deaths per day by region](https://github.com/COVID-19-plots/maincovidplotsrepo#new-deaths-per-day-by-region)
