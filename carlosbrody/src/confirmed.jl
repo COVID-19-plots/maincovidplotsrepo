@@ -377,11 +377,11 @@ function setLogYTicks(;yticbase=[1, 4], mintic=100, maxtic=400000)
    return ticklist
 end
 
-# ############################################
+# ======================================
 #
-#  FN DEFS DONE - PRODUCE PLOTS
+#  TOP-LEVEL PLOT-MAKING FUNCTIONS
 #
-# ############################################
+# ======================================
 
 # ------  Cumulative case count
 """
@@ -440,15 +440,16 @@ Grey lines at right indicate time to grow by a factor of 10X.
 """
    plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
       minval=10, fignum=3, yticks=0:10:60, ylim2=65,
+      fn=x -> smooth(percentileGrowth(x), smkernel),
       mincases=50, fname::String="", counttype="cases", kwargs...)
 """
 function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
-   fignum=3, yticks=0:10:60, ylim2=65,
+   fignum=3, yticks=0:10:60, ylim2=65, fn=x -> smooth(percentileGrowth(x), smkernel),
    mincases=50, fname::String="", counttype="cases", kwargs...)
 
    plotMany(regions, plotFn=plot,
-      fn=x -> smooth(percentileGrowth(x), smkernel),
-      mincases=mincases, fignum=3; kwargs...)
+      fn=fn,
+      mincases=mincases, fignum=fignum; kwargs...)
 
    ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
    title("% daily growth in cumulative confirmed COVID-19 $counttype," *
@@ -515,12 +516,24 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
    savefig2jpg(fname)
 end
 
+# ======================================
+#
+#  REGIONS AROUND THE WORLD
+#
+# ======================================
+
 plotCumulative(paises, fname="confirmed")
 plotNew(paises, fignum=2, fname="newConfirmed")
 plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
 plotAligned(paises, fignum=4, fname="confirmed_aligned")
 
 ## ---- states confirmed aligned
+
+# ======================================
+#
+#  US STATES
+#
+# ======================================
 
 south = ("South: FL+LA+TN+GA+MS+\nAK+NC+SC+AL+KY", [("Florida", "US"), ("Louisiana", "US"),
    ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
@@ -536,22 +549,26 @@ canadaborder = ("Canada border:\nMI+IL+WI+MN+ND+MT", [("Michigan", "US"),
    ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
    ("North Dakota", "US"), ("Montana", "US")])
 
-regions = ["US", "Italy",
+states = ["US", "Italy",
    ("Washington", "US"), ("New York", "US"), ("California", "US"),
    ("Florida", "US"), ("Texas", "US"),
    # "Italy", "Germany", "Brazil", africa,
    ("New Jersey", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder]
 
-plotGrowth(vcat(regions, "World other than China"),
+plotGrowth(vcat(states, "World other than China"),
    fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
-plotCumulative(regions, fignum=11, maxtic=100000, fname="statesCumulative")
-plotAligned(regions, fname="states_confirmed_aligned",
+plotCumulative(states, fignum=11, maxtic=100000, fname="statesCumulative")
+plotAligned(states, fname="states_confirmed_aligned",
    mintic=40, maxtic=100000, fignum=5, minval=10)
-plotNew(regions, fignum=14, fname="statesNew")
+plotNew(states, fignum=14, fname="statesNew")
 
 
-##   ====== FOCUS ON LATIN AMERICA
+# ======================================
+#
+#  LATIN AMERICA
+#
+# ======================================
 
 la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
    "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
@@ -565,6 +582,26 @@ plotAligned(vcat(la, "Italy"), fname="laAligned",
 plotNew(la, fignum=17, fname="laNew", maxtic=1000)
 
 
+
+# ======================================
+#
+#  NEW CASES GROWTH RATE
+#
+# ======================================
+
+smkernel=vcat(0.1:0.2:1, 0.8:-0.2:0.1);
+plotGrowth(["World other than China"], days_previous=11,
+   yticks=0:10:40, ylim2=40, fname="newGrowthRate", fignum=16,
+   smkernel=smkernel,
+   fn = x -> smooth(percentileGrowth(diff(x)), smkernel))
+
+
+
+# ======================================
+#
+#  MORTALITY
+#
+# ======================================
 
 
 ## -----  Cumulative Death count
