@@ -12,11 +12,7 @@ We are grateful to our data sources:
 
 ### Plot types
 
-Four different types of plots are provided on this page, showing a number of selected regions from around the world: 
-* growth rates
-* cumulative counts
-* cumulative counts aligned on equal caseload
-* new daily counts.
+Four different types of plots are provided on this page, each showing a number of selected regions from around the world. These plots are (a) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (b) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (c) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (d) [new daily counts](new-cases-per-day-and-by-region).
 
 
   For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
@@ -25,19 +21,8 @@ Four different types of plots are provided on this page, showing a number of sel
 
   For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
 
-### Plot listing
 
-#### [Confirmed cases around the world](https://github.com/COVID-19-plots/maincovidplotsrepo#confirmed-cases-plots-1):
-
-* [Daily percentile growth rates in confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#daily-percentile-growth-rates-in-confirmed-cases-per-country)
-* [Cumulative number of confirmed cases by region](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-per-country)
-* [Cumulative number of confirmed cases by region, aligned on equal caseload](https://github.com/COVID-19-plots/maincovidplotsrepo#cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
-* [New cases per day and by region](#new-cases-per-day-and-by-region)
-
-
-#### Blog noting some brief observations:
-
-* [Blog with comments](https://github.com/COVID-19-plots/maincovidplotsrepo#blog)
+There is also a very brief [blog with short observations](https://github.com/COVID-19-plots/maincovidplotsrepo#blog)
 
 
 
