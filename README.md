@@ -4,7 +4,7 @@
 
 ---
 
-Four different types of plots are provided on this page, each showing a number of selected regions from around the world. (A) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (B) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (C) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (D) [new daily counts](new-cases-per-day-and-by-region).
+Four different types of plots are provided on this page, each showing data for multiple different selected regions from around the world. (A) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (B) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (C) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (D) [new daily counts](new-cases-per-day-and-by-region).
 
 * For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
 * For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
@@ -21,32 +21,33 @@ We are grateful to our data sources:
 
 ### Daily percentile growth rates in confirmed cases per country
 
-This plot shows the percentage daily growth in number of confirmed cases for a selected set of countries. For each country, the data plot starts after 50 cases were reached (it is too noisy before that). Note that net number of confirmed cases can change over time due to many factors, including test availability, test applications, reporting accuracy, etc. These plots simply show the available data as is.
-
-Caseloads growing at a contsant exponential rate  correspond to a horizontal line in this plot. In other words, although growth rate in Japan is comparatively slower than others, it is still exponential growth. Mainland China is the orange line at the bottom, near zero.
-
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/multiplicative_factor_1.jpg" width="1200"> 
+
+This plot shows the percentage daily growth in number of confirmed cases for a selected set of countries. For each country, the data plot starts after 50 cases were reached (it is too noisy before that). Note that net number of confirmed cases can change over time due to many factors, including test availability, test applications, reporting accuracy, etc. These plots simply show the available data as is.
+
+Caseloads growing at a contsant exponential rate  correspond to a horizontal line in this plot. In other words, although growth rate in Japan is comparatively slower than others, it is still exponential growth. Mainland China is the orange line at the bottom, near zero.
 
 
 
 ### Cumulative number of confirmed cases per country
 
-This plot shows total number of confirmed cases, for the same countries as the first plot (same color code also). Since the vertical axis is logarithmic, percentage daily growth (in the first plot) is proportional to the slope of the lines in this plot. China is the orange line at the top. 
-
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/confirmed.jpg" width="1000">
 
+This plot shows total number of confirmed cases, for the same countries as the first plot (same color code also). Since the vertical axis is logarithmic, percentage daily growth (in the first plot) is proportional to the slope of the lines in this plot. China is the orange line at the top. 
+
 
 ### Cumulative number of confirmed cases, aligned on equal caseload
-
-First spotted on Adam J Calhoun's [facebook feed](https://www.facebook.com/photo.php?fbid=10101610112688432&set=a.10100591572231672&type=3), this plot is the same as the previous plot, but now each country's timeline is shifted horizontally so that 0 on the horizontal axis corresponds to the moment the caseload hit 200 cases. The legend indicates, for each region, how many days ago that happened.
 
 Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/confirmed_aligned.jpg" width="1000">
+
+First spotted on Adam J Calhoun's [facebook feed](https://www.facebook.com/photo.php?fbid=10101610112688432&set=a.10100591572231672&type=3), this plot is the same as the previous plot, but now each country's timeline is shifted horizontally so that 0 on the horizontal axis corresponds to the moment the caseload hit 200 cases. The legend indicates, for each region, how many days ago that happened.
+
 
 
 ### New cases per day and by region
