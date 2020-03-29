@@ -1,3 +1,5 @@
+[[Regions around the world](../README.md) | [Latin America](../latinamerica/README.md)]
+
 #### [US States confirmed cases](#focus-on-us-states):
 
 * [States of the US: Daily percentile growth rates](#states-of-the-us-daily-percentile-growth-rates)
