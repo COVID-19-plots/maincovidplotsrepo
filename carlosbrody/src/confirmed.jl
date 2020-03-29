@@ -546,6 +546,22 @@ plotAligned(regions, fname="states_confirmed_aligned",
 plotNew(regions, fignum=14, fname="statesNew")
 
 
+##   ====== FOCUS ON LATIN AMERICA
+
+la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
+   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
+
+plotCumulative(la, fname="confirmedLA", fignum=8, minval=100,
+   mintic=100, maxtic=4000)
+plotGrowth(la, yticks=0:10:40, ylim2=45, fname="multiplicative_factorLA",
+   fignum=15)
+plotAligned(la, fname="laAligned",
+   mintic=40, maxtic=100000, fignum=16, minval=10)
+plotNew(la, fignum=17, fname="laNew", maxtic=1000)
+
+
+
+
 ## -----  Cumulative Death count
 plotMany(paises, db=D, minval=2, fignum=6)
 ylabel("cumulative deaths", fontsize=fontsize, fontname=fontname)
@@ -597,26 +613,6 @@ plotGrowth(paises, fignum=8; db=D, counttype="deaths", mincases=20, yticks=0:10:
 # savefig("$fname.png")
 # run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
-
-##   ====== FOCUS ON LATIN AMERICA
-
-la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
-   "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
-
-plotMany(setdiff(la, ["World other than China"]), minval=100, fignum=8)
-ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
-title("Cumulative confirmed COVID-19 cases in selected regions", fontsize=fontsize, fontname=fontname)
-gca().set_yticks([100, 400, 1000, 4000, 10000]) # , 40000, 100000])
-gca().set_yticklabels(["100", "400", "1000",
-   "4000", "10000"]) # , "40000", "100000"])
-# ylim(minval, ylim()[2])
-savefig2jpg("confirmedLA")
-
-##
-
-
-plotGrowth(la, yticks=0:10:40, ylim2=45, fname="multiplicative_factorLA",
-   fignum=9)
 
 ##
 # plotMany(la, plotFn=plot,
