@@ -1,4 +1,8 @@
-#### [Latin America confirmed cases](#focus-on-latin-america):
+[[Regions around the world](../README.md) | [US States](../states/README.md)]
+
+
+
+## [Latin America confirmed cases](#focus-on-latin-america):
 
 * [Latin America: Daily percentile growth rates](#daily-percentile-growth-rates-in-confirmed-cases-in-latin-america)
 * [Latin America: cumulative number of confirmed cases, aligned on equal caseload](#latin-america-cumulative-number-of-cases-aligned-on-equal-caseload)
