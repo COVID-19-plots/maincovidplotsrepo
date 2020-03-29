@@ -50,12 +50,16 @@ africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
 "Rwanda", "Uganda", "Somalia", "Kenya", "Tanzania"])
 
 # list of countries to plot
-paises = ["Korea, South", "Iran", "Italy", "Germany", "France", "Japan",
-   "Spain", "US", "Switzerland", "United Kingdom", ("New York", "US"),
+paises = ["Korea, South", "Iran", "Italy", "Germany", "France",
+   "Japan",
+   "Spain",
+   "US", "Switzerland",
+   "United Kingdom", ("New York", "US"),
    "China", ("California", "US"),
    "Brazil", "Argentina", "Mexico",
    "India", africa, ("New Jersey", "US"), # "Other European Countries",
-   ("Hong Kong", "China"), "Singapore", ("Washington", "US"),
+   ("Hong Kong", "China"),
+   "Singapore", ("Washington", "US"),
    "World other than China"]
 
 
@@ -539,7 +543,8 @@ regions = ["US", "Italy",
    ("New Jersey", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder]
 
-plotGrowth(regions, fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
+plotGrowth(vcat(regions, "World other than China"),
+   fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
 plotCumulative(regions, fignum=11, maxtic=100000, fname="statesCumulative")
 plotAligned(regions, fname="states_confirmed_aligned",
    mintic=40, maxtic=100000, fignum=5, minval=10)
@@ -553,9 +558,9 @@ la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
 
 plotCumulative(la, fname="confirmedLA", fignum=8, minval=100,
    mintic=100, maxtic=4000)
-plotGrowth(la, yticks=0:10:40, ylim2=45, fname="multiplicative_factorLA",
-   fignum=15)
-plotAligned(la, fname="laAligned",
+plotGrowth(vcat(la, ["Italy", "World other than China"]), days_previous=15,
+   yticks=0:10:40, ylim2=45, fname="multiplicative_factorLA", fignum=15)
+plotAligned(vcat(la, "Italy"), fname="laAligned",
    mintic=40, maxtic=100000, fignum=16, minval=10)
 plotNew(la, fignum=17, fname="laNew", maxtic=1000)
 
