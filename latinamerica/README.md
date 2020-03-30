@@ -1,4 +1,4 @@
-[[Regions around the world](../README.md) | [US States](../states/README.md)]
+[[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Mortality](../mortality)]
 
 
 
