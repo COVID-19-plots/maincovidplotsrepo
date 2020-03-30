@@ -1,4 +1,4 @@
-[[Regions around the world](../) | [States of the US](../states) | [Latin America](../latinamerica) | [Mortality](../mortality)]
+[[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Mortality](../mortality)]
 
 ## [US States confirmed cases](#focus-on-us-states):
 
