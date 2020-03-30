@@ -1,3 +1,4 @@
+[[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Mortality](../mortality)]
 
 
 ## Mortality plots
