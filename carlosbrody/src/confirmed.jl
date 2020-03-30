@@ -526,7 +526,7 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
          ypos = exp(log(ylim()[2]) - 0.08*(log(ylim()[2]) - log(ylim()[1])))
          xpos = days*log10(ypos/alignon)
       else
-         xpos = xlim()[2] - 0.08*(xlim()[2]-xlim()[1])
+         xpos = xlim()[2] - 0.05*(xlim()[2]-xlim()[1])
          ypos = alignon*(10 .^(xpos/days))
       end
       bbox = gca().get_window_extent().transformed(gcf().dpi_scale_trans.inverted())
@@ -549,7 +549,7 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
    savefig2jpg(fname)
 end
 
-
+plotAligned(paises)
 
 ##
 
