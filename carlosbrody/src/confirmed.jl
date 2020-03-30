@@ -19,7 +19,7 @@ D = collapseUSStates(D)
 
 
 
-sourcestring = "daily updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
+sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
 
 
 #
@@ -411,18 +411,24 @@ end
       yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
 """
 function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
+      counttype="cases", plotFn=semilogy,
       yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
 
    plotMany(regions, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
-   minval=minval, fignum=fignum, kwargs...) # days_previous=size(A,2)-6)
+      plotFn=plotFn,
+      minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
    ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
-   title("New confirmed COVID-19 cases per day\nin selected regions, " *
+   title("New confirmed COVID-19 $counttype per day\nin selected regions, " *
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window",
       fontsize=fontsize, fontname=fontname)
    ylim(minval, ylim()[2])
-   setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
+   if plotFn==semilogy
+      setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
+      addSourceString2Semilogy()
+   else
+      addSourceString2Linear()
+   end
 
-   addSourceString2Semilogy()
 
    savefig2jpg(fname)
 end
