@@ -501,10 +501,12 @@ end
 ## --------   case count aligned on caseload
 """
    plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
-      mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases", kwargs...)
+      mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases",
+      xlim1 = -20, kwargs...)
 """
 function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
-   mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases", kwargs...)
+   mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases",
+   xlim1 = -20, kwargs...)
 
    plotMany(setdiff(regions, ["World other than China"]),
       alignon=alignon, minval=alignon/8, fignum=fignum; kwargs...)
@@ -512,9 +514,44 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
    title("Cumulative confirmed COVID-19 $counttype in selected regions,\naligned on cases=$alignon",
       fontsize=fontsize, fontname=fontname)
    setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
+   xlim(xlim1, xlim()[2])
+
+   function tenXline(days, str)
+      xl = xlim()
+      h = plot([0, xl[2]], alignon*(10 .^[0, xl[2]/days]),
+         color="grey", linewidth=4, alpha=0.2)[1] ;
+      x2 = xl[2];    y2 = alignon*(10 .^(xl[2]/days))
+      y1 = ylim()[2] ; x1 = days*log10(y1/alignon)
+      if x1 < x2
+         ypos = exp(log(ylim()[2]) - 0.08*(log(ylim()[2]) - log(ylim()[1])))
+         xpos = days*log10(ypos/alignon)
+      else
+         xpos = xlim()[2] - 0.08*(xlim()[2]-xlim()[1])
+         ypos = alignon*(10 .^(xpos/days))
+      end
+      bbox = gca().get_window_extent().transformed(gcf().dpi_scale_trans.inverted())
+      dataAng = (180/pi)*atan((log(ypos)-log(alignon))*bbox.height/(log(ylim()[2])-log(ylim()[1])),
+         xpos*bbox.width/(xlim()[2]-xlim()[1]))
+      tx = text(xpos, ypos, "10X every\n$str", backgroundcolor="white",
+         color="gray", horizontalalignment="center", verticalalignment="center",
+         rotation=dataAng)
+
+      xlim(xl)
+      return h
+   end
+
+   tenXline(3, "3 days")
+   tenXline(7, "week")
+   tenXline(14, "2 weeks")
+   tenXline(30, "month")
+   tenXline(180, "6 months")
 
    savefig2jpg(fname)
 end
+
+
+
+##
 
 # ======================================
 #
