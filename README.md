@@ -6,9 +6,7 @@
 
 Four different types of plots are provided on this page, each showing data for multiple different selected regions from around the world. (A) [growth rates](#daily-percentile-growth-rates-in-confirmed-cases-per-country); (B) [cumulative counts](#cumulative-number-of-confirmed-cases-per-country); (C) [cumulative counts aligned on equal caseload](cumulative-number-of-confirmed-cases-aligned-on-equal-caseload); (D) [new daily counts](new-cases-per-day-and-by-region). For a pointer to the data sources (mostly Johns Hopkins), please click **[here](#data-sources)**. Please note that all confirmed case counts are strongly modulated by test availability and testing practices.
 
-* For a page with the same plots focusing on **[US states](states/README.md)**, click **[here](states/README.md)**
-* For a page with the same plots focusing on **[Latin America](latinamerica/README.md)**, click **[here](latinamerica/README.md)**
-* For a page with the same plots now counting **[mortality](mortality/README.md)**, click **[here](mortality/README.md)**
+* Click on the following links for pages focusing on [States of the US](../states) | [Latin America](../latinamerica) | [Europe](../Europe) | [Mortality](../mortality).
 
 
 ### Daily percentile growth rates in confirmed cases per country
