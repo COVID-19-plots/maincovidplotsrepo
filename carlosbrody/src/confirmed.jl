@@ -312,7 +312,7 @@ end
       plotFn=plot, alignon=40, minval=0)
 
 """
-function plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
+function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today", kwargs...)
 
    figure(fignum); clf(); println()
    set_current_fig_position(115, 61, 1496, 856)
@@ -325,9 +325,9 @@ function plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
       xOffset = ((u[i]/(length(paises)/2))-1)*offsetRange
 
       if i<length(paises) && alignon != "today"
-         h = plotSingle(paises[i]; xOffset=xOffset, adjustZeroXLabel=false, kwargs...)
+         h = plotSingle(paises[i]; alignon=alignon, xOffset=xOffset, adjustZeroXLabel=false, kwargs...)
       else
-         h = plotSingle(paises[i]; xOffset=xOffset, adjustZeroXLabel=true, kwargs...)
+         h = plotSingle(paises[i]; alignon=alignon, xOffset=xOffset, adjustZeroXLabel=true, kwargs...)
       end
 
       # World other than China gets no marker, but everybody
@@ -417,7 +417,7 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
    plotMany(regions, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
       plotFn=plotFn,
       minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
-   ylabel("New cases each day", fontsize=fontsize, fontname=fontname)
+   ylabel("New $counttype each day", fontsize=fontsize, fontname=fontname)
    title("New confirmed COVID-19 $counttype per day\nin selected regions, " *
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window",
       fontsize=fontsize, fontname=fontname)
