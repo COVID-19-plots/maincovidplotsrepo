@@ -1,4 +1,4 @@
-[[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Europe](../Europe) | [Mortality](../mortality)]
+[[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Europe](../europe) | [Mortality](../mortality)]
 
 
 ## Mortality plots
