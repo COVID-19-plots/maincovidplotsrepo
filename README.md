@@ -46,11 +46,21 @@ Click on the plot to see an expanded version.
 
 <img src="carlosbrody/src/newConfirmed.jpg" width="1000">
 
-**2020-March-29**: It looks like the number of new cases per day is beginning to not grow exponentially, but stay steady. A sign of social distancing working? But I fear that might be merely because the number of actual cases is now exceeding, in many regions, their testing capacity. 
+
+### New deaths per day and by region
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/newDeaths.jpg" width="1000">
+
 
 ---
 
 ## Blog
+
+#### 2020-March-29 : Is social distancing working, or are we limited by number of tests?
+
+It looks like the number of new cases per day is beginning to not grow exponentially, but stay steady. A sign of social distancing working? But I fear that might be merely because the number of actual cases is now exceeding, in many regions, their testing capacity. 
 
 #### 2020-March-23 : South Korea seems stuck.
 
