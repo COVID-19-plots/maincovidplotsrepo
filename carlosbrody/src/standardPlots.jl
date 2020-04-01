@@ -52,6 +52,8 @@ plotCumulative(paises, fname="confirmed")
 plotNew(paises, fignum=2, fname="newConfirmed")
 plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
 plotAligned(paises, fignum=4, fname="confirmed_aligned")
+plotNew(paises, db=D, minval=1, mintic=1, maxtic = 10000,
+   counttype="deaths", fname="newDeaths")
 
 ## ---- states confirmed aligned
 
@@ -144,18 +146,18 @@ run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 # ------  New death count
-plotMany(paises, db=D, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
-   minval=1, fignum=7)
-ylabel("New deaths per day", fontsize=fontsize, fontname=fontname)
-title("Daily COVID-19 mortality in selected regions\nsmoothed with a +/- 2 day window",
-   fontsize=fontsize, fontname=fontname)
-gca().set_yticks([4, 10, 40, 100, 400, 1000, 4000])
-gca().set_yticklabels(["4", "10", "40", "100", "400", "1000",
-   "4000"])
-# ylim(minval, ylim()[2])
-fname = "newDeaths"
-savefig("$fname.png")
-run(`sips -s format JPEG $fname.png --out $fname.jpg`)
+# plotMany(paises, db=D, fn=x -> smooth(diff(x), [0.2, 0.5, 0.7, 0.5, 0.2]),
+#    minval=1, fignum=7)
+# ylabel("New deaths per day", fontsize=fontsize, fontname=fontname)
+# title("Daily COVID-19 mortality in selected regions\nsmoothed with a +/- 2 day window",
+#    fontsize=fontsize, fontname=fontname)
+# gca().set_yticks([4, 10, 40, 100, 400, 1000, 4000])
+# gca().set_yticklabels(["4", "10", "40", "100", "400", "1000",
+#    "4000"])
+# # ylim(minval, ylim()[2])
+# fname = "newDeaths"
+# savefig("$fname.png")
+# run(`sips -s format JPEG $fname.png --out $fname.jpg`)
 
 
 # -----   Death growth rate
