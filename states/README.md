@@ -6,6 +6,7 @@
 * [States of the US: cumulative number of confirmed cases by state, aligned on equal caseload](#states-of-the-us-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [States of the US: Cumulative number of cases](#states-of-the-us-cumulative-number-of-cases)
 * [States of the US: New cases per day](#states-of-the-us-new-cases-per-day)
+* [States of the US: New deaths per day](#states-of-the-us-new-deaths-per-day)
 
 
 
