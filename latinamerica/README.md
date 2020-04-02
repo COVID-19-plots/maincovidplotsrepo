@@ -8,6 +8,7 @@
 * [Latin America: cumulative number of confirmed cases, aligned on equal caseload](#latin-america-cumulative-number-of-cases-aligned-on-equal-caseload)
 * [Latin America: Cumulative number of cases](#latin-america-cumulative-number-of-cases)
 * [Latin America: New cases per day](#latin-america-new-cases-per-day)
+* [Latin America: New deaths per day](#latin-america-new-deaths-per-day)
 
 
 
@@ -38,5 +39,11 @@ Click on the plot to see an expanded version.
 Click on the plot to see an expanded version.
 
 <img src="../carlosbrody/src/laNew.jpg" width="1000">
+
+### Latin America: New deaths per day
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/laNewDeaths.jpg" width="1000">
 
 
