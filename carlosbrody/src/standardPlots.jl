@@ -90,7 +90,7 @@ plotCumulative(states, fignum=11, maxtic=100000, fname="statesCumulative")
 plotAligned(states, fname="states_confirmed_aligned",
    mintic=100, maxtic=100000, fignum=5, minval=10)
 plotNew(states, fignum=14, fname="statesNew")
-plotNew(states, db=D, minval=1, mintic=1, maxtic = 10000,
+plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
    counttype="deaths", fname="statesNewDeaths")
 
 
@@ -110,7 +110,7 @@ plotGrowth(vcat(la, ["Italy", "World other than China"]), days_previous=15,
 plotAligned(vcat(la, "Italy"), fname="laAligned",
    mintic=40, maxtic=100000, fignum=16, minval=10)
 plotNew(la, fignum=17, fname="laNew", maxtic=1000)
-plotNew(la, db=D, minval=1, mintic=1, maxtic = 10000,
+plotNew(la, db=D, minval=1, mintic=1, maxtic = 100,
    counttype="deaths", fname="laNewDeaths")
 
 
