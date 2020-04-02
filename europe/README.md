@@ -6,6 +6,7 @@
 * [Europe: cumulative number of confirmed cases by state, aligned on equal caseload](#europe-cumulative-number-of-confirmed-cases-aligned-on-equal-caseload)
 * [Europe: Cumulative number of cases](#europe-cumulative-number-of-cases)
 * [Europe: New cases per day](#europe-new-cases-per-day)
+* [Europe: New deaths per day](#europe-new-deaths-per-day)
 
 
 
@@ -35,5 +36,11 @@ Click on the plot to see an expanded version.
 Click on the plot to see an expanded version.
 
 <img src="../carlosbrody/src/europeNew.jpg" width="1000">
+
+### Europe: New deaths per day
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/europeNewDeaths.jpg" width="1000">
 
 
