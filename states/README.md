@@ -36,4 +36,10 @@ Click on the plot to see an expanded version.
 
 <img src="../carlosbrody/src/statesNew.jpg" width="1000">
 
+### States of the US: New deaths per day
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/statesNewDeaths.jpg" width="1000">
+
 
