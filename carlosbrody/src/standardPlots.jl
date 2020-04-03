@@ -82,7 +82,7 @@ states = ["US", "Italy",
    ("Florida", "US"), ("Texas", "US"),
    # "Italy", "Germany", "Brazil", africa,
    ("New Jersey", "US"), # "Australia",
-   south, mexicoborder, midwest, canadaborder]
+   south, mexicoborder, midwest, canadaborder, ("Connecticut", "US")]
 
 plotGrowth(vcat(states, "World other than China"),
    fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
