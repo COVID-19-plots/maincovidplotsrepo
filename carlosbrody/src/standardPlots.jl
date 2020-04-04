@@ -48,7 +48,7 @@ paises = ["Korea, South", "Iran", "Italy", "Germany", "France",
 # other_europe_kwargs = Dict(:linewidth=>6, :color=>"gray", :alpha=>0.3)
 
 
-plotCumulative(paises, fname="confirmed")
+plotCumulative(paises, fname="confirmed"); stashLinespecs()
 plotNew(paises, fignum=2, fname="newConfirmed")
 plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
 plotAligned(paises, fignum=4, fname="confirmed_aligned")
@@ -95,7 +95,7 @@ plotNew(states, fignum=14, fname="statesNew")
 plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
    counttype="deaths", fname="statesNewDeaths")
 
-
+##
 # ======================================
 #
 #  LATIN AMERICA

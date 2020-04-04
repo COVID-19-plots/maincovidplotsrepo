@@ -8,7 +8,7 @@ export get_current_fig_position, set_current_fig_position
 export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
     stateName2Abbrev
 
-export myLinespec, findLinespecs
+export myLinespec, findLinespecs, stashLinespecs, getLinespecs
 
 struct myLinespec
    label::String
@@ -41,7 +41,39 @@ function findLinespecs()
 end
 
 
-function stashLinespecs
+"""
+    stashLinespecs()
+
+    For any line2D objects in the current axis whose label is not
+    yet in the linespec list, add their linespec to the list
+"""
+function stashLinespecs()
+    linespecs = findLinespecs()
+    for i=1:length(linespecs)
+        if isempty(findall(x->x.label == linespecs[i].label, linespecList))
+            global linespecList = vcat(linespecList, linespecs[i])
+        end
+    end
+end
+
+"""
+    getLinespecs()
+
+    return all stashed linespecs
+"""
+function getLinespecs()
+    return linespecList
+end
+
+"""
+    getLinespecs(label)
+
+    Return linespecs matching the specified label
+"""
+function getLinespecs(label)
+    u = findall(x->x.label == label, linespecList)
+    return linespecList[u]
+end
 
 stateName2AbbrevDict = Dict(
     "New Jersey"    => "NJ",
@@ -275,6 +307,7 @@ function __init__()
         abbrev2StateNameDict[stateName2AbbrevDict[k]] = k
     end
 
+    linespecList = Array{myLinespec}(undef, 0)
 end
 
 

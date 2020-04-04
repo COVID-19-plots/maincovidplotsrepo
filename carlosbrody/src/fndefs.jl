@@ -123,6 +123,15 @@ function plot_kwargs(pais)
    else
       kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>"o",
          :linewidth=>2)
+      # lspec = getLinespecs(pais)
+      # if isempty(lspec)
+      #    kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>"o",
+      #       :linewidth=>2)
+      # else
+      #    lspec = lspec[1]
+      #    kwargs = Dict(:linestyle=>"-", :label=>lspec.label, :marker=>lspec.marker,
+      #       :color=>lspec.color, :linewidth=>lspec.linewidth)
+      # end
    end
 
    kwargs[:fillstyle] = "none"
