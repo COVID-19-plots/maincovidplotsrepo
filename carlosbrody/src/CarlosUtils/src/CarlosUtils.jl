@@ -8,7 +8,17 @@ export get_current_fig_position, set_current_fig_position
 export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
     stateName2Abbrev
 
-export myLinespec, findLinespecs, stashLinespecs, getLinespecs
+export myLinespec, findLinespecs, stashLinespecs, getLinespecs, handMeLinespec,
+    saveLinespecList, loadLinespecList, nextLinespec, addToLinespecList,
+    deleteFromLinespecList, colorOrder, markerOrder
+
+# If we plot more than 10 lines, colors repeat; use next marker in that case
+colorOrder = [
+    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+    "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+    ]
+markerOrder = ["o", "x", "P", "d", "*", "<"]
+
 
 struct myLinespec
    label::String
@@ -20,12 +30,12 @@ end
 linespecList = Array{myLinespec}(undef, 0)
 
 """
-    findLinespecs()
+    axisLinespecs()
 
     Returns an Array of myLinespec for all the Line2D objects
-    that are children of the current axis
+    that are immediate children of the current axis
 """
-function findLinespecs()
+function axisLinespecs()
     linespecs = Array{myLinespec}(undef, 0)
 
     h = gca().get_children()
@@ -45,10 +55,10 @@ end
     stashLinespecs()
 
     For any line2D objects in the current axis whose label is not
-    yet in the linespec list, add their linespec to the list
+    yet in the linespec list, add their linespec to the Main list
 """
 function stashLinespecs()
-    linespecs = findLinespecs()
+    linespecs = axisLinespecs()
     for i=1:length(linespecs)
         if isempty(findall(x->x.label == linespecs[i].label, linespecList))
             global linespecList = vcat(linespecList, linespecs[i])
@@ -56,24 +66,120 @@ function stashLinespecs()
     end
 end
 
-"""
-    getLinespecs()
-
-    return all stashed linespecs
-"""
-function getLinespecs()
-    return linespecList
-end
 
 """
-    getLinespecs(label)
+    getLinespecs(;label=nothing, color=nothing, linewidth=nothing, marker=nothing)
 
-    Return linespecs matching the specified label
+    Return array of linespecs from the Main list matching things that were passed
+    as not nothing
 """
-function getLinespecs(label)
-    u = findall(x->x.label == label, linespecList)
+function getLinespecs(;label=nothing, color=nothing, linewidth=nothing, marker=nothing)
+    u = 1:length(linespecList)
+    if label != nothing
+        u = u[findall(x->x.label == label, linespecList[u])]
+    end
+    if color != nothing
+        u = u[findall(x->x.color == color, linespecList[u])]
+    end
+    if marker != nothing
+        u = u[findall(x->x.marker == marker, linespecList[u])]
+    end
+    if linewidth != nothing
+        u = u[findall(x->x.linewidth == linewidth, linespecList[u])]
+    end
     return linespecList[u]
 end
+"""
+    getLinespecs(ml::myLinespec)
+
+    Return array of linespecs from main list that match ml in all respects
+"""
+function getLinespecs(ml::myLinespec)
+    return linespecList[findall(map(x -> x == ml, linespecList))]
+end
+
+
+"""
+    nextLinespec()
+
+    Using colorOrder and makerOrder, returns the next linespec that is
+    not yet in the Main list. Uses linewidth=2.
+
+    Steps through colors first, outer loop markers
+"""
+function nextLinespec()
+    for i=1:length(markerOrder)
+        for j=1:length(colorOrder)
+            if isempty(getLinespecs(marker=markerOrder[i], color=colorOrder[j]))
+                return myLinespec("", 2, markerOrder[i], colorOrder[j])
+            end
+        end
+    end
+
+    error("Used up all markers and colors; add more to CarlosUtils.colorOrder or CarlosUtils.makerOrder?")
+end
+
+
+"""
+    handMeLinespec(label)
+
+    If a linespec for the given label already exists in the Main list, returns that.
+    Otherwise, returns the next unused linespec.
+"""
+function handMeLinespec(label)
+    ml = getLinespecs(label=label)
+    if isempty(ml)
+        return nextLinespec()
+    else
+        return ml[1]
+    end
+end
+
+function handMeLinespec(label::Tuple{String,String})
+    return handMeLinespec(string(label))
+end
+
+using JLD
+"""
+    saveLinespecList(fname::String="linespeclist.jld")
+
+    saves the Main linsepectList
+"""
+function saveLinespecList(fname::String="linespeclist.jld")
+    save(fname, Dict("linespecList"=>linespecList))
+end
+
+
+"""
+    loadLinespecList(fname::String="linespeclist.jld")
+
+    loads and returns the Main linsepectList
+    (overwrites previous existing Main linspecList)
+"""
+function loadLinespecList(fname::String="linespeclist.jld")
+    global linespecList = load(fname)["linespecList"]
+end
+
+"""
+    addToLinespecList(ml::myLinespec)
+
+    If ml is not already in the Main linespec list, add it
+"""
+function addToLinespecList(ml::myLinespec)
+    if isempty(getLinespecs(ml))
+        global linespecList = vcat(linespecList, ml)
+    end
+end
+
+"""
+    deleteFromLinespecList(ml::myLinespec)
+
+    If ml is in the Main linespec list, delete it
+"""
+function deleteFromLinespecList(ml::myLinespec)
+    global linespecList = setdiff(linespecList, [ml])
+end
+
 
 stateName2AbbrevDict = Dict(
     "New Jersey"    => "NJ",

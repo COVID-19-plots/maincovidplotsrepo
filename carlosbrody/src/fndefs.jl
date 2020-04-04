@@ -43,8 +43,6 @@ fontname       = "Helvetica Neue"
 fontsize       = 20   # for title and x and y labels
 legendfontsize = 13
 
-# If we plot more than 10 lines, colors repeat; use next marker in that case
-markerorder = ["o", "x", "P", "d", "*", "<"]
 
 # ####################################
 #
@@ -117,12 +115,21 @@ end
    For example, "World other than China" has special line thickness, etc.
 """
 function plot_kwargs(pais)
+   # If pais is a Tuple representing not a single region but a sum of regions,
+   # use only its first element as the label
+   if typeof(pais) == Tuple{String, Array{String,1}} ||
+      typeof(pais) == Tuple{String,Array{Tuple{String,String},1}}
+      pais = pais[1]
+   end
+
    if pais == "World other than China"
       # special code for all countries other than China:
-      kwargs = Dict(:linewidth=>12, :color=>"gray", :alpha=>0.3, :label=>pais)
+      kwargs = Dict(:linewidth=>12, :color=>"gray", :alpha=>0.3, :label=>pais,
+         :marker=>"None")
    else
-      kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>"o",
-         :linewidth=>2)
+      ml = handMeLinespec(pais)
+      kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>ml.marker,
+         :linewidth=>ml.linewidth, :color=>ml.color)
       # lspec = getLinespecs(pais)
       # if isempty(lspec)
       #    kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>"o",
@@ -136,10 +143,8 @@ function plot_kwargs(pais)
 
    kwargs[:fillstyle] = "none"
 
-   if typeof(pais) == Tuple{String, Array{String,1}} ||
-      typeof(pais) == Tuple{String,Array{Tuple{String,String},1}}
-      kwargs[:label] = pais[1]
-   end
+   ml = myLinespec(kwargs[:label], kwargs[:linewidth], kwargs[:marker], kwargs[:color])
+   addToLinespecList(ml)
    return kwargs
 end
 
@@ -307,9 +312,9 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today", kwargs...)
 
       # World other than China gets no marker, but everybody
       # else gets a different marker every ten countries:
-      if h != nothing && h.get_marker() != "None"
-         h.set_marker(markerorder[Int64(ceil(i/10))])
-      end
+      # if h != nothing && h.get_marker() != "None"
+      #    h.set_marker(markerOrder[Int64(ceil(i/10))])
+      # end
 
    end
 

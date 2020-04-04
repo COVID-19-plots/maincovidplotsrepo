@@ -1,5 +1,8 @@
 ##
 
+# Get the standard starting colors
+loadLinespecList()
+
 # ====================================
 #
 #  CUMULATIVE CONFIRMED
@@ -48,7 +51,7 @@ paises = ["Korea, South", "Iran", "Italy", "Germany", "France",
 # other_europe_kwargs = Dict(:linewidth=>6, :color=>"gray", :alpha=>0.3)
 
 
-plotCumulative(paises, fname="confirmed"); stashLinespecs()
+plotCumulative(paises, fname="confirmed");
 plotNew(paises, fignum=2, fname="newConfirmed")
 plotGrowth(paises, counttype="cases", fname = "multiplicative_factor_1", ylim2=51)
 plotAligned(paises, fignum=4, fname="confirmed_aligned")
