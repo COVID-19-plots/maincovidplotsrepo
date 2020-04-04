@@ -5,7 +5,43 @@ using Dates
 export mydate, smooth, axisWidthChange, axisHeightChange, axisMove
 export get_current_fig_position, set_current_fig_position
 
-export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName, stateName2Abbrev
+export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
+    stateName2Abbrev
+
+export myLinespec, findLinespecs
+
+struct myLinespec
+   label::String
+   linewidth::Float64
+   marker::String
+   color::String
+end
+
+linespecList = Array{myLinespec}(undef, 0)
+
+"""
+    findLinespecs()
+
+    Returns an Array of myLinespec for all the Line2D objects
+    that are children of the current axis
+"""
+function findLinespecs()
+    linespecs = Array{myLinespec}(undef, 0)
+
+    h = gca().get_children()
+    for i=1:length(h)
+        if h[i].__class__.__name__ == "Line2D"
+            myspec = myLinespec(h[i].get_label(), h[i].get_linewidth(),
+                h[i].get_marker(), h[i].get_color())
+            linespecs = vcat(linespecs, myspec)
+       end
+   end
+
+   return linespecs
+end
+
+
+function stashLinespecs
 
 stateName2AbbrevDict = Dict(
     "New Jersey"    => "NJ",

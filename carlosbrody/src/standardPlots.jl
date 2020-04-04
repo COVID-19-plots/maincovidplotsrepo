@@ -57,6 +57,8 @@ plotNew(paises, db=D, minval=1, mintic=1, maxtic = 10000,
 
 ## ---- states confirmed aligned
 
+
+##
 # ======================================
 #
 #  US STATES
@@ -122,8 +124,8 @@ plotNew(la, db=D, minval=1, mintic=1, maxtic = 100,
 # ======================================
 
 smkernel=vcat(0.1:0.2:1, 0.8:-0.2:0.1);
-plotGrowth(["World other than China"], days_previous=11,
-   yticks=0:10:40, ylim2=40, fname="newGrowthRate", fignum=16,
+plotGrowth(["World other than China"], days_previous=18,
+   yticks=0:10:30, ylim2=30, fname="newGrowthRate", fignum=16,
    smkernel=smkernel,
    fn = x -> smooth(percentileGrowth(diff(x)), smkernel))
 
