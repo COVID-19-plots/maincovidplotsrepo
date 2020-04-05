@@ -15,29 +15,29 @@
 
 Click on the plot to see an expanded version.
 
-<img src="../carlosbrody/src/statesGrowthRate.jpg", width="1000">
+<img src="../carlosbrody/src/statesGrowthRate.jpg" width="1000">
 
 ### US States: Cumulative number of confirmed cases by region, aligned on equal caseload
 
 Click on the plot to see an expanded version.
 
-<img src="../carlosbrody/src/states_confirmed_aligned.jpg", width="1000">
+<img src="../carlosbrody/src/states_confirmed_aligned.jpg" width="1000">
 
 ### US States: Cumulative number of cases
 
 Click on the plot to see an expanded version.
 
-<img src="../carlosbrody/src/statesCumulative.jpg", width="1000">
+<img src="../carlosbrody/src/statesCumulative.jpg" width="1000">
 
 ### US States: New cases per day
 
 Click on the plot to see an expanded version.
 
-<img src="../carlosbrody/src/statesNew.jpg", width="1000">
+<img src="../carlosbrody/src/statesNew.jpg" width="1000">
 
 ### US States: New deaths per day
 
 Click on the plot to see an expanded version.
 
-<img src="../carlosbrody/src/statesNewDeaths.jpg", width="1000">
+<img src="../carlosbrody/src/statesNewDeaths.jpg" width="1000">
 
