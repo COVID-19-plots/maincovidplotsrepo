@@ -15,3 +15,7 @@ plotAligned(europe, fname="europeAligned",
 plotNew(vcat(europe, alleurope), fignum=14, fname="europeNew")
 plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
    counttype="deaths", fname="europeNewDeaths")
+
+
+
+writeReadme(prefix="europe", dirname="../../$prefix", header1="Europe")

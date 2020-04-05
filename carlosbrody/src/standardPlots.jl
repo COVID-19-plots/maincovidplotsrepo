@@ -98,6 +98,20 @@ plotNew(states, fignum=14, fname="statesNew")
 plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
    counttype="deaths", fname="statesNewDeaths")
 
+
+prefix = "states"
+sections = [
+   "Daily percentile growth rates"  "$(prefix)GrowthRate"
+   "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"
+   "Cumulative number of cases"     "$(prefix)Cumulative"
+   "New cases per day"              "$(prefix)New"
+   "New deaths per day"             "$(prefix)NewDeaths"
+]
+
+writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States", sections=sections)
+
+
+
 ##
 # ======================================
 #
