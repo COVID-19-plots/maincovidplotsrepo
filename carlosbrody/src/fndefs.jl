@@ -551,3 +551,51 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
 
    savefig2jpg(fname)
 end
+
+##
+
+standardHeader = """
+[[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Europe](../europe) | [Mortality](../mortality)]
+"""
+
+prefix = "states"
+sections = [
+   "Daily percentile growth rates"  "$(prefix)GrowthRate"
+   "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"
+   "Cumulative number of cases"     "$(prefix)Cumulative"
+   "New cases per day"              "$(prefix)New"
+   "New deaths per day"             "$(prefix)NewDeaths"
+]
+
+function writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States",
+      jpgDirname="../carlosbrody/src", sections=sections)
+   io = open("$dirname/README.md", "w")
+   println(io, standardHeader)
+   println(io)
+   println(io, "## $header1 confirmed cases and deaths")
+   println(io)
+
+   function writeLink(str)
+      linkstr = replace(replace(lowercase("$header1 $str"), " "=>"-"), ","=>"")
+      println(io, "* [$header1: $str](#$linkstr)")
+   end
+   for i=1:size(sections,1)
+      writeLink(sections[i,1])
+   end
+   println(io)
+
+   println(io, "## Focus on $header1")
+   println(io)
+   for i=1:size(sections,1)
+      println(io, "### $header1: $(sections[i,1])")
+      println(io)
+      println(io, "Click on the plot to see an expanded version.")
+      println(io)
+      println(io, "<img src=\"$jpgDirname/$(sections[i,2]).jpg\", width=\"1000\">")
+      println(io)
+   end
+
+   close(io)
+end
+
+writeReadme()
