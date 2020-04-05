@@ -18,4 +18,4 @@ plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
 
 
 
-writeReadme(prefix="europe", dirname="../../$prefix", header1="Europe")
+writeReadme(prefix="europe", header1="Europe")

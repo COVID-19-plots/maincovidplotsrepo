@@ -132,7 +132,7 @@ plotNew(la, fignum=17, fname="laNew", maxtic=1000)
 plotNew(la, db=D, minval=1, mintic=1, maxtic = 100,
    counttype="deaths", fname="laNewDeaths")
 
-writeReadme(prefix="la", dirname="../../$prefix", header1="Latin America")
+writeReadme(prefix="la", dirname="../../latinamerica", header1="Latin America")
 
 
 # ======================================
