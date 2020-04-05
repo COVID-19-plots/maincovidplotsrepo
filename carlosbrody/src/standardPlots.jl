@@ -101,11 +101,11 @@ plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
 
 prefix = "states"
 sections = [
-   "Daily percentile growth rates"  "$(prefix)GrowthRate"
-   "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"
-   "Cumulative number of cases"     "$(prefix)Cumulative"
    "New cases per day"              "$(prefix)New"
    "New deaths per day"             "$(prefix)NewDeaths"
+   "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"
+   "Cumulative number of cases"     "$(prefix)Cumulative"
+   "Daily percentile growth rates"  "$(prefix)GrowthRate"
 ]
 
 writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States", sections=sections)
@@ -122,16 +122,17 @@ writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States", section
 la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
    "Peru", "Ecuador", "Bolivia", "Panama", "Venezuela", "Costa Rica"]
 
-plotCumulative(la, fname="confirmedLA", fignum=8, minval=100,
+plotCumulative(la, fname="laCumulative", fignum=8, minval=100,
    mintic=100, maxtic=4000)
 plotGrowth(vcat(la, ["Italy", "World other than China"]), days_previous=15,
-   yticks=0:10:40, ylim2=45, fname="multiplicative_factorLA", fignum=15)
+   yticks=0:10:40, ylim2=45, fname="laGrowthRate", fignum=15)
 plotAligned(vcat(la, "Italy"), fname="laAligned",
    mintic=40, maxtic=100000, fignum=16, minval=10)
 plotNew(la, fignum=17, fname="laNew", maxtic=1000)
 plotNew(la, db=D, minval=1, mintic=1, maxtic = 100,
    counttype="deaths", fname="laNewDeaths")
 
+writeReadme(prefix="la", dirname="../../$prefix", header1="Latin America")
 
 
 # ======================================

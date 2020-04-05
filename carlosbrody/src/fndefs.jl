@@ -564,11 +564,11 @@ standardHeader = """
 """
 function writeReadme(;prefix=prefix, dirname="../../$prefix", header1="US States",
       jpgDirname="../carlosbrody/src", sections=[
-         "Daily percentile growth rates"  "$(prefix)GrowthRate"
-         "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)Aligned"
-         "Cumulative number of cases"     "$(prefix)Cumulative"
          "New cases per day"              "$(prefix)New"
          "New deaths per day"             "$(prefix)NewDeaths"
+         "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)Aligned"
+         "Cumulative number of cases"     "$(prefix)Cumulative"
+         "Daily percentile growth rates"  "$(prefix)GrowthRate"
       ])
    io = open("$dirname/README.md", "w")
    println(io, standardHeader)
