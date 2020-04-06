@@ -10,7 +10,7 @@ export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
 
 export myLinespec, findLinespecs, stashLinespecs, getLinespecs, handMeLinespec,
     saveLinespecList, loadLinespecList, nextLinespec, addToLinespecList,
-    deleteFromLinespecList, colorOrder, markerOrder
+    deleteFromLinespecList, replaceInLinespecList, colorOrder, markerOrder
 
 # If we plot more than 10 lines, colors repeat; use next marker in that case
 colorOrder = [
@@ -25,6 +25,7 @@ struct myLinespec
    linewidth::Float64
    marker::String
    color::String
+   alpha::Float64
 end
 
 linespecList = Array{myLinespec}(undef, 0)
@@ -42,7 +43,7 @@ function axisLinespecs()
     for i=1:length(h)
         if h[i].__class__.__name__ == "Line2D"
             myspec = myLinespec(h[i].get_label(), h[i].get_linewidth(),
-                h[i].get_marker(), h[i].get_color())
+                h[i].get_marker(), h[i].get_color(), h[i].get_alpha())
             linespecs = vcat(linespecs, myspec)
        end
    end
@@ -73,7 +74,8 @@ end
     Return array of linespecs from the Main list matching things that were passed
     as not nothing
 """
-function getLinespecs(;label=nothing, color=nothing, linewidth=nothing, marker=nothing)
+function getLinespecs(;label=nothing, color=nothing, linewidth=nothing,
+        marker=nothing, alpha=nothing)
     u = 1:length(linespecList)
     if label != nothing
         u = u[findall(x->x.label == label, linespecList[u])]
@@ -86,6 +88,9 @@ function getLinespecs(;label=nothing, color=nothing, linewidth=nothing, marker=n
     end
     if linewidth != nothing
         u = u[findall(x->x.linewidth == linewidth, linespecList[u])]
+    end
+    if alpha != nothing
+        u = u[findall(x->x.alpha == alpha, linespecList[u])]
     end
     return linespecList[u]
 end
@@ -180,6 +185,21 @@ function deleteFromLinespecList(ml::myLinespec)
     global linespecList = setdiff(linespecList, [ml])
 end
 
+"""
+    replaceInLinespecList(ml::myLinespec)
+
+    If there is one linespec that matches ml's label in the main linespec list
+    that linespec is replaced with ml
+"""
+function replaceInLinespecList(ml::myLinespec)
+    oldml = getLinespecs(label=ml.label)
+    if length(oldml)==1
+        deleteFromLinespecList(oldml[1])
+        addToLinespecList(ml)
+    else
+        error("Did not find exactly one linespec matching label=", ml.label)
+    end
+end
 
 stateName2AbbrevDict = Dict(
     "New Jersey"    => "NJ",

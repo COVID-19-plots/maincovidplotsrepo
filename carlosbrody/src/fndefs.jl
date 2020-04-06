@@ -129,7 +129,7 @@ function plot_kwargs(pais)
    else
       ml = handMeLinespec(pais)
       kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>ml.marker,
-         :linewidth=>ml.linewidth, :color=>ml.color)
+         :linewidth=>ml.linewidth, :color=>ml.color, :alpha=>ml.alpha)
       # lspec = getLinespecs(pais)
       # if isempty(lspec)
       #    kwargs = Dict(:linestyle=>"-", :label=>string(pais), :marker=>"o",
@@ -143,7 +143,8 @@ function plot_kwargs(pais)
 
    kwargs[:fillstyle] = "none"
 
-   ml = myLinespec(kwargs[:label], kwargs[:linewidth], kwargs[:marker], kwargs[:color])
+   ml = myLinespec(kwargs[:label], kwargs[:linewidth], kwargs[:marker],
+      kwargs[:color], kwargs[:alpha])
    addToLinespecList(ml)
    return kwargs
 end
@@ -206,16 +207,18 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
    # Make zeros into NaNs so they don't disturb the log plot
    series[series .< mincases] .= NaN
 
+   origSeries = copy(series) # in case we need the original for aligning further below
    series = fn(series)
    series[series .< minval] .= NaN
    series[series .> maxval] .= NaN
 
    dias   = 1:length(series)
 
+   pkwargs = plot_kwargs(pais)
    h = nothing
    if alignon=="today"
       h = plotFn(dias[end-days_previous:end] .- dias[end].+xOffset,
-         series[end-days_previous:end]; plot_kwargs(pais)...)[1]
+         series[end-days_previous:end]; pkwargs...)[1]
          # make the rightmost ctick label the current date
 
       if adjustZeroXLabel
@@ -237,7 +240,6 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
          # Compute the fractional offset needed
          frac = (log10(alignon)-log10(series[u-1]))/(log10(series[u]) - log10(series[u-1]))
 
-         pkwargs = plot_kwargs(pais)
          myoffset = -(u+frac)
          daysago = length(series)+Int64(round(myoffset))+1
          pkwargs[:label] = pkwargs[:label]*" $daysago days ago"
@@ -247,9 +249,21 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
          # if not enough points or alignment not available or for whatever reason
          # should not be plotted, then fake plot and make invisible, so color and
          # properties remain
-         h = plot(xlim(), ylim(); plot_kwargs(pais)... )[1]
+         h = plot(xlim(), ylim(); pkwargs... )[1]
          h.set_visible(false)
       end
+   elseif typeof(alignon) <: Function
+      myoffset = labelsuffix = nothing
+      try
+         myoffset, labelsuffix = alignon(pais, origSeries)
+      catch
+         println("alignon function should take pais and series, return a number and a string (for label suffix)")
+      end
+      println(pais, ": myoffset is ", myoffset)
+      pkwargs = plot_kwargs(pais)
+      pkwargs[:label] = pkwargs[:label]*labelsuffix
+      h = plotFn((1:length(series)) .- myoffset .+ xOffset .- length(series),
+         series; pkwargs...)[1]
    else
       error("I don''t know what to do with an alignon with value=", alignon)
    end
@@ -264,6 +278,8 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
    return h
 end
 
+
+##
 
 """
    plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
@@ -400,11 +416,10 @@ end
       yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
 """
 function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
-      counttype="cases", plotFn=semilogy,
+      counttype="cases", plotFn=semilogy, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
       yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
 
-   plotMany(regions, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
-      plotFn=plotFn,
+   plotMany(regions, fn=fn, plotFn=plotFn,
       minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
    ylabel("New $counttype each day", fontsize=fontsize, fontname=fontname)
    title("New confirmed COVID-19 $counttype per day\nin selected regions, " *
@@ -554,15 +569,93 @@ end
 
 ##
 
+
+# ==============================================
+#
+#   plotDeathPeakAligned()
+#
+# ==============================================
+
+"""
+   plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
+      smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3],
+      fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
+      alignon=nothing, soffsets = Dict(
+         "Austria"=>0,
+         "Sweden"=>-0.5,
+         "Norway"=>1,
+         "Italy"=>-0.5,
+         "Spain"=>0,
+         "Korea, South"=>2,
+         ("Hubei", "China")=>-2
+      ), kwargs...)
+
+   Linear plot of deaths per day, aligned on the peak
+
+   If alignon is not nothing, it should be a function that takes (paise, series)
+   as inputs and returns (offset, label) as outouts. Each series will be offset
+   horizontally by offset, and label will be added to its label in the legend
+"""
+function plotDeathPeakAligned(paises; plotFn=plot, db=D,
+   smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3], counttype="deaths",
+   fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
+   alignon=nothing, soffsets = Dict(
+      "Austria"=>0,
+      "Sweden"=>-0.5,
+      "Norway"=>1,
+      "Italy"=>-0.5,
+      "Spain"=>0,
+      "Korea, South"=>2,
+      ("Hubei", "China")=>-2
+   ), kwargs...)
+
+   """
+      myalign(pais, series; soffsets=soffsets)
+
+      Default aligning function, returns argum of peak of fn(series),
+      and a label that uses peak of the original series
+
+      OPTIONAL param soffsets is a Dict of country=>extra horizontal offset
+      default extra horizontal offset is zero
+   """
+   function myalign(pais, series; soffsets=soffsets)
+      offset = findmax(fn(series))[2]-length(series)
+      label  = " peak=$(Int64(round(maximum(diff(series))))) deaths/day $(-offset) days ago"
+      return offset-(haskey(soffsets, pais) ? soffsets[pais] : 0), label
+   end
+
+   plotNew(paises, plotFn=plot, db=db, smkernel=smkernel,
+      fn=fn, minval=0, days_previous=size(db,1)-5,
+      alignon = (alignon==nothing ? myalign : alignon), offsetRange=0.1,
+      counttype="deaths"; kwargs...)
+   ylabel("Deaths/day relative to peak")
+   xlabel("days relative to peak")
+   title("COVID-19 $counttype per day\nin selected regions, " *
+      "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window",
+      fontsize=fontsize, fontname=fontname)
+   xlim(-20,17)
+
+   addSourceString2Linear()  # the xlim() misplaces it
+end
+
+##
+
+# ==============================================
+#
+#   writeReadme()
+#
+# ==============================================
+
+
 standardHeader = """
 [[Regions around the world](../README.md) | [States of the US](../states) | [Latin America](../latinamerica) | [Europe](../europe) | [Mortality](../mortality)]
 """
 
 """
-   writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States",
+   writeReadme(prefix=prefix, dirname="../../\$prefix", header1="US States",
       jpgDirname="../carlosbrody/src", sections=sections)
 """
-function writeReadme(;prefix=prefix, dirname="../../$prefix", header1="US States",
+function writeReadme(;prefix="", dirname="../../$prefix", header1="US States",
       jpgDirname="../carlosbrody/src", sections=[
          "New cases per day"              "$(prefix)New"
          "New deaths per day"             "$(prefix)NewDeaths"
@@ -570,6 +663,7 @@ function writeReadme(;prefix=prefix, dirname="../../$prefix", header1="US States
          "Cumulative number of cases"     "$(prefix)Cumulative"
          "Daily percentile growth rates"  "$(prefix)GrowthRate"
       ])
+   @assert !isempty(prefix) "Need to specify a prefix"
    io = open("$dirname/README.md", "w")
    println(io, standardHeader)
    println(io)

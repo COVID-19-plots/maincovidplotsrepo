@@ -17,5 +17,27 @@ plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
    counttype="deaths", fname="europeNewDeaths")
 
 
+smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3];
+myfun = x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel))
+
+
+##
+
+
+soffsets = Dict(
+   "Austria"=>0,
+   "Sweden"=>-0.5,
+   "Norway"=>1,
+   "Italy"=>-0.5,
+   "Spain"=>0,
+   alleurope=>-0.5,
+   "Korea, South"=>2,
+   ("Hubei", "China")=>-2
+)
+
+plotDeathPeakAligned([("Hubei", "China"), "Germany",
+   "Italy", "Spain", alleurope], fname="deathPeakAligned.jpg", soffsets=soffsets)
+
+##
 
 writeReadme(prefix="europe", header1="Europe")
