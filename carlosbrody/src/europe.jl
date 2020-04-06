@@ -36,7 +36,7 @@ soffsets = Dict(
 )
 
 plotDeathPeakAligned([("Hubei", "China"), "Germany",
-   "Italy", "Spain", alleurope], fname="deathPeakAligned.jpg", soffsets=soffsets)
+   "Italy", "Spain", alleurope], fname="deathPeakAligned", soffsets=soffsets)
 
 ##
 
