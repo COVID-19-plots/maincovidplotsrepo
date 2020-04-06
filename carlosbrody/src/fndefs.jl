@@ -633,10 +633,11 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
    title("COVID-19 $counttype per day in selected regions,\n" *
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window and normalized to maximum",
       fontsize=fontsize, fontname=fontname)
-   xlim(-20,17)
+   xlim(-25,17)
 
    addSourceString2Linear()  # the xlim() misplaces it
-
+   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
+      loc="upper left")
    savefig2jpg(fname)
 end
 
