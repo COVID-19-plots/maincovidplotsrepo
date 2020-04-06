@@ -8,6 +8,13 @@ For a pointer to the data sources (mostly Johns Hopkins), please click **[here](
 
 * Click on the following links for pages focusing on [[Regions around the world](./README.md) | [States of the US](./states) | [Latin America](./latinamerica) | [Europe](./europe) | [Mortality](./mortality)]
 
+### Deaths per day aligned on peak
+
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/deathPeakAligned.jpg" width="1000">
+
+
 
 ### New cases per day and by region
 
