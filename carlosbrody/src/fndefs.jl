@@ -627,7 +627,7 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D,
    plotNew(paises, plotFn=plot, db=db, smkernel=smkernel,
       fn=fn, minval=0, days_previous=size(db,1)-5,
       alignon = (alignon==nothing ? myalign : alignon), offsetRange=0.1,
-      counttype="deaths"; kwargs...)
+      counttype="deaths", fname=""; kwargs...)
    ylabel("Deaths/day relative to peak")
    xlabel("days relative to peak")
    title("COVID-19 $counttype per day\nin selected regions, " *
@@ -636,6 +636,8 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D,
    xlim(-20,17)
 
    addSourceString2Linear()  # the xlim() misplaces it
+
+   savefig2jpg(fname)
 end
 
 ##
