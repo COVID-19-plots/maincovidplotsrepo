@@ -596,7 +596,7 @@ end
    as inputs and returns (offset, label) as outouts. Each series will be offset
    horizontally by offset, and label will be added to its label in the legend
 """
-function plotDeathPeakAligned(paises; plotFn=plot, db=D,
+function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
    smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3], counttype="deaths",
    fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
    alignon=nothing, soffsets = Dict(
@@ -630,8 +630,8 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D,
       counttype="deaths", fname=""; kwargs...)
    ylabel("Deaths/day relative to peak")
    xlabel("days relative to peak")
-   title("COVID-19 $counttype per day\nin selected regions, " *
-      "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window",
+   title("COVID-19 $counttype per day in selected regions,\n" *
+      "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window and normalized to maximum",
       fontsize=fontsize, fontname=fontname)
    xlim(-20,17)
 
