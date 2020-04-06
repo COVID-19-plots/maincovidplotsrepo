@@ -10,17 +10,17 @@ For a pointer to the data sources (mostly Johns Hopkins), please click **[here](
 
 ### Deaths per day aligned on peak
 
+Click on the plot to see an expanded version.
+
+<img src="carlosbrody/src/deathPeakAligned.jpg" width="1000">
+
 When will death rates go down?
 
 The White House is relying on the [IHME model out of UW](https://covid19.healthdata.org/), which predicts how many deaths there will be and over what time period. The core of the IHME approach focuses on modeling *when* the peak number of deaths/day will occur (their beta_j parameter), and on *how large* the total number of deaths will be (area under the peak, their p_j parameter). The width of the peak is assumed to be likely similar to the width of Wuhan's peak (their alpha_j parameter). **How good is the assumption that the width of the deaths/day peaks will be similar to Wuhan's, and if it is wrong, how much would outcomes change?**
 
-To assess answers to that question, I'm looking at places where deaths/day may have peaked. I'm keeping my eye on the following plot, which focuses on the width (not height or timing) of the peak of daily deaths for different regions. Will the U.K. and states of the U.S. be like Italy, with broad peaks and greater number of deaths (hope not)? Will Germany be thankfully narrow, like Wuhan, as it begins to look like? Might other countries follow suit? Will the IHME assumption continue to roughly hold, as it seems to be doing?
+To assess answers to that question, I'm looking at places where deaths/day may have peaked. I'm keeping my eye on the plot above, which focuses on the width (not height or timing) of the peak of daily deaths for different regions. Will the U.K. and states of the U.S. be like Italy, with broad peaks and greater number of deaths (hope not)? Will Germany be thankfully narrow, like Wuhan, as it begins to look like? Might other countries follow suit? Will the IHME assumption continue to roughly hold, as it seems to be doing?
 
 Still far too early to tell what the answers to any of these questions are. But I'm keeping my eye on this plot as I update it each evening.
-
-Click on the plot to see an expanded version.
-
-<img src="carlosbrody/src/deathPeakAligned.jpg" width="1000">
 
 
 
