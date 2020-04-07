@@ -116,7 +116,7 @@ function nextLinespec()
     for i=1:length(markerOrder)
         for j=1:length(colorOrder)
             if isempty(getLinespecs(marker=markerOrder[i], color=colorOrder[j]))
-                return myLinespec("", 2, markerOrder[i], colorOrder[j])
+                return myLinespec("", 2, markerOrder[i], colorOrder[j], 1)
             end
         end
     end

@@ -630,7 +630,7 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
       counttype="deaths", fname=""; kwargs...)
    ylabel("Deaths/day relative to peak")
    xlabel("days relative to peak")
-   title("COVID-19 $counttype per day in selected regions,\n" *
+   title("data up to $(mydate(db[1,end])): COVID-19 $counttype per day in selected regions,\n" *
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window and normalized to maximum",
       fontsize=fontsize, fontname=fontname)
    xlim(-25,17)

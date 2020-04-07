@@ -86,7 +86,7 @@ states = ["US", "Italy",
    ("Washington", "US"), ("New York", "US"), ("California", "US"),
    ("Florida", "US"), ("Texas", "US"),
    # "Italy", "Germany", "Brazil", africa,
-   ("New Jersey", "US"), # "Australia",
+   ("New Jersey", "US"), ("Louisiana", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder, ("Connecticut", "US")]
 
 plotGrowth(vcat(states, "World other than China"),

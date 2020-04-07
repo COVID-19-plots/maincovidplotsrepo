@@ -35,8 +35,9 @@ soffsets = Dict(
    ("Hubei", "China")=>-2
 )
 
-plotDeathPeakAligned([("Hubei", "China"), "Germany",
-   "Italy", "Spain", alleurope], fname="deathPeakAligned", soffsets=soffsets)
+plotDeathPeakAligned([("Hubei", "China"), "Portugal",
+   "Italy", "Spain", alleurope], fname="deathPeakAligned", soffsets=soffsets,
+   fignum=24)
 
 ##
 
