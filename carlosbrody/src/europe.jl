@@ -32,6 +32,7 @@ soffsets = Dict(
    "Spain"=>0,
    alleurope=>-0.5,
    "Korea, South"=>2,
+   "Portugal"=>-1,
    ("Hubei", "China")=>-2
 )
 
