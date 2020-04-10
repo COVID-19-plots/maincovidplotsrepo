@@ -29,6 +29,7 @@ sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidp
 A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
 A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
+A = setValue(A, ("Washington", "US"), "4/9/20", 9753)
 D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
 #
 # A = setValue(A, ("Washington", "US"), "3/17/20", 1014)
@@ -537,7 +538,7 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
    function tenXline(days, str)
       xl = xlim()
       h = plot([0, xl[2]], alignon*(10 .^[0, xl[2]/days]),
-         color="grey", linewidth=4, alpha=0.2)[1] ;
+         color="grey", linewidth=4, alpha=0.2, zorder=1)[1] ;
       x2 = xl[2];    y2 = alignon*(10 .^(xl[2]/days))
       y1 = ylim()[2] ; x1 = days*log10(y1/alignon)
       if x1 < x2
@@ -552,7 +553,7 @@ function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
          xpos*bbox.width/(xlim()[2]-xlim()[1]))
       tx = text(xpos, ypos, "10X every\n$str", backgroundcolor="white",
          color="gray", horizontalalignment="center", verticalalignment="center",
-         rotation=dataAng)
+         rotation=dataAng, zorder=1)
 
       xlim(xl)
       return h
