@@ -3,7 +3,7 @@ close("all")
 
 europe = ["US", "Italy", "Germany", "Spain", "Portugal", "France", "United Kingdom", "Switzerland",
 "Austria", "Greece", "Netherlands", "Sweden", "Norway", "Finland", "Denmark", "Korea, South",
-"Hungary", "Turkey"]
+"Hungary", "Turkey", "Russia"]
 
 alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South"]))
 
@@ -36,7 +36,7 @@ soffsets = Dict(
    ("Hubei", "China")=>-2
 )
 
-plotDeathPeakAligned([("Hubei", "China"), "Portugal",
+plotDeathPeakAligned([("Hubei", "China"), # "Portugal",
    "Italy", "Spain"], fname="deathPeakAligned", soffsets=soffsets,
    fignum=24)
 

@@ -30,10 +30,9 @@ A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
 A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
 A = setValue(A, ("Washington", "US"), "4/9/20", 9753)
+A = setValue(A, ("Washington", "US"), "4/10/20", 10219)
 D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
-#
-# A = setValue(A, ("Washington", "US"), "3/17/20", 1014)
-
+D = setValue(D, ("Washington", "US"), "4/10/20", 487)
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
 fname  = "time_series_19-covid-Confirmed.csv"
