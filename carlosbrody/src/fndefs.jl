@@ -590,7 +590,7 @@ end
    plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
       smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3],
       fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
-      x0=-25, x1=17, alignon=nothing, soffsets = Dict(
+      tickdiff = 5, x0=-25, x1=17, alignon=nothing, soffsets = Dict(
          "Austria"=>0,
          "Sweden"=>-0.5,
          "Norway"=>1,
@@ -609,7 +609,7 @@ end
 function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
    smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3], counttype="deaths",
    fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
-   x0=-25, x1=17, alignon=nothing, soffsets = Dict(
+   tickdiff = 5, x0=-25, x1=17, alignon=nothing, soffsets = Dict(
       "Austria"=>0,
       "Sweden"=>-0.5,
       "Norway"=>1,
@@ -644,6 +644,7 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window and normalized to maximum",
       fontsize=fontsize, fontname=fontname)
    xlim(x0,x1)
+   gca().set_xticks(minimum(gca().get_xticks()):tickdiff:maximum(gca().get_xticks()))
 
    addSourceString2Linear()  # the xlim() misplaces it
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
