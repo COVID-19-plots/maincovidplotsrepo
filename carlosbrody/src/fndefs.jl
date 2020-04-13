@@ -26,17 +26,22 @@ sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidp
 #
 
 # Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
+# and directly from Johns Hopkins dashboard. COVID tracking is failing on WA and CA!
 A = setValue(A, "Brazil", "3/15/20", 200)
 A = setValue(A, "Brazil", "3/16/20", 234)
 A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
 A = setValue(A, ("Washington", "US"), "4/9/20", 9753)
 A = setValue(A, ("Washington", "US"), "4/10/20", 10219)
 A = setValue(A, ("Washington", "US"), "4/11/20", 10375)
+A = setValue(A, ("Washington", "US"), "4/12/20", 10530)
 A = setValue(A, ("California", "US"), "4/11/20", 22289)
+A = setValue(A, ("California", "US"), "4/12/20", 23209)
 D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
 D = setValue(D, ("Washington", "US"), "4/10/20", 487)
 D = setValue(D, ("Washington", "US"), "4/11/20", 495)
+D = setValue(D, ("Washington", "US"), "4/12/20", 510)
 D = setValue(D, ("California", "US"), "4/11/20", 632)
+D = setValue(D, ("California", "US"), "4/12/20", 681)
 D = setValue(D, "Germany", "4/11/20", 2871)
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
@@ -585,7 +590,7 @@ end
    plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
       smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3],
       fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
-      alignon=nothing, soffsets = Dict(
+      x0=-25, x1=17, alignon=nothing, soffsets = Dict(
          "Austria"=>0,
          "Sweden"=>-0.5,
          "Norway"=>1,
@@ -604,7 +609,7 @@ end
 function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
    smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3], counttype="deaths",
    fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
-   alignon=nothing, soffsets = Dict(
+   x0=-25, x1=17, alignon=nothing, soffsets = Dict(
       "Austria"=>0,
       "Sweden"=>-0.5,
       "Norway"=>1,
@@ -638,7 +643,7 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
    title("data up to $(mydate(db[1,end])): COVID-19 $counttype per day in selected regions,\n" *
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window and normalized to maximum",
       fontsize=fontsize, fontname=fontname)
-   xlim(-25,17)
+   xlim(x0,x1)
 
    addSourceString2Linear()  # the xlim() misplaces it
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
