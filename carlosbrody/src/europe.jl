@@ -33,14 +33,32 @@ soffsets = Dict(
    alleurope=>-0.5,
    "Korea, South"=>2,
    "Portugal"=>-1,
+   "France"=>1,
+   "Netherlands"=>1,
+   ("New Jersey", "US")=>-1,
    ("Hubei", "China")=>-2
 )
 
-plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "US"), # "Portugal", 
-   "Italy", "Spain", "Germany", # "Denmark", "Greece", "Austria"
-   "Netherlands"], fname="deathPeakAligned", soffsets=soffsets,
+plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "US"), # "Portugal",
+   "France", "Italy", "Spain", "Germany", # "Denmark", "Greece", "Austria"
+   "Netherlands", "Sweden"], fname="deathPeakAligned",
+   soffsets=soffsets,
    fignum=24, x0=-35, x1=25)
 
 ##
+
+plotNew([("Hubei", "China")], fignum=15, db=D,
+   counttype="deaths", days_previous=size(A,2)-22, maxtic=400,
+   fname="deathsHubei", mintic=1, minval=0,
+   smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3])
+d = -(size(A,2)-26):0
+h = plot(d, 170*10 .^ (-(d.+61)./29), color="red",
+   label="1/10 every 29 days")[1]
+gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
+   loc="upper left")
+savefig2jpg("logClimbdown")   
+
+##
+
 
 writeReadme(prefix="europe", header1="Europe")

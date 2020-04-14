@@ -18,6 +18,9 @@ midwest = ("Midwest: IA+MO+OK+KS+NE\nWY, CO, UT",
 canadaborder = ("Canada border:\nMI+IL+WI+MN+ND+MT", [("Michigan", "US"),
    ("Illinois", "US"), ("Wisconsin", "US"), ("Minnesota", "US"),
    ("North Dakota", "US"), ("Montana", "US")])
+nostayhome = ("No Stay-At-Home order: SD+ND+IA+NE+AK",
+   [("South Dakota", "US"), ("Iowa", "US"),
+   ("North Dakota", "US"), ("Nebraska", "US"), ("Arkansas", "US")])
 
 states = ["US", "Italy",
    ("Washington", "US"), ("New York", "US"), ("California", "US"),
@@ -25,7 +28,8 @@ states = ["US", "Italy",
    # "Italy", "Germany", "Brazil", africa,
    ("New Jersey", "US"), ("Illinois", "US"),
    ("Louisiana", "US"), # "Australia",
-   south, mexicoborder, midwest, canadaborder, ("Connecticut", "US")]
+   south, mexicoborder, midwest, canadaborder, ("Connecticut", "US"),
+   nostayhome]
 
 plotGrowth(vcat(states, "World other than China"),
    fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
