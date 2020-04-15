@@ -35,17 +35,21 @@ A = setValue(A, ("Washington", "US"), "4/10/20", 10219)
 A = setValue(A, ("Washington", "US"), "4/11/20", 10375)
 A = setValue(A, ("Washington", "US"), "4/12/20", 10530)
 A = setValue(A, ("Washington", "US"), "4/13/20", 10838)
+A = setValue(A, ("Washington", "US"), "4/14/20", 11055)
 A = setValue(A, ("California", "US"), "4/11/20", 22289)
 A = setValue(A, ("California", "US"), "4/12/20", 23209)
 A = setValue(A, ("California", "US"), "4/13/20", 24379)
+A = setValue(A, ("California", "US"), "4/14/20", 25537)
 D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
 D = setValue(D, ("Washington", "US"), "4/10/20", 487)
 D = setValue(D, ("Washington", "US"), "4/11/20", 495)
 D = setValue(D, ("Washington", "US"), "4/12/20", 510)
 D = setValue(D, ("Washington", "US"), "4/13/20", 522)
+D = setValue(D, ("Washington", "US"), "4/14/20", 546)
 D = setValue(D, ("California", "US"), "4/11/20", 632)
 D = setValue(D, ("California", "US"), "4/12/20", 681)
 D = setValue(D, ("California", "US"), "4/13/20", 732)
+D = setValue(D, ("California", "US"), "4/14/20", 783)
 D = setValue(D, "Germany", "4/11/20", 2871)
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
@@ -610,9 +614,9 @@ end
    as inputs and returns (offset, label) as outouts. Each series will be offset
    horizontally by offset, and label will be added to its label in the legend
 """
-function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
+function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="", multFactor=1,
    smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3], counttype="deaths",
-   fn=x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
+   fn=x -> multFactor.*smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel)),
    tickdiff = 5, x0=-25, x1=17, alignon=nothing, soffsets = Dict(
       "Austria"=>0,
       "Sweden"=>-0.5,
@@ -638,7 +642,7 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="",
       return offset-(haskey(soffsets, pais) ? soffsets[pais] : 0), label
    end
 
-   plotNew(paises, plotFn=plot, db=db, smkernel=smkernel,
+   plotNew(paises, plotFn=plotFn, db=db, smkernel=smkernel,
       fn=fn, minval=0, days_previous=size(db,1)-5,
       alignon = (alignon==nothing ? myalign : alignon), offsetRange=0.1,
       counttype="deaths", fname=""; kwargs...)
