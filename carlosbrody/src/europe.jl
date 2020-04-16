@@ -40,7 +40,7 @@ soffsets = Dict(
 )
 
 plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "US"), # "Portugal",
-   "Italy", "Spain", "Germany"], # "Denmark", "Greece", "Austria"
+   "Italy", "Spain", "United Kingdom"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
    # "Netherlands", "Austria"],
    fname="deathPeakAligned",
    soffsets=soffsets,
@@ -53,11 +53,11 @@ plotNew([("Hubei", "China")], fignum=15, db=D,
    fname="deathsHubei", mintic=1, minval=0,
    smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3])
 d = -(size(A,2)-26):0
-h = plot(d, 170*10 .^ (-(d.+61)./29), color="red",
+h = plot(d, 170*10 .^ (-(d.+(size(A,2)-26))./29), color="red",
    label="1/10 every 29 days")[1]
 gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
    loc="upper left")
-savefig2jpg("logClimbdowncl")
+savefig2jpg("logClimbdown")
 
 ##
 
