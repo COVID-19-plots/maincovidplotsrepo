@@ -7,7 +7,7 @@ using PyPlot
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
 export savefig2jpg
-export dropColumns, renameColumn!, dropRows
+export dropColumns, renameColumn!, dropRows, getColNums, getDataColumns
 
 stateAbbrevMapFilename = "StateNamesAndAbbreviations.csv"
 stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
@@ -330,6 +330,64 @@ function collapseUSStates(A; mapfilename="StateNamesAndAbbreviations.csv")
 end
 
 
+"""
+   getColNums(A, colnames::Vector{String})
+
+   Return the column numbers for columns with first row matching entries in colnames
+"""
+function getColNums(A, colnames::Vector{String})
+   u = map(x -> findfirst(A[1,:] .== x), colnames)
+   if any( u .== nothing )
+      println("Could not find any columns with names ", colnames[u.==nothing])
+   end
+   u = u[ u .!= nothing ]
+
+   return u
+end
+"""
+   getColNums(A, colnames::String)
+
+   return getColNums(A, [colnames])
+"""
+function getColNums(A, colnames::String)
+   return getColNums(A, [colnames])
+end
+
+"""
+   getDataColumns(A, colnames::Vector{String})
+
+   return the data for columns with first row matching entries in colnames
+   Only the data rows are returned, without the first row
+"""
+function getDataColumns(A, colnames::Vector{String})
+   u = getColNums(A, colnames)
+
+   if length(u)==1
+      return A[2:end, u][:]
+   else
+      return A[2:end, u]
+   end
+end
+"""
+   getDataColumns(A, colnames::String)
+
+   return getDataColumns(A, [colname])
+"""
+function getDataColumns(A, colname::String)
+   return getDataColumns(A, [colname])
+end
+
+
+"""
+   firstDataColumn(A)
+
+   returns the column number of the column whose first row
+   matches r"[0-9]+/[0-9]+/[0-9]{2}" i.e. like "4/11/20"
+"""
+function firstDataColumn(A)
+   r = r"[0-9]+/[0-9]+/[0-9]{2}"
+   return findfirst(map(x -> occursin(r, x), A[1,:]))
+end
 
 """
    country2conf(A, pais::Array{String,1}, invert=false)
@@ -340,17 +398,29 @@ end
    function of days. If the optional parameter invert=true, then returns the
    result for all countries *other* than the given countries
 """
-function country2conf(A, pais::Array{String,1}; invert=false)
+function country2conf(A, pais::Array{String,1}; estado=nothing, invert=false,
+   s1col="Country/Region", s2col="Province/State", rcols=firstDataColumn(A):size(A,2))
+
+   @assert estado==nothing || all(size(estado).==size(pais)) "if estado vector is specified, it must be same size as pais vector"
+
+   countries = getDataColumns(A, s1col)
+   states = getDataColumns(A, s2col)
 
    if !invert
-      crows = findall(map(x -> in(x, pais), A[:,2]))
+      if estado==nothing
+         # the +1 is because countries will not have top row of A; add the one to index into A itself
+         crows = findall(map(x -> in(x, pais), countries)) .+ 1
+      else
+         crows = findall(map(x -> in(x, pais), countries) .&
+            map(x -> in(x, estado), states)) .+ 1
+      end
    else
       # Be careful to exclude the top row from results in this inverted case
-      crows = findall(map(x -> !in(x, pais), A[2:end,2])) .+ 1
+      crows = findall(map(x -> !in(x, pais), countries)) .+ 1
    end
 
    # daily count starts in column 5; turn it into Float64s
-   my_confirmed = Array{Float64}(A[crows,5:end])
+   my_confirmed = Array{Float64}(A[crows,rcols])
 
    # Add all rows for the country
    my_confirmed = sum(my_confirmed, dims=1)[:]
@@ -358,6 +428,42 @@ function country2conf(A, pais::Array{String,1}; invert=false)
    return my_confirmed
 end
 
+
+"""
+   country2conf(pais::String; invert=false)
+
+   Given a string representing country, returns a numeric
+   vector of cumulative confirmed cases, as a function of days. If the
+   optional parameter invert=true, then returns the result for
+   all countries *other* than the given country
+"""
+function country2conf(A, pais::String; invert=false, kwargs...)
+   return country2conf(A, [pais], invert=invert; kwargs...)
+end
+
+
+"""
+   country2conf(pais::Tuple{String, String}; invert=false)
+
+   Given a tuple of two strings, representing region, country, respectively,
+   returns a numeric vector of cumulative confirmed cases, as a function of days.
+   If the optional parameter invert=true, then returns the result for
+   all countries *other* than the given country
+
+"""
+function country2conf(A, pais::Tuple{String, String}; kwargs...)
+   return country2conf(A, [pais]; kwargs...)
+end
+
+"""
+   country2conf(A, pais::Array{Tuple{String,String},1}; invert=false)
+
+   Given a tuples of two strings, representing region, country, respectively,
+   returns a numeric vector of cumulative confirmed cases, as a function of days.
+   If the optional parameter invert=true, then returns the result for
+   all countries *other* than the given country
+
+"""
 function country2conf(A, pais::Array{Tuple{String,String},1}; invert=false)
    if !invert
       crows = findall( map(x -> in(x, pais),
@@ -376,45 +482,6 @@ function country2conf(A, pais::Array{Tuple{String,String},1}; invert=false)
 
    return my_confirmed
 end
-
-
-"""
-   country2conf(pais::String; invert=false)
-
-   Given a string representing country, returns a numeric
-   vector of cumulative confirmed cases, as a function of days. If the
-   optional parameter invert=true, then returns the result for
-   all countries *other* than the given country
-"""
-function country2conf(A, pais::String; invert=false)
-   return country2conf(A, [pais], invert=invert)
-end
-
-
-"""
-   country2conf(pais::Tuple{String, String}; invert=false)
-
-   Given a tuple of two strings, representing region, country, respectively,
-   returns a numeric vector of cumulative confirmed cases, as a function of days.
-   If the optional parameter invert=true, then returns the result for
-   all countries *other* than the given country
-
-"""
-function country2conf(A, pais::Tuple{String, String}; invert=false)
-   crows = findall((A[:,1] .== pais[1])  .&  (A[:,2] .== pais[2]))
-   if invert
-      crows = setdiff(2:size(A,1), crows)
-   end
-
-   # daily count starts in column 5; turn it into Float64s
-   my_confirmed = Array{Float64}(A[crows,5:end])
-
-   # Add all rows for the country
-   my_confirmed = sum(my_confirmed, dims=1)[:]
-
-   return my_confirmed
-end
-
 
 
 

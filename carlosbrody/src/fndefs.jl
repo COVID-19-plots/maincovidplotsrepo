@@ -9,7 +9,7 @@ push!(LOAD_PATH, ".")
 using CarlosUtils
 using CovidFunctions
 
-# Data from all countries except US:
+# Data from all countries except US: (US data will come in the next file)
 A = loadConfirmedDbase(fname = "time_series_covid19_confirmed_global.csv")
 A = dropRows(A, "Country/Region", "US")
 # Data from US, including state-by-state
