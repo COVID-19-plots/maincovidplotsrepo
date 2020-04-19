@@ -3,6 +3,8 @@
 
 ## Europe confirmed cases and deaths
 
+* [Europe: New cases growth rates](#europe-new-cases-growth-rates)
+* [Europe: New deaths growth rates](#europe-new-deaths-growth-rates)
 * [Europe: New cases per day](#europe-new-cases-per-day)
 * [Europe: New deaths per day](#europe-new-deaths-per-day)
 * [Europe: Cumulative number of confirmed cases by region, aligned on equal caseload](#europe-cumulative-number-of-confirmed-cases-by-region-aligned-on-equal-caseload)
@@ -10,6 +12,18 @@
 * [Europe: Daily percentile growth rates](#europe-daily-percentile-growth-rates)
 
 ## Focus on Europe
+
+### Europe: New cases growth rates
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/europeNewCasesGrowthRate.jpg" width="1000">
+
+### Europe: New deaths growth rates
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/europeNewDeathsGrowthRate.jpg" width="1000">
 
 ### Europe: New cases per day
 

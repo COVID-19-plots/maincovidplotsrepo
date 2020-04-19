@@ -21,4 +21,14 @@ plotNew(vcat(la, allLA), fignum=17, fname="laNew", maxtic=1000, minval=1, mintic
 plotNew(la, db=D, minval=1, mintic=1, maxtic = 100,
    counttype="deaths", fname="laNewDeaths")
 
+##
+
+plotNewGrowth(la, fname="laNewDeathsGrowthRate", db=D, fignum=18,
+   ylim1=-90, ylim2=140,
+   counttype="deaths", days_previous=26, legendLocation="lower left")
+
+plotNewGrowth(la, fname="laNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
+   counttype="new cases", days_previous=26, legendLocation="lower left")
+
+
 writeReadme(prefix="la", dirname="../../latinamerica", header1="Latin America")

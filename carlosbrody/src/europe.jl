@@ -63,7 +63,6 @@ savefig2jpg("logClimbdown")
 ##
 
 
-writeReadme(prefix="europe", header1="Europe")
 
 ##
 
@@ -74,3 +73,5 @@ plotNewGrowth(europeSelect, db=A, days_previous=22, counttype="cases",
 
 plotNewGrowth(europeSelect, db=D, days_previous=22, counttype="deaths",
    fname="europeNewDeathsGrowthRate", fignum=22)
+
+writeReadme(prefix="europe", header1="Europe")
