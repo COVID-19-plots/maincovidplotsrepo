@@ -11,7 +11,7 @@ plotGrowth(vcat(europe, "World other than China"),
    fignum=1, fname="europeGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
 plotCumulative(europe, fignum=12, maxtic=100000, fname="europeCumulative")
 plotAligned(europe, fname="europeAligned",
-   mintic=100, maxtic=100000, fignum=3, minval=10, alignon=400)
+   mintic=100, maxtic=400000, fignum=3, minval=10, alignon=400)
 plotNew(vcat(europe, alleurope), fignum=14, fname="europeNew")
 plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
    counttype="deaths", fname="europeNewDeaths")
@@ -41,7 +41,7 @@ soffsets = Dict(
 )
 
 plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "US"), # "Portugal",
-   "Italy", "Spain", "Switzerland"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
+   "Italy", "Spain", "Switzerland", "France"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
    # "Netherlands", "Austria"],
    fname="deathPeakAligned",
    soffsets=soffsets,
@@ -64,3 +64,13 @@ savefig2jpg("logClimbdown")
 
 
 writeReadme(prefix="europe", header1="Europe")
+
+##
+
+europeSelect = ["United Kingdom", "Portugal", "Italy", "Spain", "Austria", "Germany", "France", "Sweden", alleurope]
+
+plotNewGrowth(europeSelect, db=A, days_previous=22, counttype="cases",
+   fname="europeNewCasesGrowthRate", fignum=21, ylim1=-60)
+
+plotNewGrowth(europeSelect, db=D, days_previous=22, counttype="deaths",
+   fname="europeNewDeathsGrowthRate", fignum=22)

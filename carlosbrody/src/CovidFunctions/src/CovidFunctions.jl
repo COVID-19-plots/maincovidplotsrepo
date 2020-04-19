@@ -7,6 +7,7 @@ using PyPlot
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
 export savefig2jpg
+export dropColumns, renameColumn!, dropRows
 
 stateAbbrevMapFilename = "StateNamesAndAbbreviations.csv"
 stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
@@ -76,6 +77,73 @@ function loadConfirmedDbase(;
    return readdlm("$dname/$fname", ',');
 end
 
+
+"""
+   renameColumn!(A, oldname::String, newname::String)
+
+   If there is a column oldname in dbase matrix A, replaces
+   column name with newname
+
+"""
+function renameColumn!(A, oldname::String, newname::String)
+   u = findfirst(A[1,:] .== oldname)
+   if u == nothing
+      println("Couldn't find column $oldname")
+   else
+      A[1,u] = newname;
+   end
+   return A
+end
+
+"""
+   A = dropColumns(A, oldname::String)
+
+   If there is a column oldname in dbase matrix A, removes it,
+   returns new dbase matrix
+"""
+function dropColumns(A, oldname::String)
+   u = findfirst(A[1,:] .== oldname)
+   if u == nothing
+      println("Couldn't find column $oldname")
+   else
+      A = A[:,[1:u-1 ; u+1:end]];
+   end
+   return A
+end
+
+"""
+   A = dropColumns(A, oldnames::Vector{String})
+
+   drops every column in the vector oldnames
+"""
+function dropColumns(A, oldnames::Vector{String})
+   for i=1:length(oldnames)
+      A = dropColumns(A, oldnames[i])
+   end
+   return A
+end
+
+
+"""
+   dropRows(A, colname::String, colvals::Vector)
+
+   Drops any rows from dbase matrix A in which column colname
+   has any of the values in colvals
+"""
+function dropRows(A, colname::String, colvals::Vector)
+   u = findfirst(A[1,:] .== colname)
+   if u == nothing
+      println("Could not find column $colname")
+   end
+   for i=1:length(colvals)
+      r = findall(A[2:end,u] .== colvals[i]).+1
+      A = A[setdiff(1:size(A,1), r),:]
+   end
+   return A
+end
+function dropRows(A, colname::String, colvals::String)
+   return dropRows(A, colname, [colvals])
+end
 ##
 ##
 

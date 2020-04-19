@@ -51,3 +51,24 @@ sections = [
 ]
 
 writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States", sections=sections)
+
+##
+
+mystates = ["Italy",
+   ("Washington", "US"), ("New York", "US"), ("California", "US"),
+   ("Florida", "US"), ("Texas", "US"),
+   ("New Jersey", "US"), ("Illinois", "US"),
+   ("Louisiana", "US"), # "Australia",
+   nostayhome]
+
+
+
+plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=18,
+   counttype="deaths", days_previous=26, legendLocation="lower left")
+
+
+
+plotNewGrowth(mystates, fname="statesNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
+   counttype="new cases", days_previous=26, legendLocation="lower left")
+
+##

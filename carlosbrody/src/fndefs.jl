@@ -9,14 +9,31 @@ push!(LOAD_PATH, ".")
 using CarlosUtils
 using CovidFunctions
 
+# Data from all countries except US:
 A = loadConfirmedDbase(fname = "time_series_covid19_confirmed_global.csv")
-D = loadConfirmedDbase(fname = "time_series_covid19_deaths_global.csv")
-# US data showed up per county until 09-March-2020, but then only per state
-# thereafter. THis function collapses it all into states
-A = collapseUSStates(A)
-D = collapseUSStates(D)
+A = dropRows(A, "Country/Region", "US")
+# Data from US, including state-by-state
+A2 = loadConfirmedDbase(fname="time_series_covid19_confirmed_US.csv")
+A2 = dropColumns(A2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key"])
+A2 = renameColumn!(renameColumn!(A2, "Province_State", "Province/State"), "Country_Region", "Country/Region")
+# Now put them together
+A = [A ; A2[2:end,:]]
 
-#
+
+# Now same again for deaths:
+
+D = loadConfirmedDbase(fname = "time_series_covid19_deaths_global.csv")
+D = dropRows(D, "Country/Region", "US")
+D2 = loadConfirmedDbase(fname="time_series_covid19_deaths_US.csv")
+D2 = dropColumns(D2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key", "Population"])
+D2 = renameColumn!(renameColumn!(D2, "Province_State", "Province/State"), "Country_Region", "Country/Region")
+# Now put them together
+D = [D ; D2[2:end,:]]
+
+
+
+
+##
 
 days_previous=29
 
@@ -25,50 +42,60 @@ sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidp
 
 
 #
+# COVID tracking is failing on WA and CA!
+#
+# Did some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
+# and directly from Johns Hopkins dashboard, but then went back to all Johns Hopkins data source since
+# they now put state information back in.
+#
+# A = setValue(A, "Brazil", "3/15/20", 200)
+# A = setValue(A, "Brazil", "3/16/20", 234)
+# A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
+# A = setValue(A, ("Washington", "US"), "4/9/20", 9753)
+# A = setValue(A, ("Washington", "US"), "4/10/20", 10219)
+# A = setValue(A, ("Washington", "US"), "4/11/20", 10375)
+# A = setValue(A, ("Washington", "US"), "4/12/20", 10530)
+# A = setValue(A, ("Washington", "US"), "4/13/20", 10838)
+# A = setValue(A, ("Washington", "US"), "4/14/20", 11055)
+# A = setValue(A, ("Washington", "US"), "4/15/20", 11065)
+# A = setValue(A, ("Washington", "US"), "4/16/20", 11217)
+# A = setValue(A, ("Washington", "US"), "4/17/20", 11586)
+# A = setValue(A, ("California", "US"), "4/11/20", 22289)
+# A = setValue(A, ("California", "US"), "4/12/20", 23209)
+# A = setValue(A, ("California", "US"), "4/13/20", 24379)
+# A = setValue(A, ("California", "US"), "4/14/20", 25537)
+# A = setValue(A, ("California", "US"), "4/15/20", 26940)
+# A = setValue(A, ("California", "US"), "4/16/20", 27697)
+# A = setValue(A, ("California", "US"), "4/17/20", 29171)
+# D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
+# D = setValue(D, ("Washington", "US"), "4/10/20", 487)
+# D = setValue(D, ("Washington", "US"), "4/11/20", 495)
+# D = setValue(D, ("Washington", "US"), "4/12/20", 510)
+# D = setValue(D, ("Washington", "US"), "4/13/20", 522)
+# D = setValue(D, ("Washington", "US"), "4/14/20", 546)
+# D = setValue(D, ("Washington", "US"), "4/15/20", 562)
+# D = setValue(D, ("Washington", "US"), "4/16/20", 587)
+# D = setValue(D, ("Washington", "US"), "4/17/20", 610)
+# D = setValue(D, ("California", "US"), "4/11/20", 632)
+# D = setValue(D, ("California", "US"), "4/12/20", 681)
+# D = setValue(D, ("California", "US"), "4/13/20", 732)
+# D = setValue(D, ("California", "US"), "4/14/20", 783)
+# D = setValue(D, ("California", "US"), "4/15/20", 880)
+# D = setValue(D, ("California", "US"), "4/16/20", 956)
+# D = setValue(D, ("California", "US"), "4/17/20", 1041)
+#
+# D = setValue(D, "Germany", "4/11/20", 2871)
+# D = setValue(D, "Germany", "4/14/20", 3494)
 
-# Some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
-# and directly from Johns Hopkins dashboard. COVID tracking is failing on WA and CA!
-A = setValue(A, "Brazil", "3/15/20", 200)
-A = setValue(A, "Brazil", "3/16/20", 234)
-A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
-A = setValue(A, ("Washington", "US"), "4/9/20", 9753)
-A = setValue(A, ("Washington", "US"), "4/10/20", 10219)
-A = setValue(A, ("Washington", "US"), "4/11/20", 10375)
-A = setValue(A, ("Washington", "US"), "4/12/20", 10530)
-A = setValue(A, ("Washington", "US"), "4/13/20", 10838)
-A = setValue(A, ("Washington", "US"), "4/14/20", 11055)
-A = setValue(A, ("Washington", "US"), "4/15/20", 11065)
-A = setValue(A, ("Washington", "US"), "4/16/20", 11217)
-A = setValue(A, ("Washington", "US"), "4/17/20", 11586)
-A = setValue(A, ("California", "US"), "4/11/20", 22289)
-A = setValue(A, ("California", "US"), "4/12/20", 23209)
-A = setValue(A, ("California", "US"), "4/13/20", 24379)
-A = setValue(A, ("California", "US"), "4/14/20", 25537)
-A = setValue(A, ("California", "US"), "4/15/20", 26940)
-A = setValue(A, ("California", "US"), "4/16/20", 27697)
-A = setValue(A, ("California", "US"), "4/17/20", 29171)
-D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
-D = setValue(D, ("Washington", "US"), "4/10/20", 487)
-D = setValue(D, ("Washington", "US"), "4/11/20", 495)
-D = setValue(D, ("Washington", "US"), "4/12/20", 510)
-D = setValue(D, ("Washington", "US"), "4/13/20", 522)
-D = setValue(D, ("Washington", "US"), "4/14/20", 546)
-D = setValue(D, ("Washington", "US"), "4/15/20", 562)
-D = setValue(D, ("Washington", "US"), "4/16/20", 587)
-D = setValue(D, ("Washington", "US"), "4/17/20", 610)
-D = setValue(D, ("California", "US"), "4/11/20", 632)
-D = setValue(D, ("California", "US"), "4/12/20", 681)
-D = setValue(D, ("California", "US"), "4/13/20", 732)
-D = setValue(D, ("California", "US"), "4/14/20", 783)
-D = setValue(D, ("California", "US"), "4/15/20", 880)
-D = setValue(D, ("California", "US"), "4/16/20", 956)
-D = setValue(D, ("California", "US"), "4/17/20", 1041)
 
+# Remove late April correction on Wuhan, so as to keep
+# initial trends:
 A = setValue(A, ("Hubei", "China"), "4/17/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/17/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/18/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/18/20", 3222)
 
-D = setValue(D, "Germany", "4/11/20", 2871)
-D = setValue(D, "Germany", "4/14/20", 3494)
+
 # Write out the database with the states consolidated
 d2name = "../../consolidated_database"
 fname  = "time_series_19-covid-Confirmed.csv"
@@ -86,8 +113,26 @@ legendfontsize = 13
 #
 # ####################################
 
-function percentileGrowth(series; smkernel=[1])
-   series = (series[2:end]./series[1:end-1] .- 1) .* 100
+"""
+   percentileGrowth(series; smkernel=[1], assessDelta=1)
+
+   Return the series replaced by its element-by-element percentile
+   change, smoothed with smkernel after calculation
+
+   # OPTIONAL PARAMS
+
+   - smkernel      The smoothing kernel after the percentile is calculated
+
+   - assessDelta   Percentile is measured at this many bins different; then.
+                   assuming an exponential process, it is expressed as percentile
+                   per bin.
+"""
+function percentileGrowth(series; smkernel=[1], assessDelta=1, perTimeBin=true)
+   series = series[assessDelta+1:end]./series[1:end-assessDelta]
+   if perTimeBin
+      series = series.^(1.0/assessDelta)
+   end
+   series = (series .- 1) .* 100
    series = smooth(series, smkernel)
 end
 
@@ -318,7 +363,8 @@ end
 ##
 
 """
-   plotMany(paises; fignum=1, offsetRange=0.1, kwargs...)
+   plotMany(paises; fignum=1, offsetRange=0.1, legendLocation::String="upper left",
+      kwargs...)
 
    Each entry in the list paises gets plotted onto a figure using plotSingle,
    all overlaid on each other, and a legend gets created.  All of the arguments
@@ -334,6 +380,8 @@ end
 
    - offsetRange how much to jitter x position across different lines
 
+   - legendLocation   self-explanatory, follows PyPlot.gca().legend()
+
    # EXAMPLE CALLS:
 
    paises2 = ["Italy", "Spain", "Germany", "US", "Australia", "Brazil"]
@@ -344,7 +392,8 @@ end
       plotFn=plot, alignon=40, minval=0)
 
 """
-function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today", kwargs...)
+function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
+   legendLocation::String="upper left", kwargs...)
 
    figure(fignum); clf(); println()
    set_current_fig_position(115, 61, 1496, 856)
@@ -371,7 +420,7 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today", kwargs...)
    end
 
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2),
-      loc="upper left")
+      loc=legendLocation)
    xlabel("days", fontsize=fontsize, fontname=fontname)
    grid("on")
    gca().tick_params(labelsize=16)
@@ -473,6 +522,7 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
    savefig2jpg(fname)
 end
 
+##
 
 # ======================================
 #
@@ -489,29 +539,34 @@ Grey lines at right indicate time to grow by a factor of 10X.
 
 """
    plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
-      minval=10, fignum=3, yticks=0:10:60, ylim2=65,
+      minval=10, fignum=3, yticks=0:10:60, ylim1=0, ylim2=65,
       fn=x -> smooth(percentileGrowth(x), smkernel),
-      mincases=50, fname::String="", counttype="cases", kwargs...)
+      mincases=50, fname::String="", counttype="cases",
+      explain=true, weekly=false,
+      tenXGrowAnchor=7, tenXDecayAnchor=14, kwargs...)
 """
 function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
-   fignum=3, yticks=0:10:60, ylim2=65, fn=x -> smooth(percentileGrowth(x), smkernel),
-   mincases=50, fname::String="", counttype="cases", kwargs...)
+   fignum=3, yticks=0:10:60, ylim1=0, ylim2=65, fn=x -> smooth(percentileGrowth(x), smkernel),
+   mincases=50, fname::String="", counttype="cases", explain=true, weekly=false,
+   tenXGrowAnchor=7, tenXDecayAnchor=14, kwargs...)
 
    plotMany(regions, plotFn=plot,
       fn=fn,
       mincases=mincases, fignum=fignum; kwargs...)
 
-   ylabel("% daily growth", fontsize=fontsize, fontname=fontname)
-   title("% daily growth in cumulative confirmed COVID-19 $counttype," *
+   ylabel("% daily change in $counttype", fontsize=fontsize, fontname=fontname)
+   title("% daily change in confirmed COVID-19 $counttype," *
       "\nsmoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window. " *
       "$mincases cases minimum", fontsize=fontsize, fontname=fontname)
 
-   gca().set_yticks(yticks); ylim(0, ylim2); xlim(xlim()[1], 0.5)
-   axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+   gca().set_yticks(yticks); ylim(ylim1, ylim2); xlim(xlim()[1], 0.5)
    axisMove(-0.05, 0)
-   t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1]), interest_explanation,
-      fontname=fontname, fontsize=16,
-      horizontalalignment = "center", verticalalignment="top")
+   if explain
+      axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
+      t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1])+ylim()[1], interest_explanation,
+         fontname=fontname, fontsize=16,
+         horizontalalignment = "center", verticalalignment="top")
+   end
 
    """
       ypos(factor, days)
@@ -520,32 +575,98 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
       calculates the daily percentile growth that would lead to that
    """
    function growthTick(days::Real, str::String; factor=10)
-      x1 = 0.045*(xlim()[2] - xlim()[1]) + xlim()[2]
-      x2 = 0.145*(xlim()[2] - xlim()[1]) + xlim()[2]
+      color= factor>1 ? "red" : "green"
+
+      x1 = 0.065*(xlim()[2] - xlim()[1]) + xlim()[2]
+      x2 = 0.165*(xlim()[2] - xlim()[1]) + xlim()[2]
 
       ypos = 100*(exp(log(factor)/days) - 1);
 
-      h = plot([x1, x2], [1, 1]*ypos, color="grey", clip_on=false)[1]
+      h = plot([x1, x2], [1, 1]*ypos, color=color, clip_on=false)[1]
       t = text((x1+x2)/2, ypos, str,
          verticalalignment="center", horizontalalignment="center",
-         backgroundcolor="w", color="grey")
+         backgroundcolor="w", color=color)
       return ypos
    end
-   yp = growthTick(7, "1 week")
-   growthTick(14, "2 weeks")
-   growthTick(30, "1 month")
-   growthTick(60, "2 months")
-   growthTick(180, "6 months")
-   xpos = 0.105*(xlim()[2] - xlim()[1]) + xlim()[2]
+   if weekly
+      growthTick(26, "6 months")
+      growthTick(8.66, "2 months")
+      growthTick(4.33, "1 month")
+      growthTick(2, "2 weeks")
+      growthTick(1, "1 week")
+   else
+      growthTick(180, "6 months")
+      growthTick(60, "2 months")
+      growthTick(30, "1 month")
+      growthTick(14, "2 weeks")
+      growthTick(7, "1 week")
+   end
+   yp = 100*(exp(log(10)/tenXGrowAnchor) - 1);
+   xpos = 0.115*(xlim()[2] - xlim()[1]) + xlim()[2]
    ypos = yp + 0.1*(ylim()[2]-ylim()[1])
    text(xpos, ypos, "10X growth time",
       verticalalignment="center", horizontalalignment="center",
-      backgroundcolor="w", color="grey", fontname="Helvetica", fontsize=14)
+      backgroundcolor="w", color="red", fontname="Helvetica", fontsize=14)
+
+   if ylim1<0
+      if weekly
+         growthTick(26, "6 months", factor=1/10)
+         growthTick(8.66, "2 months", factor=1/10)
+         growthTick(4.33, "1 month", factor=1/10)
+      else
+         growthTick(180, "6 months", factor=1/10)
+         growthTick(60, "2 months", factor=1/10)
+         growthTick(30, "1 month", factor=1/10)
+      end
+
+      xpos = 0.115*(xlim()[2] - xlim()[1]) + xlim()[2]
+      yp = 100*(exp(log(1.0/10)/tenXDecayAnchor) - 1);
+      ypos = yp - 0.1*(ylim()[2]-ylim()[1])
+      text(xpos, ypos, "10X decay time",
+         verticalalignment="center", horizontalalignment="center",
+         backgroundcolor="w", color="green", fontname="Helvetica", fontsize=14)
+
+      hlines([0], xlim()[1], xlim()[2], color="black", linewidth=1)
+   end
 
    addSourceString2Linear()
    savefig2jpg(fname)
 end
 
+
+
+# ======================================
+#
+#  plotNewGrowth()
+#
+# ======================================
+
+
+"""
+   plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
+      tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
+      fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, perTimeBin=false), [0.5, 1, 0.5]),
+      kwargs...)
+
+   Plots weekly % change in new entries, can show positive or negative change
+
+"""
+function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
+   tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
+   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, perTimeBin=false), [0.5, 1, 0.5]),
+   kwargs...)
+
+
+   plotGrowth(regions, explain=false, fn=fn,
+      smkernel=smkernel, weekly=weekly,
+      ylim1=ylim1, ylim2=ylim2, yticks=yticks, counttype=counttype,
+      tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor, mincases=0, minval=-200; kwargs...)
+   title("week-on-week % change in COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
+   ylabel("% change per week in daily $counttype")
+   savefig2jpg(fname)
+end
+
+##
 
 
 # ======================================
@@ -697,6 +818,8 @@ standardHeader = """
 """
 function writeReadme(;prefix="", dirname="../../$prefix", header1="US States",
       jpgDirname="../carlosbrody/src", sections=[
+         "New cases growth rates"         "$(prefix)NewCasesGrowthRate"
+         "New deaths growth rates"        "$(prefix)NewDeathsGrowthRate"
          "New cases per day"              "$(prefix)New"
          "New deaths per day"             "$(prefix)NewDeaths"
          "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)Aligned"
