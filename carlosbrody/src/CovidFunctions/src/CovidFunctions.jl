@@ -389,14 +389,28 @@ function firstDataColumn(A)
    return findfirst(map(x -> occursin(r, x), A[1,:]))
 end
 
+
 """
-   country2conf(A, pais::Array{String,1}, invert=false)
+   country2conf(A, pais::Array{String,1}, estado=nothing, invert=false,
+      s1col="Country/Region", s2col="Province/State", rcols=firstDataColumn(A):size(A,2))
 
    Given a database matrix A and a vector of strings representing a list of
-   countries, returns a numeric
-   vector of cumulative confirmed cases, summed over all those countries, as a
-   function of days. If the optional parameter invert=true, then returns the
-   result for all countries *other* than the given countries
+   countries, returns a numeric vector of cumulative confirmed cases, summed
+   over all those countries, as a function of days.
+
+   # OPTIONAL PARAMS:
+
+   -invert     If true, returns data for all regions *other* than the passed ones
+
+   -estado     If specified, should be a vector of Strings same size as pais, and will
+               be used to specify values for Province/State
+
+   -s1col      The column name, indicating column to be used to match the contents of pais.
+
+   -s2col      The column name, indicating column to be used to match the contents of estado.
+
+   -rcols      The set of columns that will be returned; rows within this set will be summed.
+
 """
 function country2conf(A, pais::Array{String,1}; estado=nothing, invert=false,
    s1col="Country/Region", s2col="Province/State", rcols=firstDataColumn(A):size(A,2))
@@ -416,7 +430,12 @@ function country2conf(A, pais::Array{String,1}; estado=nothing, invert=false,
       end
    else
       # Be careful to exclude the top row from results in this inverted case
-      crows = findall(map(x -> !in(x, pais), countries)) .+ 1
+      if estado==nothing
+         crows = findall(map(x -> !in(x, pais), countries)) .+ 1
+      else
+         crows = findall(map(x -> !in(x, pais), countries) .|
+            map(x -> !in(x, estado), states)) .+ 1
+      end
    end
 
    # daily count starts in column 5; turn it into Float64s
@@ -430,79 +449,63 @@ end
 
 
 """
-   country2conf(pais::String; invert=false)
+   country2conf(A, pais::String; kwargs...)
 
-   Given a string representing country, returns a numeric
-   vector of cumulative confirmed cases, as a function of days. If the
-   optional parameter invert=true, then returns the result for
-   all countries *other* than the given country
+   return country2conf(A, [pais]; kwargs...)
 """
-function country2conf(A, pais::String; invert=false, kwargs...)
-   return country2conf(A, [pais], invert=invert; kwargs...)
+function country2conf(A, pais::String; kwargs...)
+   return country2conf(A, [pais]; kwargs...)
 end
 
 
 """
-   country2conf(pais::Tuple{String, String}; invert=false)
+   country2conf(pais::Tuple{String, String}; kwargs...)
 
-   Given a tuple of two strings, representing region, country, respectively,
-   returns a numeric vector of cumulative confirmed cases, as a function of days.
-   If the optional parameter invert=true, then returns the result for
-   all countries *other* than the given country
-
+   return country2conf(A, [pais]; kwargs...)
 """
 function country2conf(A, pais::Tuple{String, String}; kwargs...)
    return country2conf(A, [pais]; kwargs...)
 end
 
 """
-   country2conf(A, pais::Array{Tuple{String,String},1}; invert=false)
+   country2conf(A, pais::Array{Tuple{String,String},1}; kwargs...)
 
-   Given a tuples of two strings, representing region, country, respectively,
-   returns a numeric vector of cumulative confirmed cases, as a function of days.
-   If the optional parameter invert=true, then returns the result for
-   all countries *other* than the given country
+   paises  = map(x->x[2], pais)
+   estados = map(x->x[1], pais)
 
+   return country2conf(A, paises, estado=estados; kwargs...)
 """
-function country2conf(A, pais::Array{Tuple{String,String},1}; invert=false)
-   if !invert
-      crows = findall( map(x -> in(x, pais),
-         mapslices(x -> (x[1], x[2]), A, dims=2)[:]) )
-   else
-      # Be careful to exclude the top row from results in this inverted case
-      crows = findall( map(x -> !in(x, pais),
-         mapslices(x -> (x[1], x[2]), A[2:end,:], dims=2)[:]) ) .+ 1
-   end
+function country2conf(A, pais::Array{Tuple{String,String},1}; kwargs...)
+   paises  = map(x->x[2], pais)
+   estados = map(x->x[1], pais)
 
-   # daily count starts in column 5; turn it into Float64s
-   my_confirmed = Array{Float64}(A[crows,5:end])
-
-   # Add all rows for the country
-   my_confirmed = sum(my_confirmed, dims=1)[:]
-
-   return my_confirmed
+   return country2conf(A, paises, estado=estados; kwargs...)
 end
 
 
 
 """
-   country2conf(pais::Tuple{String, Array{String,1}}; invert=false)
+   country2conf(pais::Tuple{String, Array{String,1}}; kwargs...)
 
-   Given a tuple of a strings (representing a label, which will be ignored),
-   and an array of strings, representing a list of countries,
-   returns a numeric vector of cumulative confirmed cases, as a function of days.
-   If the optional parameter invert=true, then returns the result for
-   all countries *other* than those in the given list
+   Initial string in the Tuple is a label, to be ignored here
 
+   return country2conf(A, pais[2]; kwargs...)
 """
-function country2conf(A, pais::Tuple{String, Array{String,1}}; invert=false)
-   return country2conf(A, pais[2], invert=invert)
+function country2conf(A, pais::Tuple{String, Array{String,1}}; kwargs...)
+   return country2conf(A, pais[2]; kwargs...)
 end
 
 
 
-function country2conf(A, pais::Tuple{String, Array{Tuple{String,String},1}}; invert=false)
-   return country2conf(A, pais[2], invert=invert)
+"""
+   country2conf(pais::Tuple{String, Array{Tuple{String,String},1}}; kwargs...)
+
+   Initial string in the Tuple is a label, to be ignored here
+
+   return country2conf(A, pais[2]; kwargs...)
+"""
+function country2conf(A, pais::Tuple{String, Array{Tuple{String,String},1}}; kwargs...)
+   return country2conf(A, pais[2]; kwargs...)
 end
 
 
