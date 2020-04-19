@@ -41,16 +41,6 @@ plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
    counttype="deaths", fname="statesNewDeaths")
 
 
-prefix = "states"
-sections = [
-   "New cases per day"              "$(prefix)New"
-   "New deaths per day"             "$(prefix)NewDeaths"
-   "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"
-   "Cumulative number of cases"     "$(prefix)Cumulative"
-   "Daily percentile growth rates"  "$(prefix)GrowthRate"
-]
-
-writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States", sections=sections)
 
 ##
 
@@ -66,9 +56,20 @@ mystates = ["Italy",
 plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=18,
    counttype="deaths", days_previous=26, legendLocation="lower left")
 
-
-
 plotNewGrowth(mystates, fname="statesNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
    counttype="new cases", days_previous=26, legendLocation="lower left")
 
 ##
+
+prefix = "states"
+sections = [
+   "New cases growth rates"         "$(prefix)NewCasesGrowthRate"
+   "New deaths growth rates"        "$(prefix)NewDeathsGrowthRate"
+   "New cases per day"              "$(prefix)New"
+   "New deaths per day"             "$(prefix)NewDeaths"
+   "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"
+   "Cumulative number of cases"     "$(prefix)Cumulative"
+   "Daily percentile growth rates"  "$(prefix)GrowthRate"
+]
+
+writeReadme(prefix=prefix, dirname="../../$prefix", header1="US States", sections=sections)
