@@ -76,7 +76,7 @@ savefig2jpg("logClimbdown")
 ##
 
 europeSelect = ["US", "United Kingdom", "Portugal", "Italy", "Spain", "Austria",
-   "Germany", "France", "Sweden", "Denmark", alleurope]
+   "Germany", "Sweden", "Denmark", alleurope]
 
 
 function labelSuffixFn(pais, origSeries, series)

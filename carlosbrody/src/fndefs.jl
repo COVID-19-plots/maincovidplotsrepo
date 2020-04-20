@@ -105,6 +105,8 @@ A = setValue(A, ("Hubei", "China"), "4/17/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/17/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/18/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/18/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/19/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/19/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -679,7 +681,7 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
       smkernel=smkernel, weekly=weekly,
       ylim1=ylim1, ylim2=ylim2, yticks=yticks, counttype=counttype,
       tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor, mincases=0, minval=-200; kwargs...)
-   title("% change after one week in COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
+   title("% change after one week in new COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
    ylabel("% change per week in daily $counttype")
 
    kwargs = Dict(getLinespecs(label=string(("Hubei", "China")))[1])
