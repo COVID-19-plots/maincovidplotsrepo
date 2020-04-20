@@ -688,10 +688,11 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    delete!(kwargs, :marker)
    kwargs[:label] = "Hubei, China average decay rate after peaking ~ -41% ~ 1/10 per month"
    hlines([-41], xlim()[1], xlim()[2]; kwargs...)
-   savefig2jpg(fname)
 
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
       loc=legendLocation)
+
+   savefig2jpg(fname)
 
 end
 

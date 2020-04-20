@@ -51,7 +51,7 @@ soffsets = Dict(
 
 plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "US"), # "Portugal",
    "Italy", "Spain", "Switzerland", "France",
-   "United Kingdom", "Portugal"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
+   "United Kingdom", "Portugal", "Austria", "Denmark"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
    # "Netherlands", "Austria"],
    fname="deathPeakAligned",
    soffsets=soffsets,
@@ -76,8 +76,8 @@ savefig2jpg("logClimbdown")
 
 ##
 
-europeSelect = ["US", "United Kingdom", "Portugal", "Italy", "Spain", "Austria",
-   "Germany", "Sweden", "Denmark", alleurope]
+europeSelect = [alleurope, "US", "United Kingdom", "Spain", "Italy", "Germany", "Sweden",
+   "Portugal", "Denmark", "Austria"]
 
 
 function labelSuffixFn(pais, origSeries, series)
@@ -92,7 +92,7 @@ end
 plotNewGrowth(europeSelect, db=A, days_previous=22, counttype="cases",
    fname="europeNewCasesGrowthRate", fignum=21, ylim1=-60, labelSuffixFn=labelSuffixFn)
 
-#
+##
 plotNewGrowth(europeSelect, db=D, days_previous=22, counttype="deaths",
    fname="europeNewDeathsGrowthRate", fignum=22, labelSuffixFn=labelSuffixFn)
 
