@@ -10,7 +10,7 @@ export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
 
 export myLinespec, findLinespecs, stashLinespecs, getLinespecs, handMeLinespec,
     saveLinespecList, loadLinespecList, nextLinespec, addToLinespecList,
-    deleteFromLinespecList, replaceInLinespecList, colorOrder, markerOrder
+    deleteFromLinespecList, replaceInLinespecList, colorOrder, markerOrder, Dict
 
 # If we plot more than 10 lines, colors repeat; use next marker in that case
 colorOrder = [
@@ -142,6 +142,16 @@ end
 
 function handMeLinespec(label::Tuple{String,String})
     return handMeLinespec(string(label))
+end
+
+"""
+    Dict(ml::myLinespec)
+
+    returns ml in Dict format
+"""
+function Dict(ml::myLinespec)
+    return Dict(:label=>ml.label, :linewidth=>ml.linewidth,
+        :marker=>ml.marker, :color=>ml.color, :alpha=>ml.alpha)
 end
 
 using JLD

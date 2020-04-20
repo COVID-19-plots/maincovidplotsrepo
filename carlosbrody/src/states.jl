@@ -44,20 +44,27 @@ plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
 
 ##
 
-mystates = ["Italy",
+mystates = ["Italy", "US",
    ("Washington", "US"), ("New York", "US"), ("California", "US"),
    ("Florida", "US"), ("Texas", "US"),
    ("New Jersey", "US"), ("Illinois", "US"),
    ("Louisiana", "US"), # "Australia",
    nostayhome]
 
+function labelSuffixFn(pais, origSeries, series)
+   series = origSeries[.!isnan.(origSeries)]
+   series = series[series .!= Inf]
 
+   peak   = Int64(ceil.(smooth(diff(series[end-35:end]), [0.2, 0.5, 1, 0.5, 0.2]))[end])
+   popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M"
+   return " currently=$peak/day, pop=$popstr"
+end
 
 plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=18,
-   counttype="deaths", days_previous=26, legendLocation="lower left")
+   counttype="deaths", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn)
 
 plotNewGrowth(mystates, fname="statesNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
-   counttype="new cases", days_previous=26, legendLocation="lower left")
+   counttype="new cases", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn)
 
 ##
 

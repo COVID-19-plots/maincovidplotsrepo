@@ -7,12 +7,21 @@ europe = ["US", "Italy", "Germany", "Spain", "Portugal", "France", "United Kingd
 
 alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South"]))
 
+function labelSuffixFn(pais, origSeries, series)
+   series = series[.!isnan.(series)]
+   series = series[series .!= Inf]
+
+   peak   = Int64(ceil(maximum(series)))
+   popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M"
+   return " peak=$peak/day, pop=$popstr"
+end
+
 plotGrowth(vcat(europe, "World other than China"),
    fignum=1, fname="europeGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
-plotCumulative(europe, fignum=12, maxtic=100000, fname="europeCumulative")
+plotCumulative(europe, fignum=12, maxtic=400000, fname="europeCumulative")
 plotAligned(europe, fname="europeAligned",
    mintic=100, maxtic=400000, fignum=3, minval=10, alignon=400)
-plotNew(vcat(europe, alleurope), fignum=14, fname="europeNew")
+plotNew(vcat(europe, alleurope), fignum=14, fname="europeNew", labelSuffixFn = labelSuffixFn)
 plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
    counttype="deaths", fname="europeNewDeaths")
 
@@ -66,12 +75,24 @@ savefig2jpg("logClimbdown")
 
 ##
 
-europeSelect = ["United Kingdom", "Portugal", "Italy", "Spain", "Austria", "Germany", "France", "Sweden", alleurope]
+europeSelect = ["US", "United Kingdom", "Portugal", "Italy", "Spain", "Austria",
+   "Germany", "France", "Sweden", "Denmark", alleurope]
+
+
+function labelSuffixFn(pais, origSeries, series)
+   series = origSeries[.!isnan.(origSeries)]
+   series = series[series .!= Inf]
+
+   peak   = Int64(ceil.(smooth(diff(series[end-35:end]), [0.2, 0.5, 1, 0.5, 0.2]))[end])
+   popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M"
+   return " currently=$peak/day, pop=$popstr"
+end
 
 plotNewGrowth(europeSelect, db=A, days_previous=22, counttype="cases",
-   fname="europeNewCasesGrowthRate", fignum=21, ylim1=-60)
+   fname="europeNewCasesGrowthRate", fignum=21, ylim1=-60, labelSuffixFn=labelSuffixFn)
 
+#
 plotNewGrowth(europeSelect, db=D, days_previous=22, counttype="deaths",
-   fname="europeNewDeathsGrowthRate", fignum=22)
+   fname="europeNewDeathsGrowthRate", fignum=22, labelSuffixFn=labelSuffixFn)
 
 writeReadme(prefix="europe", header1="Europe")

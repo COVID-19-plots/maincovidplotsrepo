@@ -12,7 +12,7 @@ la = ["Mexico", "Uruguay", "Argentina", "Brazil", "Chile", "Colombia",
 allLA = ("All Latin America", la)
 
 plotCumulative(la, fname="laCumulative", fignum=8, minval=100,
-   mintic=100, maxtic=4000)
+   mintic=100, maxtic=40000)
 plotGrowth(vcat(la, ["Italy", "World other than China"]), days_previous=15,
    yticks=0:10:40, ylim2=45, fname="laGrowthRate", fignum=15)
 plotAligned(vcat(la, "Italy"), fname="laAligned",
@@ -23,12 +23,22 @@ plotNew(la, db=D, minval=1, mintic=1, maxtic = 100,
 
 ##
 
+function labelSuffixFn(pais, origSeries, series)
+   series = origSeries[.!isnan.(origSeries)]
+   series = series[series .!= Inf]
+
+   peak   = Int64(ceil.(smooth(diff(series[end-35:end]), [0.2, 0.5, 1, 0.5, 0.2]))[end])
+   popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M"
+   return " currently=$peak/day, pop=$popstr"
+end
+
+
 plotNewGrowth(la, fname="laNewDeathsGrowthRate", db=D, fignum=18,
    ylim1=-90, ylim2=140,
-   counttype="deaths", days_previous=26, legendLocation="lower left")
+   counttype="deaths", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn)
 
 plotNewGrowth(la, fname="laNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
-   counttype="new cases", days_previous=26, legendLocation="lower left")
+   counttype="new cases", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn)
 
 
 writeReadme(prefix="la", dirname="../../latinamerica", header1="Latin America")

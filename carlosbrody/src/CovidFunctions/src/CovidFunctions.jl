@@ -7,11 +7,14 @@ using PyPlot
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
 export savefig2jpg
-export dropColumns, renameColumn!, dropRows, getColNums, getDataColumns
+export dropColumns, renameColumn!, dropRows, getColNums, getDataColumns, firstDataColumn
+export addPopulationColumn
 
 stateAbbrevMapFilename = "StateNamesAndAbbreviations.csv"
 stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
 
+
+popdbase = readdlm("../../data/datasets/population/blob/master/data/popularion.csv", ',', quotes=true)
 
 """
    stateAbbrev2Fullname(str)
@@ -50,10 +53,17 @@ function savefig2jpg(fname::String)
 end
 
 
+# ###################################
+#
+#   dbase functions
+#
+# ###################################
+
+
 """
    A = loadConfirmedDbase(;
       dname::String = "../../../COVID-19/csse_covid_19_data/csse_covid_19_time_series",
-      fname::String = "time_series_19-covid-Confirmed.csv")
+      fname::String = "time_series_covid19_confirmed_global.csv")
 
    returns a matrix containing the data from the Johns Hopkins
    time_series_19-covid-Confirmed.csv file.
@@ -71,11 +81,12 @@ end
 
 """
 function loadConfirmedDbase(;
-   dname = "../../../COVID-19/csse_covid_19_data/csse_covid_19_time_series",
-   fname = "time_series_covid19_confirmed_global.csv")
+   dname::String = "../../../COVID-19/csse_covid_19_data/csse_covid_19_time_series",
+   fname::String = "time_series_covid19_confirmed_global.csv")
 
    return readdlm("$dname/$fname", ',');
 end
+
 
 
 """
@@ -144,8 +155,106 @@ end
 function dropRows(A, colname::String, colvals::String)
    return dropRows(A, colname, [colvals])
 end
+
+
+"""
+   getColNums(A, colnames::Vector{String})
+
+   Return the column numbers for columns with first row matching entries in colnames
+"""
+function getColNums(A, colnames::Vector{String})
+   u = map(x -> findfirst(A[1,:] .== x), colnames)
+   if any( u .== nothing )
+      println("Could not find any columns with names ", colnames[u.==nothing])
+   end
+   u = u[ u .!= nothing ]
+
+   return u
+end
+"""
+   getColNums(A, colnames::String)
+
+   return getColNums(A, [colnames])
+"""
+function getColNums(A, colnames::String)
+   return getColNums(A, [colnames])
+end
+
+"""
+   getDataColumns(A, colnames::Vector{String})
+
+   return the data for columns with first row matching entries in colnames
+   Only the data rows are returned, without the first row
+"""
+function getDataColumns(A, colnames::Vector{String})
+   u = getColNums(A, colnames)
+
+   if length(u)==1
+      return A[2:end, u][:]
+   else
+      return A[2:end, u]
+   end
+end
+"""
+   getDataColumns(A, colnames::String)
+
+   return getDataColumns(A, [colname])
+"""
+function getDataColumns(A, colname::String)
+   return getDataColumns(A, [colname])
+end
+
+
+"""
+   firstDataColumn(A)
+
+   returns the column number of the column whose first row
+   matches r"[0-9]+/[0-9]+/[0-9]{2}" i.e. like "4/11/20"
+"""
+function firstDataColumn(A)
+   r = r"[0-9]+/[0-9]+/[0-9]{2}"
+   return findfirst(map(x -> occursin(r, x), A[1,:]))
+end
+
+"""
+   A = addPopulationColumn(A)
+
+   Four COUNTRY dbases only, uses the data in ../../data/datasets/population/blob/master/data/popularion.csv"
+   to add a population column to A, listed as 0 for Provinces or sub-Regions
+"""
+function addPopulationColumn(A)
+   @assert !any(A[1,:].=="Population") "A already seems to have a Population column"
+
+   # Make the column, initially it is empty
+   fc = firstDataColumn(A)
+   A = hcat(A[:, 1:fc-1], Array{Any}(undef, size(A,1), 1), A[:,fc:end])
+   A[1,fc] = "Population"
+
+   cc = getColNums(A, "Country/Region")[1]
+   for i=2:size(A,1)
+      if A[i,1]==""  # only add to the main entry for the country, not for Provinces/States/Subregions
+         country = A[i,cc];
+         if country=="Russia"; country="Russian Federation"; end
+         if country=="Korea, South"; country="Korea, Rep."; end
+         u = findfirst((popdbase[:,1] .== country) .& (popdbase[:,3] .== 2018))
+         A[i,fc] = u==nothing ? 0 : popdbase[u,4]
+      else
+         A[i,fc] = 0
+      end
+   end
+
+   return A
+end
+
 ##
-##
+
+
+# ###################################
+#
+#   COVID Tracking Project functions
+#
+# ###################################
+
 
 """
    mergeJHandCovidTracking(;jh=NaN, ct=NaN)
@@ -330,64 +439,13 @@ function collapseUSStates(A; mapfilename="StateNamesAndAbbreviations.csv")
 end
 
 
-"""
-   getColNums(A, colnames::Vector{String})
-
-   Return the column numbers for columns with first row matching entries in colnames
-"""
-function getColNums(A, colnames::Vector{String})
-   u = map(x -> findfirst(A[1,:] .== x), colnames)
-   if any( u .== nothing )
-      println("Could not find any columns with names ", colnames[u.==nothing])
-   end
-   u = u[ u .!= nothing ]
-
-   return u
-end
-"""
-   getColNums(A, colnames::String)
-
-   return getColNums(A, [colnames])
-"""
-function getColNums(A, colnames::String)
-   return getColNums(A, [colnames])
-end
-
-"""
-   getDataColumns(A, colnames::Vector{String})
-
-   return the data for columns with first row matching entries in colnames
-   Only the data rows are returned, without the first row
-"""
-function getDataColumns(A, colnames::Vector{String})
-   u = getColNums(A, colnames)
-
-   if length(u)==1
-      return A[2:end, u][:]
-   else
-      return A[2:end, u]
-   end
-end
-"""
-   getDataColumns(A, colnames::String)
-
-   return getDataColumns(A, [colname])
-"""
-function getDataColumns(A, colname::String)
-   return getDataColumns(A, [colname])
-end
 
 
-"""
-   firstDataColumn(A)
-
-   returns the column number of the column whose first row
-   matches r"[0-9]+/[0-9]+/[0-9]{2}" i.e. like "4/11/20"
-"""
-function firstDataColumn(A)
-   r = r"[0-9]+/[0-9]+/[0-9]{2}"
-   return findfirst(map(x -> occursin(r, x), A[1,:]))
-end
+# ###################################
+#
+#   country2conf()
+#
+# ###################################
 
 
 """
@@ -410,12 +468,17 @@ end
    -s2col      The column name, indicating column to be used to match the contents of estado.
 
    -rcols      The set of columns that will be returned; rows within this set will be summed.
+               If rcols is a string, then getColNums(A, rcols) is used
 
 """
 function country2conf(A, pais::Array{String,1}; estado=nothing, invert=false,
    s1col="Country/Region", s2col="Province/State", rcols=firstDataColumn(A):size(A,2))
 
    @assert estado==nothing || all(size(estado).==size(pais)) "if estado vector is specified, it must be same size as pais vector"
+
+   if typeof(rcols) <: String
+      rcols = getColNums(A, rcols)
+   end
 
    countries = getDataColumns(A, s1col)
    states = getDataColumns(A, s2col)
@@ -578,6 +641,8 @@ end
 
 function __init__()
    stateAbbrevMap         = readdlm(stateAbbrevMapFilename, ',');
+   popdbase = readdlm("../../data/datasets/population/blob/master/data/popularion.csv", ',', quotes=true);
+   nothing
 end
 
 

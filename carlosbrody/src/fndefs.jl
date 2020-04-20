@@ -12,22 +12,33 @@ using CovidFunctions
 # Data from all countries except US: (US data will come in the next file)
 A = loadConfirmedDbase(fname = "time_series_covid19_confirmed_global.csv")
 A = dropRows(A, "Country/Region", "US")
+# Now deaths:
+D = loadConfirmedDbase(fname = "time_series_covid19_deaths_global.csv")
+D = dropRows(D, "Country/Region", "US")
+
+# Now add population for them
+A = addPopulationColumn(A)
+D = addPopulationColumn(D)
+
+
+
 # Data from US, including state-by-state
 A2 = loadConfirmedDbase(fname="time_series_covid19_confirmed_US.csv")
 A2 = dropColumns(A2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key"])
-A2 = renameColumn!(renameColumn!(A2, "Province_State", "Province/State"), "Country_Region", "Country/Region")
+A2 = renameColumn!(renameColumn!(renameColumn!(A2, "Province_State", "Province/State"), "Country_Region", "Country/Region"), "Long_", "Long")
+# Now deaths:
+D2 = loadConfirmedDbase(fname="time_series_covid19_deaths_US.csv")
+D2 = dropColumns(D2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key"])
+D2 = renameColumn!(renameColumn!(renameColumn!(D2, "Province_State", "Province/State"), "Country_Region", "Country/Region"), "Long_", "Long")
+@assert all(A2[:,1:2] .== D2[:,1:2])  "A2 and D2 matrices have a mismatch"
+
+if !any(A2[1,:] .== "Population")  # A2 is missing the Population column, copy it from D2
+   fc = firstDataColumn(A2)
+   A2 = hcat(A2[:, 1:fc-1], D2[:,getColNums(D2, "Population")], A2[:,fc:end])
+end
+
 # Now put them together
 A = [A ; A2[2:end,:]]
-
-
-# Now same again for deaths:
-
-D = loadConfirmedDbase(fname = "time_series_covid19_deaths_global.csv")
-D = dropRows(D, "Country/Region", "US")
-D2 = loadConfirmedDbase(fname="time_series_covid19_deaths_US.csv")
-D2 = dropColumns(D2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key", "Population"])
-D2 = renameColumn!(renameColumn!(D2, "Province_State", "Province/State"), "Country_Region", "Country/Region")
-# Now put them together
 D = [D ; D2[2:end,:]]
 
 
@@ -234,7 +245,8 @@ end
 """
    h = plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
          minval=0, maxval=Inf, mincases=0,
-         xOffset=0, fn=identity, plotFn=semilogy, adjustZeroXLabel=true)
+         xOffset=0, fn=identity, plotFn=semilogy, adjustZeroXLabel=true,
+         labelSuffixFn=(pais,origSeries,series)->"")
 
    Adds a single line of a time series to a  plot, correspondong to data for the
    indicated country. pais can be anything that country2conf accepts.  The
@@ -276,10 +288,14 @@ end
                then the xtick label for the 0 point is changed to a string
                with today's date.
 
+   labelSuffixFn   If passed, must be a function that takes pais, origSeries (what
+               country2conf returns) and series (fn(origSeries)), and returns a
+               string that will be appended to the lines label
 """
 function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
       minval=0, maxval=Inf, mincases=0,
-      xOffset=0, fn=identity, plotFn=semilogy, adjustZeroXLabel=true)
+      xOffset=0, fn=identity, plotFn=semilogy, adjustZeroXLabel=true,
+      labelSuffixFn=(pais,origSeries,series)->"")
    if pais == "World other than China"
       series = country2conf(db, "China", invert=true)
    else
@@ -289,13 +305,15 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
    series[series .< mincases] .= NaN
 
    origSeries = copy(series) # in case we need the original for aligning further below
-   series = fn(series)
+   series = fn(series)       # apply the function
    series[series .< minval] .= NaN
    series[series .> maxval] .= NaN
 
    dias   = 1:length(series)
 
    pkwargs = plot_kwargs(pais)
+   pkwargs[:label] = pkwargs[:label]*labelSuffixFn(pais, origSeries, series)
+
    h = nothing
    if alignon=="today"
       h = plotFn(dias[end-days_previous:end] .- dias[end].+xOffset,
@@ -560,7 +578,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
       "$mincases cases minimum", fontsize=fontsize, fontname=fontname)
 
    gca().set_yticks(yticks); ylim(ylim1, ylim2); xlim(xlim()[1], 0.5)
-   axisMove(-0.05, 0)
+   axisMove(-0.06, 0)
    if explain
       axisHeightChange(0.85, lock="t"); axisMove(0, 0.03)
       t = text(mean(xlim()), -0.18*(ylim()[2]-ylim()[1])+ylim()[1], interest_explanation,
@@ -604,7 +622,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    yp = 100*(exp(log(10)/tenXGrowAnchor) - 1);
    xpos = 0.115*(xlim()[2] - xlim()[1]) + xlim()[2]
    ypos = yp + 0.1*(ylim()[2]-ylim()[1])
-   text(xpos, ypos, "10X growth time",
+   text(xpos, ypos, "X10 growth time",
       verticalalignment="center", horizontalalignment="center",
       backgroundcolor="w", color="red", fontname="Helvetica", fontsize=14)
 
@@ -619,14 +637,14 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
          growthTick(30, "1 month", factor=1/10)
       end
 
-      xpos = 0.115*(xlim()[2] - xlim()[1]) + xlim()[2]
+      xpos = 0.125*(xlim()[2] - xlim()[1]) + xlim()[2]
       yp = 100*(exp(log(1.0/10)/tenXDecayAnchor) - 1);
       ypos = yp - 0.1*(ylim()[2]-ylim()[1])
-      text(xpos, ypos, "10X decay time",
+      text(xpos, ypos, "X 1/10 decay time",
          verticalalignment="center", horizontalalignment="center",
          backgroundcolor="w", color="green", fontname="Helvetica", fontsize=14)
 
-      hlines([0], xlim()[1], xlim()[2], color="black", linewidth=1)
+      hlines([0], xlim()[1], xlim()[2], color="black", linewidth=2)
    end
 
    addSourceString2Linear()
@@ -654,16 +672,25 @@ end
 function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
    tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, perTimeBin=false), [0.5, 1, 0.5]),
-   kwargs...)
+   legendLocation::String="upper left", kwargs...)
 
 
    plotGrowth(regions, explain=false, fn=fn,
       smkernel=smkernel, weekly=weekly,
       ylim1=ylim1, ylim2=ylim2, yticks=yticks, counttype=counttype,
       tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor, mincases=0, minval=-200; kwargs...)
-   title("week-on-week % change in COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
+   title("% change after one week in COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
    ylabel("% change per week in daily $counttype")
+
+   kwargs = Dict(getLinespecs(label=string(("Hubei", "China")))[1])
+   delete!(kwargs, :marker)
+   kwargs[:label] = "Hubei, China average decay rate after peaking ~ -41% ~ 1/10 per month"
+   hlines([-41], xlim()[1], xlim()[2]; kwargs...)
    savefig2jpg(fname)
+
+   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
+      loc=legendLocation)
+
 end
 
 ##
