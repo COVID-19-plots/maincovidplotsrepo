@@ -107,6 +107,8 @@ A = setValue(A, ("Hubei", "China"), "4/18/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/18/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/19/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/19/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/20/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/20/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -692,7 +694,7 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
       loc=legendLocation)
 
-   savefig2jpg(fname)
+      savefig2jpg(fname)
 
 end
 

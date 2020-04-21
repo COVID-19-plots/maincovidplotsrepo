@@ -45,11 +45,10 @@ plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
 ##
 
 mystates = ["Italy", "US",
-   ("Washington", "US"), ("New York", "US"), ("California", "US"),
-   ("Florida", "US"), ("Texas", "US"),
-   ("New Jersey", "US"), ("Illinois", "US"),
-   ("Louisiana", "US"), # "Australia",
-   nostayhome]
+   ("New York", "US"), ("New Jersey", "US"), ("Massachusetts", "US"),
+   ("Illinois", "US"), ("California", "US"),
+   ("Florida", "US"), nostayhome, ("Texas", "US"), ("Washington", "US"),   
+   ("Louisiana", "US")]
 
 function labelSuffixFn(pais, origSeries, series)
    series = origSeries[.!isnan.(origSeries)]
