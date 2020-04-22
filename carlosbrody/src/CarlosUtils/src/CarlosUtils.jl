@@ -1,5 +1,19 @@
 module CarlosUtils
 
+stateName2AbbrevDict = Dict(
+    "New Jersey"    => "NJ",
+    "California"    => "CA",
+    "Florida"       => "FL",
+    "Washington"    => "WA",
+    "New York"      => "NY",
+    "Texas"         => "TX",
+    "Illinois"      => "IL",
+    "Connecticut"   => "CT"
+)
+
+abbrev2StateNameDict = Dict()
+
+
 using Dates
 
 export mydate, smooth, axisWidthChange, axisHeightChange, axisMove
@@ -211,18 +225,7 @@ function replaceInLinespecList(ml::myLinespec)
     end
 end
 
-stateName2AbbrevDict = Dict(
-    "New Jersey"    => "NJ",
-    "California"    => "CA",
-    "Florida"       => "FL",
-    "Washington"    => "WA",
-    "New York"      => "NY",
-    "Texas"         => "TX",
-    "Illinois"      => "IL",
-    "Connecticut"   => "CT"
-)
 
-abbrev2StateNameDict = Dict()
 
 """
     abbrev2StateName(abrs::Array{String,1})

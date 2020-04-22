@@ -59,6 +59,7 @@ function labelSuffixFn(pais, origSeries, series)
    return " currently=$peak/day, pop=$popstr"
 end
 
+smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1]
 plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=20,
    counttype="deaths", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
