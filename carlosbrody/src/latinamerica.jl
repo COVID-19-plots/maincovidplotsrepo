@@ -35,10 +35,14 @@ end
 
 plotNewGrowth(la, fname="laNewDeathsGrowthRate", db=D, fignum=18,
    ylim1=-90, ylim2=140,
-   counttype="deaths", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn)
+   counttype="deaths", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
+   smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 plotNewGrowth(la, fname="laNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
-   counttype="new cases", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn)
+   counttype="new cases", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
+   smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 
 writeReadme(prefix="la", dirname="../../latinamerica", header1="Latin America")

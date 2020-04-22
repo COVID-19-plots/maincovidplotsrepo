@@ -90,10 +90,14 @@ function labelSuffixFn(pais, origSeries, series)
 end
 
 plotNewGrowth(europeSelect, db=A, days_previous=22, counttype="cases",
-   fname="europeNewCasesGrowthRate", fignum=21, ylim1=-60, labelSuffixFn=labelSuffixFn)
+   fname="europeNewCasesGrowthRate", fignum=21, ylim1=-60, labelSuffixFn=labelSuffixFn,
+   smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 ##
 plotNewGrowth(europeSelect, db=D, days_previous=22, counttype="deaths",
-   fname="europeNewDeathsGrowthRate", fignum=22, labelSuffixFn=labelSuffixFn)
+   fname="europeNewDeathsGrowthRate", fignum=22, labelSuffixFn=labelSuffixFn,
+   smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 writeReadme(prefix="europe", header1="Europe")

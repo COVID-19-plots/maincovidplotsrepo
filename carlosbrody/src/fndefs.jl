@@ -109,6 +109,8 @@ A = setValue(A, ("Hubei", "China"), "4/19/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/19/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/20/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/20/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/21/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/21/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -142,11 +144,9 @@ legendfontsize = 13
                    assuming an exponential process, it is expressed as percentile
                    per bin.
 """
-function percentileGrowth(series; smkernel=[1], assessDelta=1, perTimeBin=true)
+function percentileGrowth(series; smkernel=[1], assessDelta=1, expressDelta=assessDelta)
    series = series[assessDelta+1:end]./series[1:end-assessDelta]
-   if perTimeBin
-      series = series.^(1.0/assessDelta)
-   end
+   series = series.^(expressDelta/assessDelta)
    series = (series .- 1) .* 100
    series = smooth(series, smkernel)
 end
@@ -591,13 +591,15 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    end
 
    """
-      ypos(factor, days)
+      growthTick(days::Real, str::String; factor=10,
+         color= factor>1 ? "red" : "green")
 
-      given a growth fcator (e.g., 10 for 10x) and a number of days,
-      calculates the daily percentile growth that would lead to that
+      given a number of days, and a growth factor (e.g., 10 for 10x)
+      and a number of days, calculates the daily percentile growth that would
+      lead to that and places a labeled tick to indicated that.
    """
-   function growthTick(days::Real, str::String; factor=10)
-      color= factor>1 ? "red" : "green"
+   function growthTick(days::Real, str::String; factor=10,
+      color= factor>1 ? "red" : "green")
 
       x1 = 0.065*(xlim()[2] - xlim()[1]) + xlim()[2]
       x2 = 0.165*(xlim()[2] - xlim()[1]) + xlim()[2]
@@ -649,6 +651,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
          backgroundcolor="w", color="green", fontname="Helvetica", fontsize=14)
 
       hlines([0], xlim()[1], xlim()[2], color="black", linewidth=2)
+      growthTick(10, "Inf (R=1)", factor=1, color="black")
    end
 
    addSourceString2Linear()
@@ -667,7 +670,7 @@ end
 """
    plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
       tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
-      fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, perTimeBin=false), [0.5, 1, 0.5]),
+      fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, expressDelta=assessDelta), [0.5, 1, 0.5]),
       kwargs...)
 
    Plots weekly % change in new entries, can show positive or negative change
@@ -675,7 +678,7 @@ end
 """
 function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
    tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
-   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, perTimeBin=false), [0.5, 1, 0.5]),
+   fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, expressDelta=7), [0.5, 1, 0.5]),
    legendLocation::String="upper left", kwargs...)
 
 
