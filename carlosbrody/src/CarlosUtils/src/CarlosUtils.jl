@@ -443,18 +443,39 @@ function set_current_fig_position(x, y, w, h)
 end
 
 
-function rightHandAxis(;ax=gca(), fn=identity, digits=1)
-    u = findfirst(map(x -> x.__class__.__name__, findobj(gca())) .== "SecondaryAxis")
-    u == nothing ? 0 : findobj(gca())[u].remove()
+"""
+    rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
+        ticks2convert=ax.get_yticks(), rightHandAxisUrlLabel="rha")
 
-    secax = ax.secondary_yaxis("right", functions=(identity, identity))
-    secax.set_yticks(ax.get_yticks())
+"""
+function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
+    ticks2convert=ax.get_yticks(), rightHandAxisUrlLabel="rha")
+
+    #u = findfirst(map(x -> x.__class__.__name__, findobj(gca())) .== "SecondaryAxis")
+    u = findobj(ax, obj->obj.get_url()==rightHandAxisUrlLabel)
+    if !isempty(u)
+        for obj in u
+            obj.remove()
+        end
+    end
+
+    secax = ax.twinx(); sca(ax)
+    secax.set_position(ax.get_position())
+    secax.set_url(rightHandAxisUrlLabel)
+    secax.set_yticks(ticks2convert)
+    secax.set_ylim(ax.get_ylim())
     secax.tick_params(labelsize=ax.get_yticklabels()[1].get_fontsize())
 
     lbls = secax.get_yticklabels()
+    println(lbls)
+    yl = ax.get_ylim()
     for lab in lbls
-        lab.get_position()[2]
+        yp = lab.get_position()[2]
+        if (yl[1] <= yp) && (yp <= yl[2])
+            lab.set_text(string(round(old2newFn(yp), digits=digits)))
+        end
     end
+    secax.set_yticklabels(lbls)
 
     return secax
 end

@@ -579,12 +579,12 @@ Grey lines at right indicate time to grow by a factor of 10X.
       fn=x -> smooth(percentileGrowth(x), smkernel),
       mincases=50, fname::String="", counttype="cases",
       explain=true, weekly=false,
-      tenXGrowAnchor=7, tenXDecayAnchor=14, kwargs...)
+      tenXGrowAnchor=7, tenXDecayAnchor=14, growthTickDeltaX=0, kwargs...)
 """
 function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    fignum=3, yticks=0:10:60, ylim1=0, ylim2=65, fn=x -> smooth(percentileGrowth(x), smkernel),
    mincases=50, fname::String="", counttype="cases", explain=true, weekly=false,
-   tenXGrowAnchor=7, tenXDecayAnchor=14, kwargs...)
+   tenXGrowAnchor=7, tenXDecayAnchor=14, growthTickDeltaX=0, kwargs...)
 
    plotMany(regions, plotFn=plot,
       fn=fn,
@@ -615,8 +615,8 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    function growthTick(days::Real, str::String; factor=10,
       color= factor>1 ? "red" : "green")
 
-      x1 = 0.065*(xlim()[2] - xlim()[1]) + xlim()[2]
-      x2 = 0.165*(xlim()[2] - xlim()[1]) + xlim()[2]
+      x1 = (0.065+growthTickDeltaX)*(xlim()[2] - xlim()[1]) + xlim()[2]
+      x2 = (0.165+growthTickDeltaX)*(xlim()[2] - xlim()[1]) + xlim()[2]
 
       ypos = 100*(exp(log(factor)/days) - 1);
 
@@ -640,7 +640,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
       growthTick(7, "1 week")
    end
    yp = 100*(exp(log(10)/tenXGrowAnchor) - 1);
-   xpos = 0.115*(xlim()[2] - xlim()[1]) + xlim()[2]
+   xpos = (0.115+growthTickDeltaX)*(xlim()[2] - xlim()[1]) + xlim()[2]
    ypos = yp + 0.1*(ylim()[2]-ylim()[1])
    text(xpos, ypos, "X10 growth time",
       verticalalignment="center", horizontalalignment="center",
@@ -657,7 +657,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
          growthTick(30, "1 month", factor=1/10)
       end
 
-      xpos = 0.125*(xlim()[2] - xlim()[1]) + xlim()[2]
+      xpos = (0.125+growthTickDeltaX)*(xlim()[2] - xlim()[1]) + xlim()[2]
       yp = 100*(exp(log(1.0/10)/tenXDecayAnchor) - 1);
       ypos = yp - 0.1*(ylim()[2]-ylim()[1])
       text(xpos, ypos, "X 1/10 decay time",
@@ -693,14 +693,19 @@ end
 function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
    tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, expressDelta=7), [0.5, 1, 0.5]),
-   legendLocation::String="upper left", kwargs...)
+   legendLocation::String="upper left",
+   growthTickDeltaX=0.02, rightTicksFn= p ->(p./100 .+ 1).^(5.2/7),
+   kwargs...)
 
 
    plotGrowth(regions, explain=false, fn=fn,
       smkernel=smkernel, weekly=weekly,
       ylim1=ylim1, ylim2=ylim2, yticks=yticks, counttype=counttype,
-      tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor, mincases=0, minval=-200; kwargs...)
-   title("% change after one week in new COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
+      tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor,
+      growthTickDeltaX=growthTickDeltaX,
+      mincases=0, minval=-200; kwargs...)
+   title("% change after one week (left) and corresponding R (right; assuming 5.2 day virus cycle)\n"*
+      "in new COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
    ylabel("% change per week in daily $counttype")
 
    kwargs = Dict(getLinespecs(label=string(("Hubei", "China")))[1])
@@ -711,7 +716,13 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-1),
       loc=legendLocation)
 
-      savefig2jpg(fname)
+   gca().yaxis.tick_left()
+   secax = rightHandAxis(old2newFn=rightTicksFn, ticks2convert=-60:20:100)
+   secax.set_ylabel("R", fontsize=fontsize)
+   axisWidthChange(0.98, lock="l")
+   axisMove(0.01,0)
+
+   savefig2jpg(fname)
 
 end
 
