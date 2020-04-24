@@ -111,6 +111,10 @@ A = setValue(A, ("Hubei", "China"), "4/20/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/20/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/21/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/21/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/22/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/22/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/23/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/23/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -345,7 +349,7 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
 
          myoffset = -(u+frac)
          daysago = length(series)+Int64(round(myoffset))+1
-         pkwargs[:label] = pkwargs[:label]*" $daysago days ago"
+         # pkwargs[:label] = pkwargs[:label]*" $daysago days ago"
          h = plotFn((1:length(series)) .+ myoffset .+ 1 .+ xOffset,
             series; pkwargs...)[1]
       else
@@ -497,9 +501,14 @@ end
       mintic=100, maxtic=400000, minval=100, fignum=1, counttype="cases", kwargs...)
 """
 function plotCumulative(regions; fname::String="", yticbase=[1, 4],
-   mintic=100, maxtic=400000, minval=100, fignum=1, counttype="cases", kwargs...)
+   mintic=100, maxtic=1000000, minval=100, fignum=1, counttype="cases",
+   labelSuffixFn = (pais, origSeries, series) -> begin
+      popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
+      return " : $(Int64(round(series[end]/1e3, digits=0)))K pop=$popstr"
+   end,
+   kwargs...)
 
-   plotMany(regions, minval=minval, fignum=fignum; kwargs...)
+   plotMany(regions, minval=minval, fignum=fignum; labelSuffixFn=labelSuffixFn, kwargs...)
 
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 $counttype in selected regions", fontsize=fontsize, fontname=fontname)
@@ -524,9 +533,14 @@ end
 """
 function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
       counttype="cases", plotFn=semilogy, fn=x -> smooth(diff(x), smkernel), # [0.2, 0.5, 0.7, 0.5, 0.2]),
-      yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="", kwargs...)
+      yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="",
+      labelSuffixFn = (pais, origSeries, series) -> begin
+         popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
+         return " : $(ceil(series[end]))/day pop=$popstr"
+      end,
+      kwargs...)
 
-   plotMany(regions, fn=fn, plotFn=plotFn,
+   plotMany(regions, fn=fn, plotFn=plotFn, labelSuffixFn=labelSuffixFn,
       minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
    ylabel("New $counttype each day", fontsize=fontsize, fontname=fontname)
    title("New confirmed COVID-19 $counttype per day\nin selected regions, " *
@@ -694,7 +708,7 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    kwargs[:label] = "Hubei, China average decay rate after peaking ~ -41% ~ 1/10 per month"
    hlines([-41], xlim()[1], xlim()[2]; kwargs...)
 
-   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize),
+   gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-1),
       loc=legendLocation)
 
       savefig2jpg(fname)
@@ -715,10 +729,13 @@ end
       xlim1 = -20, kwargs...)
 """
 function plotAligned(regions; alignon=200, fname::String="", yticbase=[1, 4],
-   mintic=100, maxtic=400000, minval=100, fignum=4, counttype="cases",
-   xlim1 = -20, kwargs...)
+   mintic=100, maxtic=1000000, minval=100, fignum=4, counttype="cases",
+   xlim1 = -30,
+   labelSuffixFn = (pairs, origSeries, series) -> " : $(Int64(ceil(series[end]/1000)))K ",
+   kwargs...)
 
    plotMany(setdiff(regions, ["World other than China"]),
+      labelSuffixFn = labelSuffixFn,
       alignon=alignon, minval=alignon/8, fignum=fignum; kwargs...)
    ylabel("cumulative confirmed $counttype", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 $counttype in selected regions,\naligned on cases=$alignon",

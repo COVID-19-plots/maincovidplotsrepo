@@ -27,15 +27,15 @@ states = ["US", "Italy",
    ("Florida", "US"), ("Texas", "US"),
    # "Italy", "Germany", "Brazil", africa,
    ("New Jersey", "US"), ("Illinois", "US"),
-   ("Louisiana", "US"), # "Australia",
+   ("Louisiana", "US"), ("Georgia", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder, ("Connecticut", "US"),
    nostayhome]
 
 plotGrowth(vcat(states, "World other than China"),
    fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
-plotCumulative(states, fignum=11, maxtic=100000, fname="statesCumulative")
+plotCumulative(states, fignum=11, maxtic=1000000, fname="statesCumulative")
 plotAligned(states, fname="states_confirmed_aligned",
-   mintic=100, maxtic=100000, fignum=5, minval=10)
+   mintic=100, maxtic=1000000, fignum=5, minval=10)
 plotNew(states, fignum=14, fname="statesNew", mintic=100, minval=80, maxval=40000)
 plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
    counttype="deaths", fname="statesNewDeaths")
@@ -48,7 +48,7 @@ mystates = ["Italy", "US",
    ("New York", "US"), ("New Jersey", "US"), ("Massachusetts", "US"),
    ("Illinois", "US"), ("California", "US"),
    ("Florida", "US"), nostayhome, ("Texas", "US"), ("Washington", "US"),
-   ("Louisiana", "US")]
+   ("Louisiana", "US"), ("Georgia", "US")]
 
 function labelSuffixFn(pais, origSeries, series)
    series = origSeries[.!isnan.(origSeries)]

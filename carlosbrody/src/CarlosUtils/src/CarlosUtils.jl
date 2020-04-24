@@ -25,6 +25,8 @@ export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
 export myLinespec, findLinespecs, stashLinespecs, getLinespecs, handMeLinespec,
     saveLinespecList, loadLinespecList, nextLinespec, addToLinespecList,
     deleteFromLinespecList, replaceInLinespecList, colorOrder, markerOrder, Dict
+export rightHandAxis
+
 
 # If we plot more than 10 lines, colors repeat; use next marker in that case
 colorOrder = [
@@ -438,6 +440,23 @@ function set_current_fig_position(x, y, w, h)
     catch
         error("Failed to set current figure position. Is pygui(false) or are you using a back end other than QT?")
     end
+end
+
+
+function rightHandAxis(;ax=gca(), fn=identity, digits=1)
+    u = findfirst(map(x -> x.__class__.__name__, findobj(gca())) .== "SecondaryAxis")
+    u == nothing ? 0 : findobj(gca())[u].remove()
+
+    secax = ax.secondary_yaxis("right", functions=(identity, identity))
+    secax.set_yticks(ax.get_yticks())
+    secax.tick_params(labelsize=ax.get_yticklabels()[1].get_fontsize())
+
+    lbls = secax.get_yticklabels()
+    for lab in lbls
+        lab.get_position()[2]
+    end
+
+    return secax
 end
 
 
