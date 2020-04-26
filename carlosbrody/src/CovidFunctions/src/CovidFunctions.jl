@@ -625,7 +625,7 @@ end
    - datestring    A string of the form "m/d/yy". Must match one of A[1,5:end]
 
 """
-function getValue(A, country, datestring, value::Real)
+function getValue(A, country, datestring)
    if typeof(country) == Tuple{String, String}
       crows = findall((A[:,1] .== country[1]) .& (A[:,2] .== country[2]))
    else

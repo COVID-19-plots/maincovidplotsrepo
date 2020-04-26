@@ -46,7 +46,7 @@ D = [D ; D2[2:end,:]]
 
 ##
 
-days_previous=29
+days_previous=49
 
 
 sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
@@ -115,6 +115,10 @@ A = setValue(A, ("Hubei", "China"), "4/22/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/22/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/23/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/23/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/24/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/24/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/25/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/25/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -150,10 +154,12 @@ legendfontsize = 13
 """
 function percentileGrowth(series; smkernel=[1], assessDelta=1, expressDelta=assessDelta)
    series = series[assessDelta+1:end]./series[1:end-assessDelta]
-   series = series.^(expressDelta/assessDelta)
+   series = map(x->maximum([x,0]), series) .^(expressDelta/assessDelta)
    series = (series .- 1) .* 100
    series = smooth(series, smkernel)
 end
+
+
 
 """
    addSourceString2Semilogy(;replaceOld=true)
@@ -504,7 +510,7 @@ function plotCumulative(regions; fname::String="", yticbase=[1, 4],
    mintic=100, maxtic=1000000, minval=100, fignum=1, counttype="cases",
    labelSuffixFn = (pais, origSeries, series) -> begin
       popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
-      return " : $(Int64(round(series[end]/1e3, digits=0)))K pop=$popstr"
+      return " : $(round(series[end]/1e3, digits=1))K pop=$popstr"
    end,
    kwargs...)
 
@@ -536,7 +542,7 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
       yticbase=[1, 4], mintic=10, maxtic=100000, fname::String="",
       labelSuffixFn = (pais, origSeries, series) -> begin
          popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
-         return " : $(ceil(series[end]))/day pop=$popstr"
+         return " : $(Int64(begin gu=ceil(series[end]); isnan(gu) ? 0 : gu ; end ))/day pop=$popstr"
       end,
       kwargs...)
 
@@ -693,24 +699,32 @@ end
 function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yticks=-200:10:200, weekly=true,
    tenXGrowAnchor=4, tenXDecayAnchor=5, smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2], fname="",
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=7, expressDelta=7), [0.5, 1, 0.5]),
-   legendLocation::String="upper left",
+   legendLocation::String="lower left",
+   labelSuffixFn = (pais, origSeries, series) -> begin
+      series = origSeries[.!isnan.(origSeries)]
+      series = series[series .!= Inf]
+
+      peak   = Int64(ceil.(smooth(diff(series[end-35:end]), [0.2, 0.5, 1, 0.5, 0.2]))[end])
+      popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M"
+      return " currently=$peak/day, pop=$popstr"
+   end,
    growthTickDeltaX=0.02, rightTicksFn= p ->(p./100 .+ 1).^(5.2/7),
    kwargs...)
 
 
    plotGrowth(regions, explain=false, fn=fn,
-      smkernel=smkernel, weekly=weekly,
+      smkernel=smkernel, weekly=weekly, labelSuffixFn=labelSuffixFn,
       ylim1=ylim1, ylim2=ylim2, yticks=yticks, counttype=counttype,
       tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor,
       growthTickDeltaX=growthTickDeltaX,
       mincases=0, minval=-200; kwargs...)
-   title("% change after one week (left) and corresponding R (right; assuming 5.2 day virus cycle)\n"*
+   title("% change after one week (left) and reproductive R (right; 5.2 day change factor)\n"*
       "in new COVID-19 $counttype/day, smoothed", fontsize=fontsize, fontname=fontname)
    ylabel("% change per week in daily $counttype")
 
    kwargs = Dict(getLinespecs(label=string(("Hubei", "China")))[1])
    delete!(kwargs, :marker)
-   kwargs[:label] = "Hubei, China average decay rate after peaking ~ -41% ~ 1/10 per month"
+   kwargs[:label] = "Hubei, China average decay rate\nafter peaking ~ -41% ~ 1/10 per month"
    hlines([-41], xlim()[1], xlim()[2]; kwargs...)
 
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-1),

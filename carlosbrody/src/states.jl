@@ -29,7 +29,7 @@ states = ["US", "Italy",
    ("New Jersey", "US"), ("Illinois", "US"),
    ("Louisiana", "US"), ("Georgia", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder, ("Connecticut", "US"),
-   nostayhome]
+   nostayhome, ("Massachusetts", "US")]
 
 plotGrowth(vcat(states, "World other than China"),
    fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
@@ -50,23 +50,16 @@ mystates = ["Italy", "US",
    ("Florida", "US"), nostayhome, ("Texas", "US"), ("Washington", "US"),
    ("Louisiana", "US"), ("Georgia", "US")]
 
-function labelSuffixFn(pais, origSeries, series)
-   series = origSeries[.!isnan.(origSeries)]
-   series = series[series .!= Inf]
 
-   peak   = Int64(ceil.(smooth(diff(series[end-35:end]), [0.2, 0.5, 1, 0.5, 0.2]))[end])
-   popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M"
-   return " currently=$peak/day, pop=$popstr"
-end
 
 smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1]
 plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=20,
-   counttype="deaths", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
+   counttype="deaths", days_previous=36, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 plotNewGrowth(mystates, fname="statesNewCasesGrowthRate", db=A, ylim1=-70, fignum=21,
-   counttype="new cases", days_previous=26, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
+   counttype="new cases", days_previous=36, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
