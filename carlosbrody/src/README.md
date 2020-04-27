@@ -1,4 +1,4 @@
-The code to make the plots in the repo is in Julia.
+The code to make the plots in the [repo](../..) is written in Julia.
 
 The module [CarlosUtils](./CarlosUtils/src/CarlosUtils.jl) has some general-purpose utilities.
 
@@ -8,32 +8,18 @@ The main plotting functions are in [fndefs.jl](./fndefs.jl). Then [states.jl](./
 
 Within [fndefs.jl](./fndefs.jl):
 
-<code>
-plotSingle() plots a single time series
-</code>.
+`plotSingle()` plots a single time series.
 
-<code>
-plotMany() plots multiple time series and adds a legend
-</code>.
+`plotMany()` plots multiple time series and adds a legend.
 
-<code>
-plotCumulative() plots many cumulative case time series
-</code>.
+`plotCumulative()` plots many cumulative case time series.
 
-<code>
-plotNew() first takes the diff of a time series, to plot new entries per day
-</code>.
+`plotNew()` first takes the diff of a time series, to plot new entries per day.
 
-<code>
-plotAligned() alignes series on a given point (e.g., 200 cases)
-</code>.
+`plotAligned()` alignes series on a given point (e.g., 200 cases).
 
-<code>
-plotGrowth() plots percentage growth in a series
-</code>.
+`plotGrowth()` plots percentage growth in a series.
 
-<code>
-plotNewGrowth() first takes the diff, to plot new entries/day, and then plots percentage growth or decay in a series, also expressing it as R (reproductive ratio).
-</code>.
+`plotNewGrowth()` first takes the diff, to plot new entries/day, and then plots percentage growth or decay in a series, also expressing it as R (reproductive ratio).
 
 
