@@ -1,6 +1,6 @@
 # COVID-19-plots
 
-*To make a comment or suggestion, please click on the ["Issues"](https://github.com/COVID-19-plots/maincovidplotsrepo/issues) tab at the top and add to the thread of an existing issue or click on ["New Issue"](https://github.com/COVID-19-plots/maincovidplotsrepo/issues/new/choose) to add a new thread.* 
+*To make a comment or suggestion, please click on the ["Issues"](https://github.com/COVID-19-plots/maincovidplotsrepo/issues) tab at the top and add to the thread of an existing issue or click on ["New Issue"](https://github.com/COVID-19-plots/maincovidplotsrepo/issues/new/choose) to add a new thread. The Julia code that makes these plots is in the carlosbrody/src/ directory of this repository.* 
 
 ---
 
