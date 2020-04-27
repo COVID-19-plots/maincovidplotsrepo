@@ -48,7 +48,7 @@ mystates = ["Italy", "US",
    ("New York", "US"), ("New Jersey", "US"), ("Massachusetts", "US"),
    ("Illinois", "US"), ("California", "US"),
    ("Florida", "US"), nostayhome, ("Texas", "US"), ("Washington", "US"),
-   ("Louisiana", "US"), ("Georgia", "US")]
+   ("Louisiana", "US"), ("Georgia", "US"), ("Connecticut", "US")]
 
 
 

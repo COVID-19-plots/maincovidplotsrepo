@@ -380,6 +380,12 @@ function loadCovidTrackingUSData(;
 end
 
 
+"""
+
+"""
+function covid2JH(C, colname::String)
+end
+
 
 
 """

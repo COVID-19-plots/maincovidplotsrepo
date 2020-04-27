@@ -119,6 +119,8 @@ A = setValue(A, ("Hubei", "China"), "4/24/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/24/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/25/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/25/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/26/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/26/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -544,10 +546,10 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
          popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
          return " : $(Int64(begin gu=ceil(series[end]); isnan(gu) ? 0 : gu ; end ))/day pop=$popstr"
       end,
-      kwargs...)
+      days_previous=45, kwargs...)
 
    plotMany(regions, fn=fn, plotFn=plotFn, labelSuffixFn=labelSuffixFn,
-      minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
+      days_previous=days_previous, minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
    ylabel("New $counttype each day", fontsize=fontsize, fontname=fontname)
    title("New confirmed COVID-19 $counttype per day\nin selected regions, " *
       "smoothed with a +/- $(Int64((length(smkernel)-1)/2)) day window",
