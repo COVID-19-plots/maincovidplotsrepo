@@ -1,4 +1,4 @@
-The code to make the plots in the [repo](../..) is written in Julia.
+The code to make the plots in the [repo](../../../maincovidplotsrepo) is written in Julia.
 
 The module [CarlosUtils](./CarlosUtils/src/CarlosUtils.jl) has some general-purpose utilities.
 
