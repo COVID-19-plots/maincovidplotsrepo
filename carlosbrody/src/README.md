@@ -1,4 +1,4 @@
-The code to make the plots in the [repo](../../README.md) is written in Julia.
+The code to make the plots in the [repo](../../README.md) is written in Julia and is all here in this directory.
 
 The module [CarlosUtils](./CarlosUtils/src/CarlosUtils.jl) has some general-purpose utilities.
 
