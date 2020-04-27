@@ -8,9 +8,15 @@ The main plotting functions are in [fndefs.jl](./fndefs.jl). Then [states.jl](./
 
 Within [fndefs.jl](./fndefs.jl):
 
+The workhorses are:
+
 `plotSingle()` plots a single time series.
 
 `plotMany()` plots multiple time series and adds a legend.
+
+As optional arguments, they take the plotting function (`plot` or `semilogy`), a function to apply to each series before plotting it, a function to generate the legend label for each series, and several others.
+
+Then other functions are used as convenient entryways to `plotMany()`:
 
 `plotCumulative()` plots many cumulative case time series.
 
