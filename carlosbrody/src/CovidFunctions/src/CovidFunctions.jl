@@ -6,6 +6,7 @@ using PyPlot
 
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
+export covid2JH, covid2JHParsing
 export savefig2jpg
 export dropColumns, renameColumn!, dropRows, getColNums, getDataColumns, firstDataColumn
 export addPopulationColumn
@@ -278,6 +279,41 @@ function mergeJHandCovidTracking(;jh=NaN, ct=NaN)
    return vcat(nA, ct[2:end,:])
 end
 
+"""
+   daynum2daystr(num::Int)
+
+   Number in format yyyymmdd gets turned into string mm/dd/yr where
+   dd might be length 1
+"""
+function daynum2daystr(num::Int)
+   yr = fld(num, 10000); num -= yr*10000; yr -= 2000
+   mo = fld(num, 100);   num -= mo*100
+   dy = num
+   return "$mo/$dy/$yr"
+end
+
+"""
+   dayroll(;startdate=20200122, enddate=20200324)
+
+   Return a vector of sequential days, following the calendar,
+   using Int64s to define the limits, as in C[:,daycol]
+"""
+function dayroll(;startdate=20200122, enddate=20200324)
+   ds = zeros(Int64, 0)
+   ds = vcat(ds, startdate:(minimum([enddate, 20200131])))
+
+   if enddate >= 20200201
+      ds = vcat(ds, 20200201:(minimum([enddate, 20200229])))
+   end
+   if enddate >= 20200301
+      ds = vcat(ds, 20200301:(minimum([enddate, 20200331])))
+   end
+   if enddate >= 20200401
+      ds = vcat(ds, 20200401:(minimum([enddate, 20200430])))
+   end
+   return ds
+end
+
 
 """
    loadCovidTrackingUSData(; dname = "../../data/covidtracking.com/api/states",
@@ -295,42 +331,6 @@ function loadCovidTrackingUSData(;
    dedcol = findfirst(C[1,:].=="death")
    sabcol = findfirst(C[1,:].=="state")
    daycol = findfirst(C[1,:].=="date")
-
-   """
-      dayroll(;startdate=20200122, enddate=20200324)
-
-      Return a vector of sequential days, following the calendar,
-      using Int64s to define the limits, as in C[:,daycol]
-   """
-   function dayroll(;startdate=20200122, enddate=20200324)
-      ds = zeros(Int64, 0)
-      ds = vcat(ds, startdate:(minimum([enddate, 20200131])))
-
-      if enddate >= 20200201
-         ds = vcat(ds, 20200201:(minimum([enddate, 20200229])))
-      end
-      if enddate >= 20200301
-         ds = vcat(ds, 20200301:(minimum([enddate, 20200331])))
-      end
-      if enddate >= 20200401
-         ds = vcat(ds, 20200401:(minimum([enddate, 20200430])))
-      end
-      return ds
-   end
-
-   """
-      daynum2daystr(num::Int)
-
-      Number in format yyyymmdd gets turned into string mm/dd/yr where
-      dd might be length 1
-   """
-   function daynum2daystr(num::Int)
-      yr = fld(num, 10000); num -= yr*10000; yr -= 2000
-      mo = fld(num, 100);   num -= mo*100
-      dy = num
-      return "$mo/$dy/$yr"
-   end
-
 
    mydays = dayroll(enddate=maximum(C[2:end,daycol])) # use default start date to match JH dbase
    ndays  = length(mydays)
@@ -381,11 +381,116 @@ end
 
 
 """
+   covid2JH(C, colnames::Vector{String})
 
+   Takes columns colnames from a matrix representing a read of a Covid Tracking
+   data file, and turns it into JH-style matrices for a given colname feature,
+   with columns "Province/State", "Country/Region", and then date columns
+   in format "m/d/yy", with rows being US states, and the entries correspinding
+   to colname values.
+
+   Example Call:
+
+   julia> P, N = covid2JH(C, ["positive", "negative"])
+
+   Then P and N will each be JH style matrices
 """
-function covid2JH(C, colname::String)
+function covid2JH(C, colnames::Vector{String})
+   sabcol = getColNums(C, "state")[1]
+   daycol = getColNums(C, "date")[1]
+   myCcols = getColNums(C, colnames)
+   @assert length(myCcols)==length(colnames) "could not uniquely resolve each of $colnames"
+   N = length(colnames)
+
+   mydays = dayroll(enddate=maximum(C[2:end,daycol])) # use default start date to match JH dbase
+   ndays  = length(mydays)
+   sabs   = Array{String}(unique(C[2:end,sabcol]))  # state abbreviations
+   states = stateAbbrev2Fullname(sabs)              # corresponding fullnames
+   u = findall(.!isempty.(states))                  # eliminate unknown states
+      sabs = sabs[u]
+      states = states[u]
+   nstates = length(u)
+
+
+   As = Array{Any}(undef, N)     # This will be the output
+   for n=1:N;
+      As[n] = Array{Any}(undef, nstates+1, ndays+4);
+      # Fill in top row
+      As[n][1,1:4] = ["Province/State", "Country/Region", "Lat", "Long"]
+      for i=1:length(mydays)
+         As[n][1, i+4] = daynum2daystr(mydays[i])
+      end
+   end
+   # loop over states
+   for s=1:nstates
+      mystate = states[s]
+
+      for n=1:N
+         As[n][s+1, 1:4]   .= [stateAbbrev2Fullname(sabs[s]), "US", 0, 0]
+         As[n][s+1, 5:end] .= 0
+      end
+      # Find all entries for this state
+      u = findall(C[:,sabcol] .== sabs[s])
+      for d=1:length(u)
+         myday   = C[u[d], daycol]
+         for n=1:N
+            myval   = C[u[d], myCcols[n]]
+
+            Adaycol    = findfirst(As[1][1,:] .== daynum2daystr(myday))
+            # For each entry, put it in corresponding spot in As
+            As[n][s+1, Adaycol] = (myval == "" ? 0 : myval)
+         end
+      end
+   end
+
+   return Tuple(As)
 end
 
+
+"""
+   covid2JH(C, colnames::String)
+
+   return covid2JH(C, [colnames])
+"""
+function covid2JH(C, colnames::String)
+   return covid2JH(C, [colnames])[1]
+end
+
+"""
+   covid2JHParsing(C, exstr)
+
+   Returns a JH-style matrix for the 50 US states, after parsing a
+   CovidTracking matrix
+
+   # Example call:
+
+   posratio = covid2JHParsing(C, "positive ./ (positive .+ negative)")
+"""
+function covid2JHParsing(C, exstr)
+   ex = Meta.parse(exstr)
+   shell = covid2JH(C, "positive")
+
+   function recurseReplacer!(ex)
+      for i=1:length(ex.args)
+         if typeof(ex.args[i]) <: Expr
+            recurseReplacer!(ex.args[i])
+         elseif any(string(ex.args[i]) .== C[1,3:end])
+            ex.args[i] = Array{Float64}(covid2JH(C, string(ex.args[i]))[2:end,5:end])
+         end
+      end
+   end
+
+   if !(typeof(ex) <: Expr)
+      if any(string(ex) .== C[1,3:end])
+         ex = Array{Float64}(covid2JH(C, string(ex))[2:end,5:end])
+      end
+   else
+      recurseReplacer!(ex)
+   end
+
+   shell[2:end,5:end] .= eval(ex)
+   return shell
+end
 
 
 """
