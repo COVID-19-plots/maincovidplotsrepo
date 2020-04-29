@@ -34,6 +34,7 @@ myfun = x -> smooth(diff(x), smkernel)./maximum(smooth(diff(x), smkernel))
 
 
 soffsets = Dict(
+   "Germany"=>0,
    "Austria"=>0,
    "Sweden"=>-0.5,
    "Norway"=>1,
@@ -51,11 +52,11 @@ soffsets = Dict(
 
 plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "US"), # "Portugal",
    "Italy", "Spain", "Switzerland", "France",
-   "United Kingdom", "Portugal", "Austria", "Denmark"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
+   "United Kingdom", "Portugal", "Austria", "Denmark", "Germany"], #"Germany", "Denmark", "Sweden", "France"], # "Denmark", "Greece", "Austria"
    # "Netherlands", "Austria"],
    fname="deathPeakAligned",
    soffsets=soffsets,
-   fignum=24, x0=-50, x1=35)
+   fignum=24, x0=-55, x1=35)
 
 ##
 
