@@ -55,7 +55,7 @@ plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "
    # "Netherlands", "Austria"],
    fname="deathPeakAligned",
    soffsets=soffsets,
-   fignum=24, x0=-35, x1=25)
+   fignum=24, x0=-50, x1=35)
 
 ##
 
@@ -95,9 +95,10 @@ plotNewGrowth(europeSelect, db=A, days_previous=36, counttype="cases",
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 ##
+smkernel = [0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1];
 plotNewGrowth(europeSelect, db=D, days_previous=36, counttype="deaths",
    fname="europeNewDeathsGrowthRate", fignum=122, labelSuffixFn=labelSuffixFn,
-   smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+   smkernel=smkernel,
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 writeReadme(prefix="europe", header1="Europe")

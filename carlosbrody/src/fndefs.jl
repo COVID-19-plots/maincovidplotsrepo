@@ -123,6 +123,8 @@ A = setValue(A, ("Hubei", "China"), "4/26/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/26/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/27/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/27/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/28/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/28/20", 3222)
 
 
 # Write out the database with the states consolidated
@@ -399,12 +401,14 @@ end
 ##
 
 """
-   plotMany(paises; fignum=1, offsetRange=0.1, legendLocation::String="upper left",
+   hs plotMany(paises; fignum=1, offsetRange=0.1, legendLocation::String="upper left",
       kwargs...)
 
    Each entry in the list paises gets plotted onto a figure using plotSingle,
    all overlaid on each other, and a legend gets created.  All of the arguments
    for plotSingle are accepted, except for pais, xOffset, adjustZeroXLabel.
+
+   Return a list of handles to the plotted lines
 
    # PARAMETERS:
 
@@ -436,7 +440,7 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
 
    u = randperm(length(paises))
 
-   h = nothing
+   hs = Array{Any}(undef, length(paises))
    for i=1:length(paises)
       # Randomly offset plots w.r.t to each other by a small amount.
       xOffset = ((u[i]/(length(paises)/2))-1)*offsetRange
@@ -446,13 +450,7 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
       else
          h = plotSingle(paises[i]; alignon=alignon, xOffset=xOffset, adjustZeroXLabel=true, kwargs...)
       end
-
-      # World other than China gets no marker, but everybody
-      # else gets a different marker every ten countries:
-      # if h != nothing && h.get_marker() != "None"
-      #    h.set_marker(markerOrder[Int64(ceil(i/10))])
-      # end
-
+      hs[i] = h
    end
 
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2),
@@ -468,6 +466,8 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
    else
       addSourceString2Linear()
    end
+
+   return hs
 end
 
 
@@ -518,15 +518,17 @@ function plotCumulative(regions; fname::String="", yticbase=[1, 4],
    end,
    kwargs...)
 
-   plotMany(regions, minval=minval, fignum=fignum; labelSuffixFn=labelSuffixFn, kwargs...)
+   hs = plotMany(regions, minval=minval, fignum=fignum; labelSuffixFn=labelSuffixFn, kwargs...)
 
    ylabel("cumulative confirmed cases", fontsize=fontsize, fontname=fontname)
    title("Cumulative confirmed COVID-19 $counttype in selected regions", fontsize=fontsize, fontname=fontname)
    setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
 
    addSourceString2Semilogy()
+   xAxisTickPeriod(7)
 
    savefig2jpg(fname)
+   return hs
 end
 
 
@@ -548,9 +550,9 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
          popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
          return " : $(Int64(begin gu=ceil(series[end]); isnan(gu) ? 0 : gu ; end ))/day pop=$popstr"
       end,
-      days_previous=45, kwargs...)
+      days_previous=45, xAxisWeekify=true, kwargs...)
 
-   plotMany(regions, fn=fn, plotFn=plotFn, labelSuffixFn=labelSuffixFn,
+   hs = plotMany(regions, fn=fn, plotFn=plotFn, labelSuffixFn=labelSuffixFn,
       days_previous=days_previous, minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)
    ylabel("New $counttype each day", fontsize=fontsize, fontname=fontname)
    title("New confirmed COVID-19 $counttype per day\nin selected regions, " *
@@ -564,8 +566,9 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
       addSourceString2Linear()
    end
 
-
+   if xAxisWeekify; xAxisTickPeriod(7); end
    savefig2jpg(fname)
+   return hs
 end
 
 ##
@@ -596,7 +599,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    mincases=50, fname::String="", counttype="cases", explain=true, weekly=false,
    tenXGrowAnchor=7, tenXDecayAnchor=14, growthTickDeltaX=0, kwargs...)
 
-   plotMany(regions, plotFn=plot,
+   hs = plotMany(regions, plotFn=plot,
       fn=fn,
       mincases=mincases, fignum=fignum; kwargs...)
 
@@ -679,7 +682,9 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    end
 
    addSourceString2Linear()
+   xAxisTickPeriod(7)
    savefig2jpg(fname)
+   return hs
 end
 
 
@@ -716,7 +721,7 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    kwargs...)
 
 
-   plotGrowth(regions, explain=false, fn=fn,
+   hs = plotGrowth(regions, explain=false, fn=fn,
       smkernel=smkernel, weekly=weekly, labelSuffixFn=labelSuffixFn,
       ylim1=ylim1, ylim2=ylim2, yticks=yticks, counttype=counttype,
       tenXGrowAnchor=tenXGrowAnchor, tenXDecayAnchor=tenXDecayAnchor,
@@ -739,9 +744,10 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    secax.set_ylabel("R", fontsize=fontsize)
    axisWidthChange(0.98, lock="l")
    axisMove(0.01,0)
+   xAxisTickPeriod(7)
 
    savefig2jpg(fname)
-
+   return hs
 end
 
 ##
@@ -865,7 +871,7 @@ function plotDeathPeakAligned(paises; plotFn=plot, db=D, fname="", multFactor=1,
    plotNew(paises, plotFn=plotFn, db=db, smkernel=smkernel,
       fn=fn, minval=0, days_previous=size(db,1)-5,
       alignon = (alignon==nothing ? myalign : alignon), offsetRange=0.1,
-      counttype="deaths", fname=""; kwargs...)
+      counttype="deaths", fname="", xAxisWeekify=false; kwargs...)
    ylabel("Deaths/day relative to peak")
    xlabel("days relative to peak")
    title("data up to $(mydate(db[1,end])): COVID-19 $counttype per day in selected regions,\n" *

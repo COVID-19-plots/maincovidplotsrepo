@@ -53,11 +53,12 @@ mystates = ["Italy", "US",
 
 
 smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1]
+# smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2]
 plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=20,
    counttype="deaths", days_previous=36, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
-   smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+   smkernel=smkernel,
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
-
+##
 plotNewGrowth(mystates, fname="statesNewCasesGrowthRate", db=A, ylim1=-70, fignum=21,
    counttype="new cases", days_previous=36, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],

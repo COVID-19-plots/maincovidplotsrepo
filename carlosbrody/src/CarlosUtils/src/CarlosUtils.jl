@@ -25,7 +25,7 @@ export stateName2AbbrevDict, abbrev2StateNameDict, abbrev2StateName,
 export myLinespec, findLinespecs, stashLinespecs, getLinespecs, handMeLinespec,
     saveLinespecList, loadLinespecList, nextLinespec, addToLinespecList,
     deleteFromLinespecList, replaceInLinespecList, colorOrder, markerOrder, Dict
-export rightHandAxis
+export rightHandAxis, xAxisTickPeriod
 
 
 # If we plot more than 10 lines, colors repeat; use next marker in that case
@@ -480,6 +480,34 @@ function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
     return secax
 end
 
+
+function xAxisTickPeriod(n::Int64; ax=gca(), anchor="end")
+    xt   = gca().get_xticks()
+    xl   = gca().get_xlim()
+    xlab = gca().get_xticklabels()
+    goods = (xl[1] .<= xt) .& (xt .<= xl[2])
+    xt   = xt[goods]
+    xlab = xlab[goods]
+    lastLabIsStr = tryparse(Float64, replace(xlab[end].get_text(), "−" => "-")) == nothing
+    if lastLabIsStr
+        lastStr = xlab[end].get_text()
+    end
+
+    if anchor=="end"
+        newxt = (xt[end]:-n:xl[1])[end:-1:1]
+    end
+    gca().set_xticks(newxt)
+    newxlab = gca().get_xticklabels()
+    for i=1:length(newxlab)-1
+        x = newxt[i]
+        x = x == round(x) ? Int64(x) : x
+        newxlab[i].set_text("$x")
+    end
+    if lastLabIsStr
+        newxlab[end].set_text(lastStr)
+    end
+    gca().set_xticklabels(newxlab)
+end
 
 function __init__()
     for k in keys(stateName2AbbrevDict)
