@@ -52,52 +52,6 @@ days_previous=49
 sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
 
 
-#
-# COVID tracking is failing on WA and CA!
-#
-# Did some hand-fixes from Wikipedia: https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Brazil
-# and directly from Johns Hopkins dashboard, but then went back to all Johns Hopkins data source since
-# they now put state information back in.
-#
-# A = setValue(A, "Brazil", "3/15/20", 200)
-# A = setValue(A, "Brazil", "3/16/20", 234)
-# A = mergeJHandCovidTracking(jh=A, ct=loadCovidTrackingUSData()[1])
-# A = setValue(A, ("Washington", "US"), "4/9/20", 9753)
-# A = setValue(A, ("Washington", "US"), "4/10/20", 10219)
-# A = setValue(A, ("Washington", "US"), "4/11/20", 10375)
-# A = setValue(A, ("Washington", "US"), "4/12/20", 10530)
-# A = setValue(A, ("Washington", "US"), "4/13/20", 10838)
-# A = setValue(A, ("Washington", "US"), "4/14/20", 11055)
-# A = setValue(A, ("Washington", "US"), "4/15/20", 11065)
-# A = setValue(A, ("Washington", "US"), "4/16/20", 11217)
-# A = setValue(A, ("Washington", "US"), "4/17/20", 11586)
-# A = setValue(A, ("California", "US"), "4/11/20", 22289)
-# A = setValue(A, ("California", "US"), "4/12/20", 23209)
-# A = setValue(A, ("California", "US"), "4/13/20", 24379)
-# A = setValue(A, ("California", "US"), "4/14/20", 25537)
-# A = setValue(A, ("California", "US"), "4/15/20", 26940)
-# A = setValue(A, ("California", "US"), "4/16/20", 27697)
-# A = setValue(A, ("California", "US"), "4/17/20", 29171)
-# D = mergeJHandCovidTracking(jh=D, ct=loadCovidTrackingUSData()[2])
-# D = setValue(D, ("Washington", "US"), "4/10/20", 487)
-# D = setValue(D, ("Washington", "US"), "4/11/20", 495)
-# D = setValue(D, ("Washington", "US"), "4/12/20", 510)
-# D = setValue(D, ("Washington", "US"), "4/13/20", 522)
-# D = setValue(D, ("Washington", "US"), "4/14/20", 546)
-# D = setValue(D, ("Washington", "US"), "4/15/20", 562)
-# D = setValue(D, ("Washington", "US"), "4/16/20", 587)
-# D = setValue(D, ("Washington", "US"), "4/17/20", 610)
-# D = setValue(D, ("California", "US"), "4/11/20", 632)
-# D = setValue(D, ("California", "US"), "4/12/20", 681)
-# D = setValue(D, ("California", "US"), "4/13/20", 732)
-# D = setValue(D, ("California", "US"), "4/14/20", 783)
-# D = setValue(D, ("California", "US"), "4/15/20", 880)
-# D = setValue(D, ("California", "US"), "4/16/20", 956)
-# D = setValue(D, ("California", "US"), "4/17/20", 1041)
-#
-# D = setValue(D, "Germany", "4/11/20", 2871)
-# D = setValue(D, "Germany", "4/14/20", 3494)
-
 
 # Remove late April correction on Wuhan, so as to keep
 # initial trends:
@@ -125,6 +79,8 @@ A = setValue(A, ("Hubei", "China"), "4/27/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/27/20", 3222)
 A = setValue(A, ("Hubei", "China"), "4/28/20", 67803)
 D = setValue(D, ("Hubei", "China"), "4/28/20", 3222)
+A = setValue(A, ("Hubei", "China"), "4/29/20", 67803)
+D = setValue(D, ("Hubei", "China"), "4/29/20", 3222)
 
 
 # Write out the database with the states consolidated
