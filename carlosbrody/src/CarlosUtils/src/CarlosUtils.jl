@@ -446,7 +446,6 @@ end
 """
     rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
         ticks2convert=ax.get_yticks(), rightHandAxisUrlLabel="rha")
-
 """
 function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
     ticks2convert=ax.get_yticks(), rightHandAxisUrlLabel="rha")
@@ -467,15 +466,14 @@ function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
     secax.tick_params(labelsize=ax.get_yticklabels()[1].get_fontsize())
 
     lbls = secax.get_yticklabels()
-    yl = ax.get_ylim()
     println(lbls)
+    yl = ax.get_ylim()
     for lab in lbls
         yp = lab.get_position()[2]
         if (yl[1] <= yp) && (yp <= yl[2])
             lab.set_text(string(round(old2newFn(yp), digits=digits)))
         end
     end
-    println(lbls)
     secax.set_yticklabels(lbls)
 
     return secax
