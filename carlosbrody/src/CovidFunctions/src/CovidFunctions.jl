@@ -27,7 +27,7 @@ popdbase = readdlm("../../data/datasets/population/blob/master/data/popularion.c
 
 """
 function stateAbbrev2Fullname(str::String)
-   @assert length(str)==2  "str must be a tw-letter string"
+   @assert length(str)==2  "str must be a two-letter string"
    abvs = stateAbbrevMap
    u = findfirst(abvs[:,2].==str)
    return u==nothing ? "" : abvs[u,1];

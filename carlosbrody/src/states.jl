@@ -29,7 +29,8 @@ states = ["US", "Italy",
    ("New Jersey", "US"), ("Illinois", "US"),
    ("Louisiana", "US"), ("Georgia", "US"), # "Australia",
    south, mexicoborder, midwest, canadaborder, ("Connecticut", "US"),
-   nostayhome, ("Massachusetts", "US")]
+   nostayhome, ("Massachusetts", "US"), ("South Carolina", "US"),
+   ("Indiana", "US"), ("Iowa", "US")]
 
 plotGrowth(vcat(states, "World other than China"),
    fignum=10, fname="statesGrowthRate") # , smkernel=[0.2, 0.4, 0.5, 0.7, 0.5, 0.4, 0.2])
@@ -48,7 +49,8 @@ mystates = ["Italy", "US",
    ("New York", "US"), ("New Jersey", "US"), ("Massachusetts", "US"),
    ("Illinois", "US"), ("California", "US"),
    ("Florida", "US"), nostayhome, ("Texas", "US"), ("Washington", "US"),
-   ("Louisiana", "US"), ("Georgia", "US"), ("Connecticut", "US")]
+   ("Louisiana", "US"), ("Georgia", "US"), ("Connecticut", "US"),
+   ("South Carolina", "US"), ("Indiana", "US"), ("Iowa", "US")]
 
 
 

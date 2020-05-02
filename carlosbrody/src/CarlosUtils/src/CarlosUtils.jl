@@ -33,7 +33,7 @@ colorOrder = [
     "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
     "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
     ]
-markerOrder = ["o", "x", "P", "d", "*", "<"]
+markerOrder = ["o", "x", "P", "d", "*", "<", ">"]
 
 
 struct myLinespec
@@ -467,7 +467,6 @@ function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
     secax.tick_params(labelsize=ax.get_yticklabels()[1].get_fontsize())
 
     lbls = secax.get_yticklabels()
-    println(lbls)
     yl = ax.get_ylim()
     for lab in lbls
         yp = lab.get_position()[2]
