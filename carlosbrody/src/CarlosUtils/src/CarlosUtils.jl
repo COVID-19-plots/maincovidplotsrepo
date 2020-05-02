@@ -468,12 +468,14 @@ function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
 
     lbls = secax.get_yticklabels()
     yl = ax.get_ylim()
+    println(lbls)
     for lab in lbls
         yp = lab.get_position()[2]
         if (yl[1] <= yp) && (yp <= yl[2])
             lab.set_text(string(round(old2newFn(yp), digits=digits)))
         end
     end
+    println(lbls)
     secax.set_yticklabels(lbls)
 
     return secax

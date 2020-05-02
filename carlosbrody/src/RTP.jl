@@ -71,11 +71,12 @@ function pgs(;db=D, smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 
          secax = rightHandAxis(old2newFn=p2RFn, ticks2convert=-20:20:60)
          secax.set_ylabel("R", fontsize=fontsize, fontname=fontname)
       else
-         secax = rightHandAxis(old2newFn=R2pFn, ticks2convert=-0.9:0.1:1.4)
+         secax = rightHandAxis(old2newFn=R2pFn, ticks2convert=0.7:0.1:1.5)
          secax.set_ylabel("% change per week", fontsize=fontsize, fontname=fontname)
       end
       hlines(plottype=="R" ? 1 : 0, -1, length(s)+1, linestyle="--", color="#ff7777")
-
+      # axisWidthChange(0.95, lock="l")
+      # PyPlot.show()
 
       savefig2jpg(fname)
    end
