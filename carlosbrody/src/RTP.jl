@@ -45,7 +45,7 @@ function pgs(;db=D, smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 
       for i=1:length(s)
          delta = 0.01*(ylim()[2]-ylim()[1])
          delta = s[i] >= 0 ? delta : -2.5*delta
-         text(i, s[i]+delta, z[i,2], horizontalAlignment="center", fontsize=9);
+         text(i, s[i]+delta, z[i,2], horizontalAlignment="center", fontsize=10);
       end
 
 
