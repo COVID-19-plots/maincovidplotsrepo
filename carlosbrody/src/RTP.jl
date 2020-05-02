@@ -83,7 +83,7 @@ function pgs(;db=D, smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 
    return z
 end
 
-pgs(db =D, mincases=10, fignum=2000, fname="currentDeathGrowthRateAllStates")
+pgs(db =D, mincases=10, fignum=2000, fname="statesCurrentDeathGrowthRates")
 ##
 
 
