@@ -72,6 +72,7 @@ prefix = "states"
 sections = [
    "New cases growth rates"         "$(prefix)NewCasesGrowthRate"
    "New deaths growth rates"        "$(prefix)NewDeathsGrowthRate"
+   "All states, current deaths growth rates"   "$(prefix)CurrentDeathGrowthRates"
    "New cases per day"              "$(prefix)New"
    "New deaths per day"             "$(prefix)NewDeaths"
    "Cumulative number of confirmed cases by region, aligned on equal caseload"  "$(prefix)_confirmed_aligned"

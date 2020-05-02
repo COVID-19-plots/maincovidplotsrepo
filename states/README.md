@@ -5,6 +5,7 @@
 
 * [US States: New cases growth rates](#us-states-new-cases-growth-rates)
 * [US States: New deaths growth rates](#us-states-new-deaths-growth-rates)
+* [US States: All states, current deaths growth rates](#us-states-all-states-current-deaths-growth-rates)
 * [US States: New cases per day](#us-states-new-cases-per-day)
 * [US States: New deaths per day](#us-states-new-deaths-per-day)
 * [US States: Cumulative number of confirmed cases by region, aligned on equal caseload](#us-states-cumulative-number-of-confirmed-cases-by-region-aligned-on-equal-caseload)
@@ -24,6 +25,12 @@ Click on the plot to see an expanded version.
 Click on the plot to see an expanded version.
 
 <img src="../carlosbrody/src/statesNewDeathsGrowthRate.jpg" width="1000">
+
+### US States: All states, current deaths growth rates
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/statesCurrentDeathGrowthRates.jpg" width="1000">
 
 ### US States: New cases per day
 
