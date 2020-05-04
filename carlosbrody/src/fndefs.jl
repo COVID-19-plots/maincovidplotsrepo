@@ -420,7 +420,7 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
    gca().legend(prop=Dict("family" =>fontname, "size"=>legendfontsize-2),
       loc=legendLocation)
    xlabel("days", fontsize=fontsize, fontname=fontname)
-   grid("on")
+   grid("on", which="both")
    gca().tick_params(labelsize=16)
    gca().yaxis.tick_right()
    gca().tick_params(labeltop=false, labelleft=true)
@@ -430,6 +430,7 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
    else
       addSourceString2Linear()
    end
+   grid("on", which="both")
 
    return hs
 end
