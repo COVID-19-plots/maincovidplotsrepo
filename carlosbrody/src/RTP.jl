@@ -109,3 +109,22 @@ plot(pg[end-dp:end])
 subplot(2,1,2)
 n=length(pg)
 plot(pv[end-n+1:end][end-dp:end])
+
+
+##
+function newguys(str)
+   return "hcat(zeros(size($str,1)), diff($str, dims=2))"
+end
+
+TP = covid2JHParsing(C, newguys("positive")*"./"*newguys("totalTestResults"))
+regions = [("Massachusetts", "US"), ("New York", "US"), ("New Jersey", "US"),
+   ("Florida", "US"), ("Ohio", "US"), ("Pennsylvania", "US"),
+   ("Indiana", "US"), ("Iowa", "US"), ("Minnesota", "US"),
+   ("South Carolina", "US"), ("California", "US"), ("Georgia", "US")]
+
+plotMany(regions, db=TP, plotFn=plot, days_previous=28, fignum=1000,
+   fn = x ->smooth(x, [0.1:0.1:0.7; 0.6:-0.1:0.1]),
+   labelSuffixFn = (pais, origSeries, series) -> " curr=$(round(series[end], digits=2))")
+title("test positivity", fontname=fontname, fontsize=fontsize)
+
+##

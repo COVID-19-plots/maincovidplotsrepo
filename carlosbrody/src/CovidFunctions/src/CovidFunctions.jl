@@ -6,7 +6,7 @@ using PyPlot
 
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
-export covid2JH, covid2JHParsing
+export covid2JH, covid2JHParsing, loadRawCovidTrackingMatrix
 export savefig2jpg
 export dropColumns, renameColumn!, dropRows, getColNums, getDataColumns, firstDataColumn
 export addPopulationColumn
@@ -311,6 +311,12 @@ function dayroll(;startdate=20200122, enddate=20200324)
    if enddate >= 20200401
       ds = vcat(ds, 20200401:(minimum([enddate, 20200430])))
    end
+   if enddate >= 20200501
+      ds = vcat(ds, 20200501:(minimum([enddate, 20200531])))
+   end
+   if enddate >= 20200601
+      ds = vcat(ds, 20200601:(minimum([enddate, 20200630])))
+   end
    return ds
 end
 
@@ -322,7 +328,7 @@ end
    Load US state daya from CovidTracking project not Johns Hopkins
 """
 function loadCovidTrackingUSData(;
-   dname = "../../data/covidtracking.com/api/states",
+   dname = "../../data/covidtracking.com/api/v1/states",
    fname = "daily.csv")
 
    C = readdlm("$dname/$fname", ',');
@@ -377,6 +383,23 @@ function loadCovidTrackingUSData(;
    end
 
    return As, Ds
+end
+
+
+"""
+   loadRawCovidTrackingMatrix(;
+      dname = "../../data/covidtracking.com/api/states",
+      fname = "daily.csv")
+
+   Loads and returns the CovidTracking data into a raw matrix
+   form that can then be used with covid2JH
+"""
+function  loadRawCovidTrackingMatrix(;
+   dname = "../../data/covidtracking.com/api/v1/states",
+   fname = "daily.csv")
+
+   C = readdlm("$dname/$fname", ',');
+   return C
 end
 
 
@@ -438,7 +461,8 @@ function covid2JH(C, colnames::Vector{String})
 
             Adaycol    = findfirst(As[1][1,:] .== daynum2daystr(myday))
             # For each entry, put it in corresponding spot in As
-            As[n][s+1, Adaycol] = (myval == "" ? 0 : myval)
+            @assert Adaycol != nothing "covid2JH: couldn't find $(daynum2daystr(myday))"
+            As[n][s+1, Adaycol] = ( (myval == "" || myval==nothing) ? 0 : myval);
          end
       end
    end
@@ -488,6 +512,8 @@ function covid2JHParsing(C, exstr)
       recurseReplacer!(ex)
    end
 
+   println(size(shell[2:end,5:end]))
+   println(size(eval(ex)))
    shell[2:end,5:end] .= eval(ex)
    return shell
 end
