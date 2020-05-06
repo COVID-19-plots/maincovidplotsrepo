@@ -267,6 +267,8 @@ end
     Convolves vector s with vector k. The vector k must be odd in length and the
     center element corresponds to position 0. Treats edge effects gracefully and
     returns a vector of same length as s
+
+    NaNs are dropped from both data and weighting.
 """
 function smooth(s::Vector, k::Vector)
    @assert isodd(length(k)) "k should have odd length"
@@ -277,6 +279,9 @@ function smooth(s::Vector, k::Vector)
    for i=1:length(s)
       sguys = maximum([i-(mid-1), 1]) : minimum([i+(mid-1), length(s)])
       kguys = sguys .- i .+ mid
+
+      notnans = findall(.!isnan.(s[sguys]))
+      sguys = sguys[notnans]; kguys=kguys[notnans]
 
       sout[i] = sum(s[sguys].*k[kguys])./sum(k[kguys])
    end

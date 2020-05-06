@@ -84,7 +84,7 @@ function pgs(;db=D, smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 
    return z
 end
 
-pgs(db =D, mincases=10, fignum=2000, fname="statesCurrentDeathGrowthRates")
+pgs(db=D[:,1:end], mincases=10, fignum=2000, fname="statesCurrentDeathGrowthRates")
 ##
 
 
@@ -128,3 +128,36 @@ plotMany(regions, db=TP, plotFn=plot, days_previous=28, fignum=1000,
 title("test positivity", fontname=fontname, fontsize=fontsize)
 
 ##
+
+
+##
+"""
+Response to 2020-05-05 Washington Post opinion piece by "5 Republican Governors"
+"""
+
+badStates = ("5 Republican Governors\nWY+NE+AR+IA+MO",
+   [("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
+   ("Iowa", "US"), ("Missouri", "US")])
+
+plotNew([badStates], db=D[:,1:end], plotFn=semilogy, days_previous=56,
+   smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=1000, counttype="deaths",
+   mincases=10, minval=10, fname="", maxtic=40, mintic=10)
+
+gca().set_yticks(10:5:40);
+gca().set_yticklabels(["10", "15", "20", "25", "30", "35", "40"])
+savefig2jpg("Temp/5RepStatesDeaths")
+
+function newguys(str)
+   return "hcat(zeros(size($str,1)), diff($str, dims=2))"
+end
+
+C = loadRawCovidTrackingMatrix()
+NP = covid2JHParsing(C, newguys("positive"));         np = country2conf(NP, badStates)
+NT = covid2JHParsing(C, newguys("totalTestResults")); nt = country2conf(NT, badStates)
+
+figure(2001); clf();
+plot(-(length(np)-1):0, smooth(np./nt, [[0.3,0.7];ones(5);zeros(6)]), "-o"); grid("on")
+title("Test positivity", fontname=fontname, fontsize=fontsize)
+ylabel("test positivity")
+xlabel("days")
+xAxisTickPeriod(7)
