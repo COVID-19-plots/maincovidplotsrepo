@@ -93,6 +93,8 @@ A = setValue(A, ("Hubei", "China"), "5/4/20", 67803)
 D = setValue(D, ("Hubei", "China"), "5/4/20", 3222)
 A = setValue(A, ("Hubei", "China"), "5/5/20", 67803)
 D = setValue(D, ("Hubei", "China"), "5/5/20", 3222)
+A = setValue(A, ("Hubei", "China"), "5/6/20", 67803)
+D = setValue(D, ("Hubei", "China"), "5/6/20", 3222)
 
 
 # Write out the database with the states consolidated

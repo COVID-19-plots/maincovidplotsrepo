@@ -1,6 +1,6 @@
 ##
 
-function pgs(;db=D, smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
+function pgs(;db=D, smkernel=[[0.3, 0.7]; ones(9); [0.7, 0.3]],
    assessDelta=14, expressDelta=7, doplot=true, plottype="R", counttype="deaths", fname="",
    mincases=10, fignum=nothing,
    p2RFn= p ->(p./100 .+ 1).^(5.2/7), R2pFn = R -> Int64.(round.((R.^(7/5.2) .- 1) .* 100)) )
@@ -138,6 +138,17 @@ Response to 2020-05-05 Washington Post opinion piece by "5 Republican Governors"
 badStates = ("5 Republican Governors\nWY+NE+AR+IA+MO",
    [("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
    ("Iowa", "US"), ("Missouri", "US")])
+
+
+
+plotNew([("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
+("Iowa", "US"), ("Missouri", "US")], db=D[:,1:end], plotFn=semilogy, days_previous=56,
+   smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=1001, counttype="deaths",
+   mincases=1, minval=1, fname="", maxtic=10, mintic=1, maxval=25)
+ylim(1, 25)
+gca().set_yticks([1;5:5:25]);
+gca().set_yticklabels(["1", "5", "10", "15", "20", "25"])
+savefig2jpg("Temp/5RepStatesDeathsByState")
 
 plotNew([badStates], db=D[:,1:end], plotFn=semilogy, days_previous=56,
    smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=1000, counttype="deaths",
