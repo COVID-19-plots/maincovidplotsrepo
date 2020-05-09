@@ -275,7 +275,7 @@ function smooth(s::Vector, k::Vector)
 
    mid = Int64((length(k)+1)/2)
 
-   sout = copy(s)
+   sout = Array{Float64}(copy(s))
    for i=1:length(s)
       sguys = maximum([i-(mid-1), 1]) : minimum([i+(mid-1), length(s)])
       kguys = sguys .- i .+ mid

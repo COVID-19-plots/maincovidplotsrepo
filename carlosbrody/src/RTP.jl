@@ -15,7 +15,7 @@ function pgs(;db=D, smkernel=[[0.3, 0.7]; ones(9); [0.7, 0.3]],
 
    for i=1:length(p)
       c = country2conf(db, (String(stateList[i,1]), "US"))
-      if smooth(diff(c), [0.5, 1, 0.5])[end] >= mincases
+      if smooth(diff(c), [ones(7);zeros(6)])[end] >= mincases
          pg = smooth(percentileGrowth(smooth(diff(c), smkernel),
             assessDelta=assessDelta, expressDelta=expressDelta), [0.5, 1, 0.5])
             p[i]  = pg[end]
@@ -88,46 +88,46 @@ pgs(db=D[:,1:end], mincases=10, fignum=2000, fname="statesCurrentDeathGrowthRate
 ##
 
 
-dname = "../../data/covidtracking.com/api/states"
-fname = "daily.csv"
+# dname = "../../data/covidtracking.com/api/states"
+# fname = "daily.csv"
+#
+# C = readdlm("$dname/$fname", ',');
+# PV = covid2JHParsing(C, "positive./(positive + negative)")
+#
+# region = ("California", "US")
+#
+# d = country2conf(D, region)
+# pv = country2conf(PV, region)
+# pg = smooth(percentileGrowth(smooth(diff(d), smkernel), assessDelta=14, expressDelta=7),
+#    [0.5, 1, 0.5])
+#
+# dp=20
+# clf()
+# subplot(2,1,1)
+# plot(pg[end-dp:end])
+#
+# subplot(2,1,2)
+# n=length(pg)
+# plot(pv[end-n+1:end][end-dp:end])
 
-C = readdlm("$dname/$fname", ',');
-PV = covid2JHParsing(C, "positive./(positive + negative)")
-
-region = ("California", "US")
-
-d = country2conf(D, region)
-pv = country2conf(PV, region)
-pg = smooth(percentileGrowth(smooth(diff(d), smkernel), assessDelta=14, expressDelta=7),
-   [0.5, 1, 0.5])
-
-dp=20
-clf()
-subplot(2,1,1)
-plot(pg[end-dp:end])
-
-subplot(2,1,2)
-n=length(pg)
-plot(pv[end-n+1:end][end-dp:end])
-
-
-##
-function newguys(str)
-   return "hcat(zeros(size($str,1)), diff($str, dims=2))"
-end
-
-TP = covid2JHParsing(C, newguys("positive")*"./"*newguys("totalTestResults"))
-regions = [("Massachusetts", "US"), ("New York", "US"), ("New Jersey", "US"),
-   ("Florida", "US"), ("Ohio", "US"), ("Pennsylvania", "US"),
-   ("Indiana", "US"), ("Iowa", "US"), ("Minnesota", "US"),
-   ("South Carolina", "US"), ("California", "US"), ("Georgia", "US")]
-
-plotMany(regions, db=TP, plotFn=plot, days_previous=28, fignum=1000,
-   fn = x ->smooth(x, [0.1:0.1:0.7; 0.6:-0.1:0.1]),
-   labelSuffixFn = (pais, origSeries, series) -> " curr=$(round(series[end], digits=2))")
-title("test positivity", fontname=fontname, fontsize=fontsize)
 
 ##
+# function newguys(str)
+#    return "hcat(zeros(size($str,1)), diff($str, dims=2))"
+# end
+#
+# TP = covid2JHParsing(C, newguys("positive")*"./"*newguys("totalTestResults"))
+# regions = [("Massachusetts", "US"), ("New York", "US"), ("New Jersey", "US"),
+#    ("Florida", "US"), ("Ohio", "US"), ("Pennsylvania", "US"),
+#    ("Indiana", "US"), ("Iowa", "US"), ("Minnesota", "US"),
+#    ("South Carolina", "US"), ("California", "US"), ("Georgia", "US")]
+#
+# plotMany(regions, db=TP, plotFn=plot, days_previous=28, fignum=1000,
+#    fn = x ->smooth(x, [0.1:0.1:0.7; 0.6:-0.1:0.1]),
+#    labelSuffixFn = (pais, origSeries, series) -> " curr=$(round(series[end], digits=2))")
+# title("test positivity", fontname=fontname, fontsize=fontsize)
+#
+# ##
 
 
 ##
@@ -141,13 +141,13 @@ badStates = ("5 Republican Governors\nWY+NE+AR+IA+MO",
 
 
 
-plotNew([("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
+plotNew([badStates, ("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
 ("Iowa", "US"), ("Missouri", "US")], db=D[:,1:end], plotFn=semilogy, days_previous=56,
    smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=1001, counttype="deaths",
-   mincases=1, minval=1, fname="", maxtic=10, mintic=1, maxval=25)
-ylim(1, 25)
-gca().set_yticks([1;5:5:25]);
-gca().set_yticklabels(["1", "5", "10", "15", "20", "25"])
+   mincases=1, minval=1, fname="", maxtic=40, mintic=1, maxval=40)
+ylim(1, 40)
+gca().set_yticks([1;5:5:40]);
+gca().set_yticklabels(["1", "5", "10", "15", "20", "25", "30", "35", "40"])
 savefig2jpg("Temp/5RepStatesDeathsByState")
 
 plotNew([badStates], db=D[:,1:end], plotFn=semilogy, days_previous=56,
@@ -172,3 +172,5 @@ title("Test positivity", fontname=fontname, fontsize=fontsize)
 ylabel("test positivity")
 xlabel("days")
 xAxisTickPeriod(7)
+
+savefig2jpg("Temp/5RepStatesDeathsByState")

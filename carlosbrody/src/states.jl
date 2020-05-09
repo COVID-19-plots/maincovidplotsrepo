@@ -45,12 +45,18 @@ plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
 
 ##
 
+badStates = ("5 Republican Governors\nWY+NE+AR+IA+MO",
+   [("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
+   ("Iowa", "US"), ("Missouri", "US")])
+
+
 mystates = ["Italy", "US",
    ("New York", "US"), ("New Jersey", "US"), ("Massachusetts", "US"),
    ("Illinois", "US"), ("California", "US"),
    ("Florida", "US"), nostayhome, ("Texas", "US"), ("Washington", "US"),
    ("Louisiana", "US"), ("Georgia", "US"), ("Connecticut", "US"),
-   ("South Carolina", "US"), ("Indiana", "US"), ("Iowa", "US")]
+   ("South Carolina", "US"), ("Indiana", "US"), ("Iowa", "US"),
+   badStates]
 
 
 
