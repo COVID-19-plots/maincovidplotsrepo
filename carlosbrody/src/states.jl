@@ -78,6 +78,7 @@ prefix = "states"
 sections = [
    "New cases growth rates"         "$(prefix)NewCasesGrowthRate"
    "New deaths growth rates"        "$(prefix)NewDeathsGrowthRate"
+   "5 Republican Governors (WaPo May 5)"   "Temp/5RepStatesDeathsByState"
    "All states, current deaths growth rates"   "$(prefix)CurrentDeathGrowthRates"
    "New cases per day"              "$(prefix)New"
    "New deaths per day"             "$(prefix)NewDeaths"
