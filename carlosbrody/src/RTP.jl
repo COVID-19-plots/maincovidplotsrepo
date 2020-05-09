@@ -173,4 +173,4 @@ ylabel("test positivity")
 xlabel("days")
 xAxisTickPeriod(7)
 
-savefig2jpg("Temp/5RepStatesDeathsByState")
+savefig2jpg("Temp/5RepStatesTestPositivity")
