@@ -6,6 +6,7 @@ using PyPlot
 
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
 export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
+export loadMexico
 export covid2JH, covid2JHParsing, loadRawCovidTrackingMatrix
 export savefig2jpg
 export dropColumns, renameColumn!, dropRows, getColNums, getDataColumns, firstDataColumn
@@ -88,6 +89,17 @@ function loadConfirmedDbase(;
    return readdlm("$dname/$fname", ',');
 end
 
+
+"""
+"""
+function loadMexico(; casos="casos",
+   dname::String = "../../data/mexico",
+   fname::String = casos==casos ? "Casos_Diarios_Estado_Nacional_Confirmados.csv" :
+      Casos_Diarios_Estado_Nacional_Defunciones.csv
+   )
+
+   return readdlm("$dname/$fname", ',')
+end
 
 
 """

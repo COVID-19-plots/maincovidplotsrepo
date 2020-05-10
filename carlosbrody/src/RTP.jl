@@ -142,7 +142,8 @@ badStates = ("5 Republican Governors\nWY+NE+AR+IA+MO",
 
 
 plotNew([badStates, ("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
-("Iowa", "US"), ("Missouri", "US")], db=D[:,1:end], plotFn=semilogy, days_previous=56,
+("Iowa", "US"), ("Missouri", "US"), ("Arizona", "US"), ("Mississippi", "US")],
+   db=D[:,1:end], plotFn=semilogy, days_previous=56,
    smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=1001, counttype="deaths",
    mincases=1, minval=1, fname="", maxtic=40, mintic=1, maxval=40)
 ylim(1, 40)
