@@ -97,7 +97,7 @@ democratic = ("Democratic Gov. States",
 plotNew([republican, democratic],
    db=D[:,1:end], plotFn=semilogy, days_previous=28,
    smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=3001, counttype="deaths",
-   mincases=1, minval=100, fname="", maxtic=4000, mintic=100, maxval=4000,
+   mincases=1, minval=100, maxtic=4000, mintic=100, maxval=4000,
    fname="Temp/repubiclanVDemocraticDeaths")
 
 ##

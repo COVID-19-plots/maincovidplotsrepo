@@ -163,7 +163,8 @@ function newguys(str)
    return "hcat(zeros(size($str,1)), diff($str, dims=2))"
 end
 
-C = loadRawCovidTrackingMatrix()
+C  = loadRawCovidTrackingMatrix()
+T  = covid2JHParsing(C, "totalTestResults")
 NP = covid2JHParsing(C, newguys("positive"));         np = country2conf(NP, badStates)
 NT = covid2JHParsing(C, newguys("totalTestResults")); nt = country2conf(NT, badStates)
 
@@ -175,3 +176,6 @@ xlabel("days")
 xAxisTickPeriod(7)
 
 savefig2jpg("Temp/5RepStatesTestPositivity")
+
+
+plotNew(["US"], db=T, fignum=4000, plotFn=plot, days_previous=80)
