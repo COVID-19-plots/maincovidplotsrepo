@@ -178,4 +178,4 @@ xAxisTickPeriod(7)
 savefig2jpg("Temp/5RepStatesTestPositivity")
 
 
-plotNew(["US"], db=T, fignum=4000, plotFn=plot, days_previous=80)
+plotNew(["US"], db=T, fignum=4000, plotFn=plot, days_previous=80, counttype="tests")
