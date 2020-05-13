@@ -178,4 +178,6 @@ xAxisTickPeriod(7)
 savefig2jpg("Temp/5RepStatesTestPositivity")
 
 
-plotNew(["US"], db=T, fignum=4000, plotFn=plot, days_previous=80, counttype="tests")
+plotNew(["US", badStates, ("Wyoming", "US"), ("Nebraska", "US"), ("Arkansas", "US"),
+   ("Iowa", "US"), ("Missouri", "US"), ("Arizona", "US"), ("Mississippi", "US")],
+   db=T, fignum=4000, plotFn=plot, days_previous=80, counttype="tests")

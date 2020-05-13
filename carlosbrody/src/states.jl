@@ -5,6 +5,12 @@
 #
 # ======================================
 
+woutNYNJ = ("US w/out NY+NJ", map(x -> (string(x), "US"), setdiff(stateAbbrevMap[:,1],
+   ["New York", "New Jersey",
+      "Marshall Islands", "District of Columbia", "Commonwealth/Territory:"])))
+
+#
+
 south = ("South: FL+LA+TN+GA+MS+\nAK+NC+SC+AL+KY", [("Florida", "US"), ("Louisiana", "US"),
    ("Tennessee", "US"), ("Georgia", "US"), ("Mississippi", "US"),
    ("Arkansas", "US"), ("North Carolina", "US"), ("South Carolina", "US"),
@@ -22,7 +28,7 @@ nostayhome = ("No Stay-At-Home: SD+ND+IA+NE+AK",
    [("South Dakota", "US"), ("Iowa", "US"),
    ("North Dakota", "US"), ("Nebraska", "US"), ("Arkansas", "US")])
 
-states = ["US", "Italy",
+states = ["US", "Italy", woutNYNJ,
    ("Washington", "US"), ("New York", "US"), ("California", "US"),
    ("Florida", "US"), ("Texas", "US"),
    # "Italy", "Germany", "Brazil", africa,

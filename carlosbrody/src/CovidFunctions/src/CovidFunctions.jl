@@ -5,7 +5,8 @@ using PyPlot
 
 
 export loadConfirmedDbase, collapseUSStates, country2conf, setValue, getValue
-export loadCovidTrackingUSData, stateAbbrev2Fullname, mergeJHandCovidTracking
+export loadCovidTrackingUSData, stateAbbrev2Fullname, stateAbbrevMap
+export mergeJHandCovidTracking
 export loadMexico
 export covid2JH, covid2JHParsing, loadRawCovidTrackingMatrix
 export savefig2jpg
