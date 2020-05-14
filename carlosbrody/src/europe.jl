@@ -57,7 +57,7 @@ plotDeathPeakAligned([("Hubei", "China"), # ("New York", "US"), ("New Jersey", "
    # "Netherlands", "Austria"],
    fname="deathPeakAligned",
    soffsets=soffsets,
-   fignum=24, x0=-55, x1=35)
+   fignum=24, x0=-65, x1=45)
 
 ##
 
