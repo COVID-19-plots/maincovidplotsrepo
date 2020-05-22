@@ -26,10 +26,12 @@ D = addPopulationColumn(D)
 A2 = loadConfirmedDbase(fname="time_series_covid19_confirmed_US.csv")
 A2 = dropColumns(A2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key"])
 A2 = renameColumn!(renameColumn!(renameColumn!(A2, "Province_State", "Province/State"), "Country_Region", "Country/Region"), "Long_", "Long")
+u = sortperm(A2[2:end,1]).+1; A2 = A2[[1;u],:]
 # Now deaths:
 D2 = loadConfirmedDbase(fname="time_series_covid19_deaths_US.csv")
 D2 = dropColumns(D2, ["UID", "iso2", "iso3", "code3", "FIPS", "Admin2", "Combined_Key"])
 D2 = renameColumn!(renameColumn!(renameColumn!(D2, "Province_State", "Province/State"), "Country_Region", "Country/Region"), "Long_", "Long")
+u = sortperm(D2[2:end,1]).+1; D2 = D2[[1;u],:]
 @assert all(A2[:,1:2] .== D2[:,1:2])  "A2 and D2 matrices have a mismatch"
 
 if !any(A2[1,:] .== "Population")  # A2 is missing the Population column, copy it from D2
@@ -121,6 +123,10 @@ A = setValue(A, ("Hubei", "China"), "5/18/20", 67803)
 D = setValue(D, ("Hubei", "China"), "5/18/20", 3222)
 A = setValue(A, ("Hubei", "China"), "5/19/20", 67803)
 D = setValue(D, ("Hubei", "China"), "5/19/20", 3222)
+A = setValue(A, ("Hubei", "China"), "5/20/20", 67803)
+D = setValue(D, ("Hubei", "China"), "5/20/20", 3222)
+A = setValue(A, ("Hubei", "China"), "5/21/20", 67803)
+D = setValue(D, ("Hubei", "China"), "5/21/20", 3222)
 
 
 # Write out the database with the states consolidated
