@@ -22,9 +22,9 @@ plotCumulative(europe, fignum=12, maxtic=400000, fname="europeCumulative")
 plotAligned(europe, fname="europeAligned",
    mintic=100, maxtic=400000, fignum=3, minval=10, alignon=400)
 plotNew(vcat(europe, alleurope), fignum=34, fname="europeNew",
-   labelSuffixFn = labelSuffixFn, days_previous=70)
+   labelSuffixFn = labelSuffixFn, days_previous=120)
 plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
-   counttype="deaths", fname="europeNewDeaths", days_previous=70)
+   counttype="deaths", fname="europeNewDeaths", days_previous=120)
 
 
 smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3];
