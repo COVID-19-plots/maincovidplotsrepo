@@ -44,9 +44,9 @@ plotCumulative(states, fignum=11, maxtic=1000000, fname="statesCumulative")
 plotAligned(states, fname="states_confirmed_aligned",
    mintic=100, maxtic=1000000, fignum=5, minval=10)
 plotNew(states, fignum=14, fname="statesNew", mintic=100, minval=80, maxval=40000,
-   days_previous=70)
+   maxtic=40000, days_previous=120)
 plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
-   counttype="deaths", fname="statesNewDeaths", days_previous=70)
+   counttype="deaths", fname="statesNewDeaths", days_previous=120)
 
 
 
