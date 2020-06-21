@@ -5,7 +5,7 @@ europe = ["US", "Italy", "Germany", "Spain", "Portugal", "France", "United Kingd
 "Austria", "Greece", "Netherlands", "Sweden", "Norway", "Finland", "Denmark", "Korea, South",
 "Hungary", "Turkey", "Russia"]
 
-alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South"]))
+alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South", "Russia"]))
 
 function labelSuffixFn(pais, origSeries, series)
    series = series[.!isnan.(series)]

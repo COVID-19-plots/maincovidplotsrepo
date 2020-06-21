@@ -31,7 +31,8 @@ export rightHandAxis, xAxisTickPeriod
 # If we plot more than 10 lines, colors repeat; use next marker in that case
 colorOrder = [
     "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-    "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+    "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
+    "#cdb39a"
     ]
 markerOrder = ["o", "x", "P", "d", "*", "<", ">"]
 
