@@ -48,7 +48,7 @@ D = [D ; D2[2:end,:]]
 
 ##
 
-days_previous=49
+days_previous=99
 
 
 sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
