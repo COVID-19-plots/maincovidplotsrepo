@@ -3,9 +3,9 @@ close("all")
 
 europe = ["US", "Italy", "Germany", "Spain", "Portugal", "France", "United Kingdom", "Switzerland",
 "Austria", "Greece", "Netherlands", "Sweden", "Norway", "Finland", "Denmark", "Korea, South",
-"Hungary", "Turkey", "Russia"]
+"Hungary", "Turkey", "Russia", "Israel"]
 
-alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South", "Russia"]))
+alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South", "Russia", "Israel"]))
 
 function labelSuffixFn(pais, origSeries, series)
    series = series[.!isnan.(series)]
@@ -79,7 +79,7 @@ savefig2jpg("logClimbdown")
 ##
 
 europeSelect = [alleurope, "US", "United Kingdom", "Spain", "Italy", "Germany", "Sweden",
-   "Portugal", "Denmark", "Austria"]
+   "Portugal", "Denmark", "Austria", "Israel"]
 
 
 function labelSuffixFn(pais, origSeries, series)
