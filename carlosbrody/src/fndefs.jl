@@ -243,6 +243,10 @@ A = setValue(A, ("Hubei", "China"), "7/17/20", 67803)
 D = setValue(D, ("Hubei", "China"), "7/17/20", 3222)
 A = setValue(A, ("Hubei", "China"), "7/18/20", 67803)
 D = setValue(D, ("Hubei", "China"), "7/18/20", 3222)
+A = setValue(A, ("Hubei", "China"), "7/19/20", 67803)
+D = setValue(D, ("Hubei", "China"), "7/19/20", 3222)
+A = setValue(A, ("Hubei", "China"), "7/20/20", 67803)
+D = setValue(D, ("Hubei", "China"), "7/20/20", 3222)
 
 
 
