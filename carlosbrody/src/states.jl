@@ -102,7 +102,7 @@ democratic = ("Democratic Gov. States",
 
 
 plotNew([republican, democratic],
-   db=D[:,1:end], plotFn=semilogy, days_previous=68,
+   db=D[:,1:end], plotFn=semilogy, days_previous=128,
    smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=3001, counttype="deaths",
    mincases=1, minval=100, maxtic=4000, mintic=100, maxval=4000,
    fname="Temp/repubiclanVDemocraticDeaths")
@@ -115,6 +115,7 @@ sections = [
    "New cases growth rates"         "$(prefix)NewCasesGrowthRate"
    "New deaths growth rates"        "$(prefix)NewDeathsGrowthRate"
    "5 Republican Governors (WaPo May 5)"   "Temp/5RepStatesDeathsByState"
+   "Republican v Democratic Govs"   "Temp/repubiclanVDemocraticDeaths"
    "All states, current deaths growth rates"   "$(prefix)CurrentDeathGrowthRates"
    "New cases per day"              "$(prefix)New"
    "New deaths per day"             "$(prefix)NewDeaths"

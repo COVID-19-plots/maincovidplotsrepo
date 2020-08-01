@@ -6,6 +6,7 @@
 * [US States: New cases growth rates](#us-states-new-cases-growth-rates)
 * [US States: New deaths growth rates](#us-states-new-deaths-growth-rates)
 * [US States: 5 Republican Governors (WaPo May 5)](#us-states-5-republican-governors-(wapo-may-5))
+* [US States: Republican v Democratic Govs](#us-states-republican-v-democratic-govs)
 * [US States: All states, current deaths growth rates](#us-states-all-states-current-deaths-growth-rates)
 * [US States: New cases per day](#us-states-new-cases-per-day)
 * [US States: New deaths per day](#us-states-new-deaths-per-day)
@@ -32,6 +33,12 @@ Click on the plot to see an expanded version.
 Click on the plot to see an expanded version.
 
 <img src="../carlosbrody/src/Temp/5RepStatesDeathsByState.jpg" width="1000">
+
+### US States: Republican v Democratic Govs
+
+Click on the plot to see an expanded version.
+
+<img src="../carlosbrody/src/Temp/repubiclanVDemocraticDeaths.jpg" width="1000">
 
 ### US States: All states, current deaths growth rates
 
