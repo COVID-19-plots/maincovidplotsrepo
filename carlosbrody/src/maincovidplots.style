@@ -1,0 +1,21 @@
+## ==================
+#
+#  see https://matplotlib.org/tutorials/introductory/customizing.html
+#
+## ===================
+
+
+# axes.titlesize : 24
+# axes.labelsize : 20
+# lines.linewidth : 3
+# lines.markersize : 10
+# xtick.labelsize : 16
+# ytick.labelsize : 16
+
+# fontname       = "Helvetica Neue"
+# fontsize       = 20   # for title and x and y labels
+# legendfontsize = 13
+
+font.size       : 20
+font.sans-serif : 'Helvetica Neue'
+legend.fontsize : 13
