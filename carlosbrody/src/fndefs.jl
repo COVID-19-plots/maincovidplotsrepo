@@ -48,7 +48,7 @@ D = [D ; D2[2:end,:]]
 
 ##
 
-days_previous=99
+days_previous=199
 
 
 sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
@@ -742,7 +742,7 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
          popstr = "$(round(country2conf(A, pais, rcols="Population")[1]/1e6, digits=1))M";
          return " : $(Int64(begin gu=ceil(series[end]); isnan(gu) ? 0 : gu ; end ))/day pop=$popstr"
       end,
-      days_previous=45, xAxisWeekify=true, kwargs...)
+      days_previous=days_previous, xAxisWeekify=true, kwargs...)
 
    hs = plotMany(regions, fn=fn, plotFn=plotFn, labelSuffixFn=labelSuffixFn,
       days_previous=days_previous, minval=minval, fignum=fignum; kwargs...) # days_previous=size(A,2)-6)

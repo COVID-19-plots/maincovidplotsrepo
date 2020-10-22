@@ -6,7 +6,7 @@ include("fndefs.jl")
 loadLinespecList()
 
 # How many days previous to today to plot
-days_previous = 29
+days_previous = 99
 
 
 include("global.jl")
