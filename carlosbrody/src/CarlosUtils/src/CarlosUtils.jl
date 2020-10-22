@@ -486,7 +486,7 @@ function rightHandAxis(;ax=gca(), old2newFn=identity, digits=2,
 end
 
 
-function xAxisTickPeriod(n::Int64; ax=gca(), anchor="end")
+function xAxisTickPeriod(n::Int64=14; ax=gca(), anchor="end")
     xt   = gca().get_xticks()
     xl   = gca().get_xlim()
     xlab = gca().get_xticklabels()

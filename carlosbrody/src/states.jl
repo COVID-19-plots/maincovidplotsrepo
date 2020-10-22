@@ -44,9 +44,9 @@ plotCumulative(states, fignum=11, maxtic=1000000, fname="statesCumulative")
 plotAligned(states, fname="states_confirmed_aligned",
    mintic=100, maxtic=1000000, fignum=5, minval=10)
 plotNew(states, fignum=14, fname="statesNew", mintic=100, minval=80, maxval=100000,
-   maxtic=100000, days_previous=140)
+   maxtic=100000, days_previous=days_previous)
 plotNew(states, db=D, minval=1, mintic=1, maxtic = 4000,
-   counttype="deaths", fname="statesNewDeaths", days_previous=140)
+   counttype="deaths", fname="statesNewDeaths", days_previous=days_previous)
 
 
 
@@ -71,12 +71,12 @@ mystates = ["Italy", "US",
 smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1]
 # smkernel=[0.2, 0.4, 0.7, 1.0, 0.7, 0.4, 0.2]
 plotNewGrowth(mystates, fname="statesNewDeathsGrowthRate", db=D, fignum=20,
-   counttype="deaths", days_previous=136, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
+   counttype="deaths", days_previous=days_previous, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
    smkernel=smkernel,
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 ##
 plotNewGrowth(mystates, fname="statesNewCasesGrowthRate", db=A, ylim1=-70, fignum=21,
-   counttype="new cases", days_previous=136, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
+   counttype="new cases", days_previous=days_previous, legendLocation="lower left", # labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
@@ -102,7 +102,7 @@ democratic = ("Democratic Gov. States",
 
 
 plotNew([republican, democratic],
-   db=D[:,1:end], plotFn=semilogy, days_previous=128,
+   db=D[:,1:end], plotFn=semilogy, days_previous=days_previous,
    smkernel=[[0.3,0.7,1,1,1,1,1];zeros(6)], fignum=3001, counttype="deaths",
    mincases=1, minval=100, maxtic=4000, mintic=100, maxval=4000,
    fname="Temp/repubiclanVDemocraticDeaths")

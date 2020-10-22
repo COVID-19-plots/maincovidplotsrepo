@@ -13,14 +13,14 @@ allLA = ("All Latin America", la)
 
 plotCumulative(la, fname="laCumulative", fignum=8, minval=100,
    mintic=100, maxtic=40000)
-plotGrowth(vcat(la, ["Italy", "World other than China"]), days_previous=15,
+plotGrowth(vcat(la, ["Italy", "World other than China"]), days_previous=days_previous,
    yticks=0:10:40, ylim2=45, fname="laGrowthRate", fignum=15)
 plotAligned(vcat(la, "Italy"), fname="laAligned",
    mintic=100, maxtic=400000, fignum=16, minval=10)
 plotNew(vcat(la, allLA), fignum=17, fname="laNew", maxtic=40000,
-   minval=1, mintic=1, days_previous=90)
+   minval=1, mintic=1, days_previous=days_previous)
 plotNew(la, db=D, minval=1, mintic=1, maxtic = 1000,
-   counttype="deaths", fname="laNewDeaths", days_previous=90)
+   counttype="deaths", fname="laNewDeaths", days_previous=days_previous)
 
 ##
 
@@ -36,12 +36,12 @@ end
 
 plotNewGrowth(la, fname="laNewDeathsGrowthRate", db=D, fignum=18,
    ylim1=-90, ylim2=140,
-   counttype="deaths", days_previous=46, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
+   counttype="deaths", days_previous=days_previous, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 plotNewGrowth(la, fname="laNewCasesGrowthRate", db=A, ylim1=-70, fignum=19,
-   counttype="new cases", days_previous=46, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
+   counttype="new cases", days_previous=days_previous, legendLocation="lower left", labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 

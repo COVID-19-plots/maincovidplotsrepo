@@ -22,9 +22,9 @@ plotCumulative(europe, fignum=12, maxtic=400000, fname="europeCumulative")
 plotAligned(europe, fname="europeAligned",
    mintic=100, maxtic=400000, fignum=3, minval=10, alignon=400)
 plotNew(vcat(europe, alleurope), fignum=34, fname="europeNew",
-   labelSuffixFn = labelSuffixFn, days_previous=120)
+   labelSuffixFn = labelSuffixFn, days_previous=days_previous)
 plotNew(vcat(europe, alleurope), db=D, minval=1, mintic=1, maxtic = 10000,
-   counttype="deaths", fname="europeNewDeaths", days_previous=120)
+   counttype="deaths", fname="europeNewDeaths", days_previous=days_previous)
 
 
 smkernel=[0.3, 0.5, 0.7, 1, 0.7, 0.5, 0.3];
@@ -91,14 +91,14 @@ function labelSuffixFn(pais, origSeries, series)
    return " currently=$peak/day, pop=$popstr"
 end
 
-plotNewGrowth(europeSelect, db=A, days_previous=96, counttype="cases",
+plotNewGrowth(europeSelect, db=A, days_previous=days_previous, counttype="cases",
    fname="europeNewCasesGrowthRate", fignum=121, ylim1=-60, labelSuffixFn=labelSuffixFn,
    smkernel=[0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1],
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))
 
 ##
 smkernel = [0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1];
-plotNewGrowth(europeSelect, db=D, days_previous=96, counttype="deaths",
+plotNewGrowth(europeSelect, db=D, days_previous=days_previous, counttype="deaths",
    fname="europeNewDeathsGrowthRate", fignum=122, labelSuffixFn=labelSuffixFn,
    smkernel=smkernel,
    fn=x -> smooth(percentileGrowth(smooth(diff(x), smkernel), assessDelta=14, expressDelta=7), [0.5, 1, 0.5]))

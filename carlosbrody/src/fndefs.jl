@@ -4,6 +4,7 @@ using DelimitedFiles
 using PyCall
 using PyPlot
 using Random
+using Revise
 
 push!(LOAD_PATH, ".")
 using CarlosUtils
@@ -48,7 +49,8 @@ D = [D ; D2[2:end,:]]
 
 ##
 
-days_previous=199
+days_previous=255
+xTickPeriod = 28
 
 
 sourcestring = "source, updates at: https://github.com/COVID-19-plots/maincovidplotsrepo"
@@ -717,7 +719,7 @@ function plotCumulative(regions; fname::String="", yticbase=[1, 4],
    setLogYTicks(yticbase=yticbase, mintic=mintic, maxtic=maxtic)
 
    addSourceString2Semilogy()
-   xAxisTickPeriod(7)
+   xAxisTickPeriod(xTickPeriod)
 
    savefig2jpg(fname)
    return hs
@@ -758,7 +760,7 @@ function plotNew(regions; smkernel=[0.5, 1, 0.5], minval=10, fignum=2,
       addSourceString2Linear()
    end
 
-   if xAxisWeekify; xAxisTickPeriod(7); end
+   if xAxisWeekify; xAxisTickPeriod(xTickPeriod); end
    savefig2jpg(fname)
    return hs
 end
@@ -874,7 +876,7 @@ function plotGrowth(regions; smkernel=[0.2, 0.5, 0.7, 0.5, 0.2],
    end
 
    addSourceString2Linear()
-   xAxisTickPeriod(7)
+   xAxisTickPeriod(xTickPeriod)
    savefig2jpg(fname)
    return hs
 end
@@ -936,7 +938,7 @@ function plotNewGrowth(regions; counttype="new cases", ylim1=-55, ylim2=100, yti
    secax.set_ylabel("R", fontsize=fontsize)
    axisWidthChange(0.98, lock="l")
    axisMove(0.01,0)
-   xAxisTickPeriod(7)
+   xAxisTickPeriod(xTickPeriod)
 
    savefig2jpg(fname)
    return hs
