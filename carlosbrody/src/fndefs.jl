@@ -629,7 +629,8 @@ function plotMany(paises; fignum=1, offsetRange=0.1, alignon="today",
    legendLocation::String="upper left", kwargs...)
 
    figure(fignum); clf(); println()
-   set_current_fig_position(115, 61, 1496, 856)
+   # set_current_fig_position(115, 61, 1496, 856)
+   set_current_fig_position(700, -1265, 1496, 856)
 
    u = randperm(length(paises))
 

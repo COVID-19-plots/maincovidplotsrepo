@@ -3,7 +3,7 @@ close("all")
 
 europe = ["US", "Italy", "Germany", "Spain", "Portugal", "France", "United Kingdom", "Switzerland",
 "Austria", "Greece", "Netherlands", "Sweden", "Norway", "Finland", "Denmark", "Korea, South",
-"Hungary", "Turkey", "Russia", "Israel"]
+"Hungary", "Turkey", "Russia", "Israel", "Belgium"]
 
 alleurope = ("All Europe", setdiff(europe, ["US", "Korea, South", "Russia", "Israel"]))
 
@@ -79,7 +79,7 @@ savefig2jpg("logClimbdown")
 ##
 
 europeSelect = [alleurope, "US", "United Kingdom", "Spain", "Italy", "Germany", "Sweden",
-   "Portugal", "Denmark", "Austria", "Israel"]
+   "Portugal", "Denmark", "Austria", "Israel", "Belgium"]
 
 
 function labelSuffixFn(pais, origSeries, series)
