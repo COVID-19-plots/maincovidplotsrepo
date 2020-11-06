@@ -78,8 +78,8 @@ savefig2jpg("logClimbdown")
 
 ##
 
-europeSelect = [alleurope, "US", "United Kingdom", "Spain", "Italy", "Germany", "Sweden",
-   "Portugal", "Denmark", "Austria", "Israel", "Belgium"]
+europeSelect = [alleurope, "US", "United Kingdom", "Spain", "Italy", "Germany",
+   "Sweden", "Portugal", "Denmark", "Austria", "Israel", "Belgium", "Switzerland", "France"]
 
 
 function labelSuffixFn(pais, origSeries, series)
