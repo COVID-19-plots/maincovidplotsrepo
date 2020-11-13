@@ -15,7 +15,7 @@ africa = ("Africa below Sahara", ["South Africa", "Namibia", "Congo", "Gabon",
 
 # list of countries to plot
 paises = ["Korea, South", "Iran", "Italy", "Germany", "France",
-   "Japan",
+   "Canada",
    "Spain",
    "US", "Switzerland",
    "United Kingdom", ("New York", "US"),
