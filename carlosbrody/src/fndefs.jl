@@ -501,14 +501,16 @@ end
                then the xtick label for the 0 point is changed to a string
                with today's date.
 
-   labelSuffixFn   If passed, must be a function that takes pais, origSeries (what
+   - labelSuffixFn   If passed, must be a function that takes pais, origSeries (what
                country2conf returns) and series (fn(origSeries)), and returns a
                string that will be appended to the lines label
+
+   - pointsEvery interval in days between points plotted with a symbol
 """
 function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
       minval=0, maxval=Inf, mincases=0,
       xOffset=0, fn=identity, plotFn=semilogy, adjustZeroXLabel=true,
-      labelSuffixFn=(pais,origSeries,series)->"")
+      labelSuffixFn=(pais,origSeries,series)->"", pointsEvery=1)
    if pais == "World other than China"
       series = country2conf(db, "China", invert=true)
    else
@@ -529,8 +531,10 @@ function plotSingle(pais; db=A, alignon="today", days_previous=days_previous,
 
    h = nothing
    if alignon=="today"
-      h = plotFn(dias[end-days_previous:end] .- dias[end].+xOffset,
-         series[end-days_previous:end]; pkwargs...)[1]
+      plotDays = (length(dias)  :-pointsEvery:(length(dias)  -days_previous))[end:-1:1]
+      plotSers = (length(series):-pointsEvery:(length(series)-days_previous))[end:-1:1]
+      h = plotFn(dias[plotDays] .- dias[end].+xOffset,
+         series[plotSers]; pkwargs...)[1]
          # make the rightmost ctick label the current date
 
       if adjustZeroXLabel
